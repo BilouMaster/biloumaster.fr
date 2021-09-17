@@ -14,7 +14,7 @@ La principale feature de mon programme python est de récupérer directement les
 
 ## Preview
 Version actuelle : https://biloumaster.fr (premier jet, ne correspond pas au travail en cours)
-Version bêta en cours : https://test.biloumaster.fr/creations (work in progress, correspond au travail en cours dans ce répertoire)
+Version bêta en cours : http://test.biloumaster.fr/creations (work in progress, correspond au travail en cours dans ce répertoire)
 
 ## Crédits
 Je remercie @dimsemnov pour son super travail sur la version V5 bêta de PhotoSwipe !
