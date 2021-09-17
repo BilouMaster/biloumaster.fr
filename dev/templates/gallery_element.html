@@ -1,0 +1,19 @@
+<a class="thumb{tag_classes}"
+    href="{path}/{filename}#view"
+    data-pswp-src="/img/gallery/{filename}.webp"
+    data-pswp-srcset="{srcset}"
+    data-pswp-width="{width}"
+    data-pswp-height="{height}"
+    data-cropped="true"
+    data-desc="{description}"
+    data-date="{date}"
+    title="{title}"
+    style="width: calc({thumbnail_width}px * var(--ratio) / 10);">
+    <img src="/img/gallery/placeholder/{thumbnail_width}.webp"
+        data-src="/img/gallery/thumbnail/{filename}_thumbnail.webp"
+        width="{thumbnail_width}"
+        height="{thumbnail_height}"
+        alt="{title}"
+        decoding="async">
+</a>
+{tags}

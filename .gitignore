@@ -1,0 +1,8 @@
+index.html
+html/**/*.html
+img/**/*.webp
+dev/images/**/*.jpg
+dev/images/**/*.png
+dev/images/recup
+dev/misc
+__pycache__

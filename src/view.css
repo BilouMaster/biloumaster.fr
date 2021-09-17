@@ -1,0 +1,83 @@
+#arrows {
+    position: sticky;
+    top: 50vh;
+    z-index: 1000;
+}
+#arrows > a {
+    position: absolute;
+    color: var(--bilouhi4);
+    background-color: var(--biloudark);
+    border: var(--bilouborder);
+    border-radius: 50%;
+    font-size: 1.5em;
+    width: 1.5em;
+    text-align: center;
+    transition-property: transform;
+    transition-timing-function: var(--biloustic);
+    transition-duration: 0.3s;
+    top: -2em;
+}
+#arrows > a[rel='prev'] {
+    left: -0.5em;
+}
+#arrows > a[rel='next'] {
+    right: -0.5em;
+}
+#arrows > a:hover {
+    transform: scale(1.1);
+}
+#arrows > a:visited {
+    color: var(--bilouhighlight);
+}
+#return_gallery {
+    position: sticky;
+    bottom: 0.5em;
+    align-self: flex-end;
+    margin-right: -0.5em;
+    margin-bottom: 0.5em;
+}
+figure h1 {
+    margin-bottom: 0;
+    color: var(--biloulight);
+}
+figure {
+    max-height: 100vh;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    transition-property: max-height;
+    transition-timing-function: var(--biloueazout);
+    transition-duration: 0.3s;
+}
+figure.zoomed {
+    max-height: calc(var(--bilou_img_max_height) + 188px);
+}
+.img_container {
+    justify-content: center;
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+figure.zoomed img {
+    cursor: zoom-out;
+}
+figure img {
+    cursor: zoom-in;
+    max-width: 100%;
+    object-fit: contain;
+    border-radius: 0.5em;
+}
+/* figure > div.img_container:before {
+    content: 'biloumaster';
+    position: absolute;
+    background-image: url(/img/cc.svg), url(/img/by.svg), url(/img/nc.svg);
+    background-size: 12px, 12px, 12px;
+    background-repeat: no-repeat;
+    background-position-x: 0, 14px, 28px;
+    background-position-y: 4px;
+    padding-left: 42px;
+    font-size: 12px;
+    color: black;
+    opacity: 0.5;
+} */

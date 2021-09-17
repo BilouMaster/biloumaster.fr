@@ -1,0 +1,405 @@
+@font-face {
+    font-family: BilouFont;
+    src: url('/src/BilouFont_Regular.ttf');
+}
+@font-face {
+    font-family: BilouFontLight;
+    src: url('/src/BilouFont_Light.ttf');
+}
+:root {
+    --biloubgc: rgb(31, 30, 36);
+    --biloubgc33: rgb(31, 30, 36, 0.33);
+    --biloubgc50: rgb(31, 30, 36, 0.5);
+    --biloubgc80: rgb(31, 30, 36, 0.8);
+    --biloubgct: rgba(31, 30, 36, 0);
+    --biloudark: rgb(62, 60, 70);
+    --biloudarkt: rgba(62, 60, 70, 0);
+    --biloumedium: rgb(143, 129, 158);
+    --biloulight: rgb(214, 184, 231);
+    --bilouhighlight: rgb(240, 233, 242);
+    --biloustic: cubic-bezier(0.6, 3.0, 0.5, 0.7);
+    --biloueazout: cubic-bezier(0.4, 1, 0.6, 0.9);
+    --bilouborder: solid var(--biloubgc) 3px;
+    --bilouborder33: solid var(--biloubgc33) 3px;
+    --biloutextborder: -2px -2px 0 var(--biloubgc), -3px 0 0 var(--biloubgc), -2px 2px 0 var(--biloubgc), 0 3px 0 var(--biloubgc), 2px 2px 0 var(--biloubgc), 3px 0 0 var(--biloubgc), 2px -2px 0 var(--biloubgc), 0 -3px 0 var(--biloubgc);
+    --biloufade_offset: 19px;
+    --biloufade: linear-gradient(179deg, var(--biloubgc) calc(1em + var(--biloufade_offset)), var(--biloubgct) calc(1em + var(--biloufade_offset) + 1px)),
+                 linear-gradient(-200deg, var(--biloudarkt) 50px, var(--biloudark) 280px);
+    --biloupsyche_top: 36px;
+    --biloupsyche_left: 139px;
+    background-color: var(--biloubgc);
+    font-family: BilouFont, "Comic Sans MS", "Comic Sans", cursive, sans-serif;
+    box-sizing: border-box;
+    scrollbar-width: thin;
+    -webkit-tap-highlight-color: transparent;
+}
+a {
+    text-decoration: none;
+    color: var(--biloulight);
+}
+a:visited {
+    color: var(--biloulight);
+}
+h1, h2 {
+    cursor: default;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    color: white;
+    background-color: var(--biloudark);
+    max-width: min(840px, calc(100vw - 2em));
+    min-height: 100vh;
+    margin: 0 auto;
+}
+header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: 2s steps(20, end) infinite biloupsyche;
+    box-shadow: 0 1px 3px var(--biloubgc50);
+}
+header > img, header > nav {
+    width: 8em;
+    height: 8em;
+    min-width: 60px;
+    min-height: 60px;
+    max-width: 25vw;
+    max-height: 25vw;
+    margin: 0.25em;
+    margin-bottom: -1em;
+}
+header > nav > * {
+    display: block;
+    position: relative;
+    margin: 0;
+}
+header > nav > a {
+    transition-property: transform;
+    transition-timing-function: var(--biloustic);
+    transition-duration: 0.4s;
+}
+header > nav > a:hover {
+    transform: rotate(4deg);
+}
+header > nav > a > img {
+    height: 100%;
+}
+header > hgroup {
+    max-width: 70%;
+    margin: 0.25em;
+}
+header > hgroup > h1 {
+    color: var(--biloulight);
+    text-shadow: var(--biloutextborder);
+    line-height: 1em;
+    transform: rotate(-1deg);
+    margin: 0.5em 0;
+}
+main {
+    flex: 1;
+    padding: 0 1em;
+}
+main h1, main h2, .pswp h1 {
+    font-size: 1.5em;
+    letter-spacing: 0.25ex;
+    color: var(--biloulight);
+    text-shadow: var(--biloutextborder);
+    line-height: 1.75em;
+    margin: 0.5em 0;
+    font-weight: lighter;
+    text-align: center;
+}
+.tags {
+    text-align: center;
+    color: var(--biloulight);
+    margin: 0.5em 0;
+}
+.tags::before {
+    content: 'Mots-clés:';
+    font-family: BilouFontLight;
+}
+.tags a, #current_tag span {
+    font-family: BilouFontLight;
+    background-color: var(--biloubgc33);
+    padding: 0.25em 0.5em;
+    border-radius: 0.5em;
+    transition-property: transform;
+    transition-timing-function: var(--biloustic);
+    transition-duration: 0.3s;
+    display: inline-block;
+    letter-spacing: 0.25ex;
+    font-size: 0.8em;
+    margin: 0.2em;
+}
+.tags a:hover {
+    transform: scale(1.05);
+}
+footer {
+    text-align: right;
+}
+footer > nav {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    padding: 1em;
+    margin: auto;
+}
+footer > nav > a {
+    transition-property: transform;
+    transition-timing-function: var(--biloustic);
+    transition-duration: 0.3s;
+    transform-origin: 50% 90%;
+}
+footer > nav > a:hover {
+    transform: scale(1.1);
+}
+footer > nav > a > img {
+    height: 4em;
+}
+footer > small {
+    display: block;
+    min-height: 2.5em;
+    color: var(--biloumedium);
+    background-color: var(--biloubgc);
+    font-family: BilouFontLight;
+}
+footer > small > a {
+    display: inline-block;
+    text-decoration: none;
+    color: var(--biloulight);
+}
+footer > small > a:visited {
+    color: var(--biloulight);
+}
+footer > small > a > img {
+    width: 1.25em;
+    height: 1.25em;
+    opacity: 0.25;
+    margin: 0.25em 0.1em -0.25em;
+    mix-blend-mode: lighten;
+    filter: invert(100%);
+}
+a.biloulink {
+    display: block;
+    color: var(--biloubgc);
+    background-color: white;
+    border: var(--bilouborder);
+    border-radius: 1.5em;
+    padding: 0.25em 0.5em;
+    height: min-content;
+    width: max-content;
+    text-decoration: none;
+    transform-origin: center;
+    transition-property: transform;
+    transition-timing-function: var(--biloustic);
+    transition-duration: 0.3s;
+}
+a.biloulink:visited {
+    color: var(--biloubgc);
+}
+a.biloulink::before {
+    content: "→";
+    font-size: 1.5em;
+    color: var(--biloulight);
+}
+a.biloulink::after {
+    content: "...";
+    color: var(--biloulight);
+}
+a.biloulink:hover {
+    transform: scale(0.95);
+}
+.caption_container {
+    align-self: center;
+    margin: 0.25em;
+    padding-left: 5em;
+}
+.caption {
+    background-color: var(--bilouhighlight);
+    border: var(--bilouborder);
+    color: var(--biloubgc);
+    border-radius: 0.5em;
+    font-size: 1em;
+    font-weight: normal;
+    min-width: min-content;
+    max-width: max-content;
+    padding: 0.25em 0.5em;
+    margin: 4px;
+    text-align: center;
+}
+.caption:before {
+    content: "";
+    display: block;
+    background-image: url(/img/bubble_tail_left.svg);
+    width: 36px;
+    height: 28px;
+    margin-bottom: -28px;
+    position: relative;
+    top: -0.5em;
+    left: calc(-36px - 0.5em);
+}
+.caption.avatar:before {
+    content: "";
+    background-image: url(/img/bubble_tail_left.svg), url(/img/biloumaster.svg);
+    background-size: auto, contain;
+    background-repeat: no-repeat;
+    background-position: right, left;
+    width: 5em;
+    height: 4em;
+    margin-bottom: -4em;
+    top: -1.5em;
+    left: -5.5em;
+}
+date {
+    color: var(--bilouhighlight);
+    text-align: center;
+    margin: 0.1em;
+    letter-spacing: 0.1em;
+    font-family: BilouFontLight;
+    font-weight: bold;
+}
+
+@media (max-width: 640px) {
+    header > hgroup >  h1 {
+        font-size: 1.7em;
+    }
+    .caption {
+        font-size: 0.95em;
+        padding: 0.23em 0.5em;
+    }
+}
+
+@media (max-width: 520px) {
+    header > hgroup >  h1 {
+        font-size: 1.6em;
+    }
+    .caption {
+        font-size: 0.9em;
+        padding: 0.225em 0.5em;
+    }
+}
+
+@media (max-width: 420px) {
+    :root {
+        --biloufade: linear-gradient(-200deg, var(--biloudarkt), var(--biloudark) 280px);
+    }
+    header > hgroup > h1 {
+        font-size: 1.5em;
+        transform: rotate(0deg);
+    }
+    .caption {
+        font-size: 0.8em;
+        padding: 0.2em 0.5em;
+    }
+    header > a > img {
+        transform: scale(1.1);
+    }
+    :root {
+        background-color: var(--biloudark);
+    }
+    body {
+        max-width: none;
+        min-height: 100vh;
+        margin: 0;
+    }
+    footer {
+        text-align: center;
+    }
+    footer small {
+        padding: 1em;
+    }
+    header {
+        margin-top: 0;
+    }
+    header > a {
+        margin-right: 0;
+    }
+}
+
+@keyframes biloupsyche {
+    0% {
+        --biloutick: 0px;
+        background: var(--biloufade), repeating-radial-gradient(circle at left var(--biloupsyche_left) top var(--biloupsyche_top), var(--biloubgc), var(--biloubgc) 9px, var(--biloudark) 10px, var(--biloudark) 19px, var(--biloubgc) 20px);
+    }
+    5% {
+        --biloutick: 1px;
+        background: var(--biloufade), repeating-radial-gradient(circle at left var(--biloupsyche_left) top var(--biloupsyche_top), var(--biloudark), var(--biloudark) calc(var(--biloutick) - 1px), var(--biloubgc) var(--biloutick), var(--biloubgc) calc(var(--biloutick) + 9px), var(--biloudark) calc(var(--biloutick) + 10px), var(--biloudark) 20px);
+    }
+    10% {
+        --biloutick: 2px;
+        background: var(--biloufade), repeating-radial-gradient(circle at left var(--biloupsyche_left) top var(--biloupsyche_top), var(--biloudark), var(--biloudark) calc(var(--biloutick) - 1px), var(--biloubgc) var(--biloutick), var(--biloubgc) calc(var(--biloutick) + 9px), var(--biloudark) calc(var(--biloutick) + 10px), var(--biloudark) 20px);
+    }
+    15% {
+        --biloutick: 3px;
+        background: var(--biloufade), repeating-radial-gradient(circle at left var(--biloupsyche_left) top var(--biloupsyche_top), var(--biloudark), var(--biloudark) calc(var(--biloutick) - 1px), var(--biloubgc) var(--biloutick), var(--biloubgc) calc(var(--biloutick) + 9px), var(--biloudark) calc(var(--biloutick) + 10px), var(--biloudark) 20px);
+    }
+    20% {
+        --biloutick: 4px;
+        background: var(--biloufade), repeating-radial-gradient(circle at left var(--biloupsyche_left) top var(--biloupsyche_top), var(--biloudark), var(--biloudark) calc(var(--biloutick) - 1px), var(--biloubgc) var(--biloutick), var(--biloubgc) calc(var(--biloutick) + 9px), var(--biloudark) calc(var(--biloutick) + 10px), var(--biloudark) 20px);
+    }
+    25% {
+        --biloutick: 5px;
+        background: var(--biloufade), repeating-radial-gradient(circle at left var(--biloupsyche_left) top var(--biloupsyche_top), var(--biloudark), var(--biloudark) calc(var(--biloutick) - 1px), var(--biloubgc) var(--biloutick), var(--biloubgc) calc(var(--biloutick) + 9px), var(--biloudark) calc(var(--biloutick) + 10px), var(--biloudark) 20px);
+    }
+    30% {
+        --biloutick: 6px;
+        background: var(--biloufade), repeating-radial-gradient(circle at left var(--biloupsyche_left) top var(--biloupsyche_top), var(--biloudark), var(--biloudark) calc(var(--biloutick) - 1px), var(--biloubgc) var(--biloutick), var(--biloubgc) calc(var(--biloutick) + 9px), var(--biloudark) calc(var(--biloutick) + 10px), var(--biloudark) 20px);
+    }
+    35% {
+        --biloutick: 7px;
+        background: var(--biloufade), repeating-radial-gradient(circle at left var(--biloupsyche_left) top var(--biloupsyche_top), var(--biloudark), var(--biloudark) calc(var(--biloutick) - 1px), var(--biloubgc) var(--biloutick), var(--biloubgc) calc(var(--biloutick) + 9px), var(--biloudark) calc(var(--biloutick) + 10px), var(--biloudark) 20px);
+    }
+    40% {
+        --biloutick: 8px;
+        background: var(--biloufade), repeating-radial-gradient(circle at left var(--biloupsyche_left) top var(--biloupsyche_top), var(--biloudark), var(--biloudark) calc(var(--biloutick) - 1px), var(--biloubgc) var(--biloutick), var(--biloubgc) calc(var(--biloutick) + 9px), var(--biloudark) calc(var(--biloutick) + 10px), var(--biloudark) 20px);
+    }
+    45% {
+        --biloutick: 9px;
+        background: var(--biloufade), repeating-radial-gradient(circle at left var(--biloupsyche_left) top var(--biloupsyche_top), var(--biloudark), var(--biloudark) calc(var(--biloutick) - 1px), var(--biloubgc) var(--biloutick), var(--biloubgc) calc(var(--biloutick) + 9px), var(--biloudark) calc(var(--biloutick) + 10px), var(--biloudark) 20px);
+    }
+    50% {
+        --biloutick: 10px;
+        background: var(--biloufade), repeating-radial-gradient(circle at left var(--biloupsyche_left) top var(--biloupsyche_top), var(--biloudark), var(--biloudark) calc(var(--biloutick) - 1px), var(--biloubgc) var(--biloutick), var(--biloubgc) 19px, var(--biloudark) 20px);
+    }
+    55% {
+        --biloutick: 11px;
+        background: var(--biloufade), repeating-radial-gradient(circle at left var(--biloupsyche_left) top var(--biloupsyche_top), var(--biloubgc), var(--biloudark) calc(var(--biloutick) - 10px), var(--biloudark) calc(var(--biloutick) - 1px), var(--biloubgc) var(--biloutick), var(--biloubgc) 20px);
+    }
+    60% {
+        --biloutick: 12px;
+        background: var(--biloufade), repeating-radial-gradient(circle at left var(--biloupsyche_left) top var(--biloupsyche_top), var(--biloubgc), var(--biloubgc) calc(var(--biloutick) - 11px), var(--biloudark) calc(var(--biloutick) - 10px), var(--biloudark) calc(var(--biloutick) - 1px), var(--biloubgc) var(--biloutick), var(--biloubgc) 20px);
+    }
+    65% {
+        --biloutick: 13px;
+        background: var(--biloufade), repeating-radial-gradient(circle at left var(--biloupsyche_left) top var(--biloupsyche_top), var(--biloubgc), var(--biloubgc) calc(var(--biloutick) - 11px), var(--biloudark) calc(var(--biloutick) - 10px), var(--biloudark) calc(var(--biloutick) - 1px), var(--biloubgc) var(--biloutick), var(--biloubgc) 20px);
+    }
+    70% {
+        --biloutick: 14px;
+        background: var(--biloufade), repeating-radial-gradient(circle at left var(--biloupsyche_left) top var(--biloupsyche_top), var(--biloubgc), var(--biloubgc) calc(var(--biloutick) - 11px), var(--biloudark) calc(var(--biloutick) - 10px), var(--biloudark) calc(var(--biloutick) - 1px), var(--biloubgc) var(--biloutick), var(--biloubgc) 20px);
+    }
+    75% {
+        --biloutick: 15px;
+        background: var(--biloufade), repeating-radial-gradient(circle at left var(--biloupsyche_left) top var(--biloupsyche_top), var(--biloubgc), var(--biloubgc) calc(var(--biloutick) - 11px), var(--biloudark) calc(var(--biloutick) - 10px), var(--biloudark) calc(var(--biloutick) - 1px), var(--biloubgc) var(--biloutick), var(--biloubgc) 20px);
+    }
+    80% {
+        --biloutick: 16px;
+        background: var(--biloufade), repeating-radial-gradient(circle at left var(--biloupsyche_left) top var(--biloupsyche_top), var(--biloubgc), var(--biloubgc) calc(var(--biloutick) - 11px), var(--biloudark) calc(var(--biloutick) - 10px), var(--biloudark) calc(var(--biloutick) - 1px), var(--biloubgc) var(--biloutick), var(--biloubgc) 20px);
+    }
+    85% {
+        --biloutick: 17px;
+        background: var(--biloufade), repeating-radial-gradient(circle at left var(--biloupsyche_left) top var(--biloupsyche_top), var(--biloubgc), var(--biloubgc) calc(var(--biloutick) - 11px), var(--biloudark) calc(var(--biloutick) - 10px), var(--biloudark) calc(var(--biloutick) - 1px), var(--biloubgc) var(--biloutick), var(--biloubgc) 20px);
+    }
+    90% {
+        --biloutick: 18px;
+        background: var(--biloufade), repeating-radial-gradient(circle at left var(--biloupsyche_left) top var(--biloupsyche_top), var(--biloubgc), var(--biloubgc) calc(var(--biloutick) - 11px), var(--biloudark) calc(var(--biloutick) - 10px), var(--biloudark) calc(var(--biloutick) - 1px), var(--biloubgc) var(--biloutick), var(--biloubgc) 20px);
+    }
+    95% {
+        --biloutick: 19px;
+        background: var(--biloufade), repeating-radial-gradient(circle at left var(--biloupsyche_left) top var(--biloupsyche_top), var(--biloubgc), var(--biloubgc) calc(var(--biloutick) - 11px), var(--biloudark) calc(var(--biloutick) - 10px), var(--biloudark) calc(var(--biloutick) - 1px), var(--biloubgc) var(--biloutick), var(--biloubgc) 20px);
+    }
+    100% {
+        --biloutick: 20px;
+        background: var(--biloufade), repeating-radial-gradient(circle at left var(--biloupsyche_left) top var(--biloupsyche_top), var(--biloubgc), var(--biloubgc) calc(var(--biloutick) - 11px), var(--biloudark) calc(var(--biloutick) - 10px), var(--biloudark) 19px, var(--biloubgc) 20px);
+    }
+}

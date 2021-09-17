@@ -1,0 +1,11 @@
+<nav id="arrows">{go_prev}{go_next}</nav>
+<figure id="view" style="--bilou_img_max_height:{max_height}px">
+    <h1>« {title} »</h1>
+    <date datetime="{datetime}">{date}</date>
+    <div class="img_container">
+        <img srcset="{srcset}" sizes="{sizes}" src="/img/gallery/{filename}.webp" alt="{alt}" onclick="zoom_img(this);">
+    </div>
+    {description}
+    {tags}
+    {go_gallery}
+</figure>
