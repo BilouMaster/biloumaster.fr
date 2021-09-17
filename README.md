@@ -17,7 +17,7 @@ Version actuelle : https://biloumaster.fr (premier jet, ne correspond pas au tra
 Version bêta en cours : http://test.biloumaster.fr/creations (work in progress, correspond au travail en cours dans ce répertoire)
 
 ## Crédits
-Je remercie @dimsemnov pour son super travail sur la version V5 bêta de PhotoSwipe !
+Je remercie @dimsemenov pour son super travail sur la version V5 bêta de PhotoSwipe !
 
 ## Dépendances
 Pour le moment j'utilise PILLOW (PIL) et pathlib.
