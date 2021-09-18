@@ -58,3 +58,14 @@
     grid-column: 3;
     grid-row: 5 / 7;
 }
+
+@media (max-width: 420px) {
+    .preview_images {
+        width: 100%;
+        height: 9em;
+        float: none;
+    }
+    .navig_element:hover > .preview_images {
+        width: 100%;
+    }
+}
