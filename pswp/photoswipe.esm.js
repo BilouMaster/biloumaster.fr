@@ -1,5 +1,5 @@
 /*!
-  * PhotoSwipe 5.0.2 - https://photoswipe.com
+  * PhotoSwipe 5.1.4 - https://photoswipe.com
   * (c) 2021 Dmitry Semenov
   */
 /**
@@ -120,6 +120,14 @@ function setTransitionStyle(el, prop, duration, ease) {
     : 'none';
 }
 
+/**
+ * Apply width and height CSS properties to element
+ */
+function setWidthHeight(el, w, h) {
+  el.style.width = (typeof w === 'number') ? (w + 'px') : w;
+  el.style.height = (typeof h === 'number') ? (h + 'px') : h;
+}
+
 function removeTransitionStyle(el) {
   setTransitionStyle(el);
 }
@@ -149,6 +157,31 @@ function specialKeyUsed(e) {
   if (e.which === 2 || e.ctrlKey || e.metaKey || e.altKey || e.shiftKey) {
     return true;
   }
+}
+
+/**
+ * Parse `gallery` or `children` options.
+ *
+ * @param {Element|NodeList|String} option
+ * @param {String|null} legacySelector
+ * @param {Element|null} parent
+ * @returns Element[]
+ */
+function getElementsFromOption(option, legacySelector, parent = document) {
+  let elements = [];
+
+  if (option instanceof Element) {
+    elements = [option];
+  } else if (option instanceof NodeList || Array.isArray(option)) {
+    elements = Array.from(option);
+  } else {
+    const selector = typeof option === 'string' ? option : legacySelector;
+    if (selector) {
+      elements = Array.from(parent.querySelectorAll(selector));
+    }
+  }
+
+  return elements;
 }
 
 // Detect passive event listener support
@@ -346,8 +379,14 @@ class PanBounds {
 const MAX_IMAGE_WIDTH = 3000;
 
 class ZoomLevel {
-  constructor(options, itemData, index) {
-    // pswp options
+  /**
+   * @param {Object} options PhotoSwipe options
+   * @param {Object} itemData Slide data
+   * @param {Integer} index Slide index
+   * @param {PhotoSwipe|undefined} pswp PhotoSwipe instance, can be undefined if not initialized yet
+   */
+  constructor(options, itemData, index, pswp) {
+    this.pswp = pswp;
     this.options = options;
     this.itemData = itemData;
     this.index = index;
@@ -391,6 +430,10 @@ class ZoomLevel {
       this.initial,
       this.secondary
     );
+
+    if (this.pswp) {
+      this.pswp.dispatch('zoomLevelsUpdate', { zoomLevels: this, slideData: this.itemData });
+    }
   }
 
   /**
@@ -507,13 +550,6 @@ function getPanAreaSize(options, viewportSize/*, pswp*/) {
  * Renders and allows to control a single slide
  */
 
-/**
- * Apply width and height CSS properties to element
- */
-function applyWidthHeight(el, w, h) {
-  el.style.width = w + 'px';
-  el.style.height = h + 'px';
-}
 
 class Slide {
   constructor(data, index, pswp) {
@@ -526,7 +562,7 @@ class Slide {
 
     this.isFirstSlide = (this.isActive && !pswp.opener.isOpen);
 
-    this.zoomLevels = new ZoomLevel(pswp.options, data, index);
+    this.zoomLevels = new ZoomLevel(pswp.options, data, index, pswp);
 
     this.pswp.dispatch('gettingData', {
       slide: this,
@@ -540,9 +576,15 @@ class Slide {
     };
 
     this.currZoomLevel = 1;
-    this.width = Number(data.w);
-    this.height = Number(data.h);
+    this.width = Number(data.w) || 0;
+    this.height = Number(data.h) || 0;
     this.bounds = new PanBounds(this);
+
+    this.prevWidth = -1;
+    this.prevHeight = -1;
+    this.prevScaleMultiplier = -1;
+
+    this.pswp.dispatch('slideInit', { slide: this });
   }
 
   /**
@@ -572,44 +614,14 @@ class Slide {
       return;
     }
 
-    this._calculateSize();
+    this.calculateSize();
 
     this.container = createElement('pswp__zoom-wrap');
     this.container.transformOrigin = '0 0';
 
-    if (this.data.html) {
-      this.addSlideHTML(this.data.html);
-    } else if (this.data.src) {
-      // Use image-based placeholder only for the first slide
-      const useImagePlaceholder = this.data.msrc && this.isFirstSlide;
-
-      // Create placeholder
-      // (stretched thumbnail or simple div behind the main image)
-      this.placeholder = createElement(
-        'pswp__img pswp__img--placeholder',
-        useImagePlaceholder ? 'img' : '',
-        this.container
-      );
-
-      if (useImagePlaceholder) {
-        this.placeholder.decoding = 'async';
-        this.placeholder.alt = '';
-        this.placeholder.src = this.data.msrc;
-      }
-
-      this.placeholder.setAttribute('aria-hiden', 'true');
-
-      this.pswp.dispatch('placeholderCreated', { placeholder: this.placeholder, slide: this });
-
-      // Create the main image
-      if (!this.image) {
-        this.preload();
-      }
-
-      this.isLoading = true;
-    }
-
+    this.appendContent();
     this.appendHeavy();
+    this.updateContentSize();
 
     this.holderElement.innerHTML = '';
     this.holderElement.appendChild(this.container);
@@ -627,28 +639,12 @@ class Slide {
     }
   }
 
+
   /**
-   * Creates and loads image
+   * Append content to this.container
    */
-  preload() {
-    this.image = createElement('pswp__img', 'img');
-
-    // Not adding `async`,
-    // as it causes flash of image after it's loaded in Safari
-    // this.image.decoding = 'async';
-
-    // may update sizes attribute
-    this._updateImagesSize();
-
-    if (this.data.srcset) {
-      this.image.srcset = this.data.srcset;
-    }
-
-    this.image.src = this.data.src;
-
-    this.image.alt = this.data.alt || '';
-
-    this.pswp.lazyLoader.addRecent(this.index);
+  appendContent() {
+    this.setSlideHTML(this.data.html);
   }
 
   /**
@@ -675,75 +671,11 @@ class Slide {
 
     this.heavyAppended = true;
 
-    if (this.image) {
-      // "progressive loading"  - display parts of image as data arrives
-      // This behavior is limited to devices with mouse or with large screens,
-      // (as there might be significant FPS drops when image loads)
-      //
-      // TODO should we disable it on smaller screens?
-      //if (this.pswp.options.progressiveLoading !== false
-      //    && (this.pswp.hasMouse || this.pswp.viewportSize.x > 900)) {
-      this._appendImage();
-      //}
-
-      // Firefox (89) throws "DOMException: Invalid image request."
-      // if decode() is called right after image is appended, see #1760
-      // decodeImage(this.image).then(() => {
-      //   this._onImageLoaded();
-      // }).catch(() => {
-      //   this._onImageLoaded(true);
-      // });
-      // So we use simple onload:
-
-      if (this.image.complete) {
-        this._onImageLoaded();
-      } else {
-        this.image.onload = () => this._onImageLoaded();
-        this.image.onerror = () => this._onImageLoaded(true);
-      }
-    }
+    this.appendHeavyContent();
   }
 
-  _appendImage() {
-    if (!this._imageAppended) {
-      this.container.appendChild(this.image);
-      this._imageAppended = true;
-    }
-  }
-
-  _onImageLoaded(isError) {
-    this._appendImage();
-    this.isLoading = false;
-    this.pswp.dispatch('loadComplete', { slide: this, isError });
-    if (this.placeholder) {
-      // If large image is not decoded,
-      // which might happen if browser does not support decode(),
-      // there will be a flash after placeholder is removed,
-      // so we hide it with delay
-      setTimeout(() => {
-        if (this.placeholder) {
-          this.placeholder.remove();
-          this.placeholder = null;
-        }
-      }, 500);
-    }
-    if (isError) {
-      this._handleError();
-    }
-  }
-
-  _handleError() {
-    this.addSlideHTML(this.pswp.options.errorMsg);
-    const errorLinkElement = this.container.querySelector('.pswp__error-msg a');
-    if (errorLinkElement && this.data.src) {
-      errorLinkElement.href = this.data.src;
-    }
-    this.loadError = true;
-    this.image = null;
-    this._calculateSize();
-    this.setZoomLevel(1);
-    this.panTo(0, 0);
-    this.pswp.dispatch('loadError', { slide: this });
+  appendHeavyContent() {
+    this.pswp.dispatch('appendHeavyContent', { slide: this });
   }
 
   /**
@@ -753,7 +685,7 @@ class Slide {
    * @param {DOMElement} containerEl
    * @param {String} html
    */
-  addSlideHTML(html) {
+  setSlideHTML(html) {
     const { container } = this;
     if (html.tagName) {
       container.appendChild(html);
@@ -786,8 +718,10 @@ class Slide {
     this.isActive = false;
 
     // reset zoom level
+    this.currentResolution = 0;
     this.zoomAndPanToInitial();
     this.applyCurrentZoomPan();
+    this.updateContentSize();
 
     this.pswp.dispatch('slideDeactivate', { slide: this });
   }
@@ -801,15 +735,11 @@ class Slide {
   }
 
   resize() {
-    this._calculateSize();
+    this.calculateSize();
 
-    // Keep initial zoom level if it was before the resize,
-    // as well as when this slide is not active
-    if (this.currZoomLevel === this.zoomLevels.initial || !this.isActive) {
-      this.currentResolution = 0;
-    }
-
-    this._updateImagesSize();
+    // Reset position and scale to original state on resize
+    this.currentResolution = 0;
+    this.updateContentSize();
     this.zoomAndPanToInitial();
     this.applyCurrentZoomPan();
   }
@@ -818,91 +748,43 @@ class Slide {
   /**
    * Apply size to current slide images
    * based on the current resolution.
-   *
-   * @private
+   * @returns Boolean true if size was changed
    */
-  _updateImagesSize() {
-    if (!this.data.src || !this.width) {
-      return;
-    }
-
-    // Use initial zoom level
-    // if resolution is not defined (user didn't zoom yet)
-    const multiplier = this.currentResolution || this.zoomLevels.initial;
-
-    if (!multiplier) {
-      return;
-    }
-
-    const width = Math.round(this.width * multiplier);
-    const height = Math.round(this.height * multiplier);
-
-    if (this.placeholder) {
-      applyWidthHeight(this.placeholder, width, height);
-    }
-
-    const { image } = this;
-    if (image) {
-      applyWidthHeight(image, width, height);
-
-      // Handle srcset sizes attribute.
-      //
-      // Never lower quality, if it was increased previously.
-      // Chrome does this automatically, Firefox and Safari do not,
-      // so we store largest used size in dataset.
-      if (!image.dataset.largestUsedSize
-          || width > image.dataset.largestUsedSize) {
-        image.sizes = width + 'px';
-        image.dataset.largestUsedSize = width;
-      }
-
-      this.pswp.dispatch('imageSizeChange', { slide: this, width, height });
-    }
+  updateContentSize() {
+    return true;
   }
 
-
-  /**
-   * Append HTML content to container container
-   * (usually data.html or error message)
-   *
-   * @param {DOMElement} containerEl
-   * @param {String} html
-   */
-  // addSlideHTML(containerEl, html) {
-  //   if (html.tagName) {
-  //     containerEl.appendChild(html);
-  //   } else {
-  //     containerEl.innerHTML = html;
-  //   }
-  //   containerEl.classList.add('pswp__zoom-wrap--html');
-  // }
-
   getPlaceholder() {
-    return this.placeholder;
+    return false;
   }
 
   /**
    * Zoom current slide image to...
    *
    * @param  {Number} destZoomLevel      Destination zoom level.
-   * @param  {Object} centerPoint        Transform origin center poiint
+   * @param  {Object|false} centerPoint  Transform origin center point,
+   *                                     or false if viewport center should be used.
    * @param  {Number} transitionDuration Transition duration, may be set to 0.
-   * @param  {Boolean|null} ignoreBounds Minimum and maximum zoom levels will be ignore.
+   * @param  {Boolean|null} ignoreBounds Minimum and maximum zoom levels will be ignored.
    * @return {Boolean|null}              Returns true if animated.
    */
   zoomTo(destZoomLevel, centerPoint, transitionDuration, ignoreBounds) {
     const { pswp } = this;
-    if (!this.isZoomable
+    if (!this.isZoomable()
         || pswp.mainScroll.isShifted()) {
       return;
     }
 
+    pswp.dispatch('beforeZoomTo', {
+      destZoomLevel, centerPoint, transitionDuration
+    });
+
     // stop all pan and zoom transitions
     pswp.animations.stopAllPan();
 
-    if (!centerPoint) {
-      centerPoint = pswp.getViewportCenterPoint();
-    }
+    // if (!centerPoint) {
+    //   centerPoint = pswp.getViewportCenterPoint();
+    // }
 
     const prevZoomLevel = this.currZoomLevel;
 
@@ -966,54 +848,26 @@ class Slide {
    * pan bounds according to the new zoom level.
    *
    * @param {String} axis
-   * @param {Object} centerPoint point based on which zoom is performed,
-   *                             usually refers to the current mouse position,
-   *                             or something like center of viewport.
+   * @param {Object|null} centerPoint point based on which zoom is performed,
+   *                                  usually refers to the current mouse position,
+   *                                  if false - viewport center will be used.
    * @param {Number|null} prevZoomLevel Zoom level before new zoom was applied.
    */
   calculateZoomToPanOffset(axis, point, prevZoomLevel) {
     const totalPanDistance = this.bounds.max[axis] - this.bounds.min[axis];
-    let updatedPanOffset;
-
     if (totalPanDistance === 0) {
       return this.bounds.center[axis];
     }
 
-    const imageSize = this[axis === 'x' ? 'width' : 'height']
-                      * (prevZoomLevel || this.currZoomLevel);
-
-
-    const { panPaddingRatio, panEdgeIsViewport } = this.pswp.options;
-
-    const panPadding = this.panAreaSize[axis] * panPaddingRatio;
-
-    // Make it easier to zoom to the edge of the image
-    //
-    // Imagine a transparent border that overlaps an image
-    // if user clicks on it - image will be
-    // zoomed and panned to the corresponding edge
-    //
-    // If panEdgeIsViewport is enabled,
-    // pan position will be based on viewport, instead of based on image
-    //
-    let ratio; // 0 to 1, '0' being minimum pan position and '1' - maximum
-    if (!panEdgeIsViewport && point[axis] < panPadding + this.pan[axis]) {
-      // point is at left or top edge of the image
-      ratio = 0;
-    } else if (!panEdgeIsViewport && point[axis] > imageSize + this.pan[axis] - panPadding) {
-      // point is at bottom or right edge of the image
-      ratio = 1;
-    } else {
-      ratio = (point[axis] - this.bounds.min[axis] - panPadding)
-                / (this.panAreaSize[axis] - panPadding * 2);
+    if (!point) {
+      point = this.pswp.getViewportCenterPoint();
     }
 
-
-    updatedPanOffset = totalPanDistance * ratio + this.bounds.min[axis];
-
-    updatedPanOffset = this.bounds.correctPan(axis, updatedPanOffset);
-
-    return updatedPanOffset;
+    const zoomFactor = this.currZoomLevel / prevZoomLevel;
+    return this.bounds.correctPan(
+      axis,
+      (this.pan[axis] - point[axis]) * zoomFactor + point[axis]
+    );
   }
 
   /**
@@ -1032,14 +886,14 @@ class Slide {
    * Whether slide in the current state can be panned by the user
    */
   isPannable() {
-    return this.width && (this.currZoomLevel > this.zoomLevels.fit);
+    return false;
   }
 
   /**
    * Whether the slide can be zoomed
    */
   isZoomable() {
-    return (this.width > 0);
+    return false;
   }
 
   /**
@@ -1074,23 +928,23 @@ class Slide {
     setTransform(this.container, x, y, zoom);
   }
 
-  _calculateSize() {
-    if (this.data.src && !this.loadError) {
-      const { pswp } = this;
+  calculateSize() {
+    // this.zoomLevels.fit = 1;
+    // this.zoomLevels.vFill = 1;
+    // this.zoomLevels.initial = 1;
 
-      equalizePoints(
-        this.panAreaSize,
-        getPanAreaSize(pswp.options, pswp.viewportSize)
-      );
+    const { pswp } = this;
 
-      this.zoomLevels.update(this.width, this.height, this.panAreaSize);
-    } else {
-      this.width = 0;
-      this.height = 0;
-      this.zoomLevels.fit = 1;
-      this.zoomLevels.vFill = 1;
-      this.zoomLevels.initial = 1;
-    }
+    equalizePoints(
+      this.panAreaSize,
+      getPanAreaSize(pswp.options, pswp.viewportSize)
+    );
+
+    this.zoomLevels.update(this.width, this.height, this.panAreaSize);
+
+    pswp.dispatch('calcSlideSize', {
+      slide: this
+    });
   }
 
   getCurrentTransform() {
@@ -1119,10 +973,205 @@ class Slide {
     }
 
     this.currentResolution = newResolution;
-    this._updateImagesSize();
+    this.updateContentSize();
 
     this.pswp.dispatch('resolutionChanged');
   }
+}
+
+class ImageSlide extends Slide {
+  appendContent() {
+    // Use image-based placeholder only for the first slide
+    const useImagePlaceholder = this.data.msrc && this.isFirstSlide;
+
+    // Create placeholder
+    // (stretched thumbnail or simple div behind the main image)
+    this.placeholder = createElement(
+      'pswp__img pswp__img--placeholder',
+      useImagePlaceholder ? 'img' : '',
+      this.container
+    );
+
+    if (useImagePlaceholder) {
+      this.placeholder.decoding = 'async';
+      this.placeholder.alt = '';
+      this.placeholder.src = this.data.msrc;
+    }
+
+    this.placeholder.setAttribute('aria-hiden', 'true');
+
+    this.pswp.dispatch('placeholderCreated', { placeholder: this.placeholder, slide: this });
+
+    // Create the main image
+    if (!this.image) {
+      this.loadMainImage();
+    }
+
+    this.isLoading = true;
+  }
+
+  appendHeavyContent() {
+    super.appendHeavyContent();
+    if (this.image) {
+      this._appendMainImage();
+
+      if (this.image.complete) {
+        this._onImageLoaded();
+      } else {
+        this.image.onload = () => this._onImageLoaded();
+        this.image.onerror = () => this._onImageLoaded(true);
+      }
+    }
+  }
+
+  /**
+   * Creates and loads image
+   */
+  loadMainImage() {
+    this.image = createElement('pswp__img', 'img');
+
+    // may update sizes attribute
+    this.updateContentSize();
+
+    if (this.data.srcset) {
+      this.image.srcset = this.data.srcset;
+    }
+
+    this.image.src = this.data.src;
+
+    this.image.alt = this.data.alt || '';
+
+    // Not adding `async`,
+    // as it causes flash of image after it's loaded in Safari
+    // this.image.decoding = 'async';
+
+    // Using decode() to force nearby images to render:
+    // even though nearby images are in DOM and not hidden via display:none,
+    // Safari and FF still do not render them as they're offscreen. This helps:
+    if (!this.isActive && ('decode' in this.image)) {
+      this.image.decode();
+    }
+
+    this.pswp.lazyLoader.addRecent(this.index);
+  }
+
+  getPlaceholder() {
+    return this.placeholder;
+  }
+
+  sizeChanged(scaleMultiplier, width, height) {
+    if (scaleMultiplier !== this.prevScaleMultiplier
+        || width !== this.prevWidth
+        || height !== this.prevHeight) {
+      this.prevScaleMultiplier = scaleMultiplier;
+      this.prevWidth = width;
+      this.prevHeight = height;
+      return true;
+    }
+
+    return false;
+  }
+
+  _appendMainImage() {
+    if (!this._imageAppended) {
+      this.container.appendChild(this.image);
+      this._imageAppended = true;
+    }
+  }
+
+  _onImageLoaded(isError) {
+    this._appendMainImage();
+    this.isLoading = false;
+    this.pswp.dispatch('loadComplete', { slide: this, isError });
+    if (this.placeholder) {
+      // If large image is not decoded,
+      // which might happen if browser does not support decode(),
+      // there will be a flash after placeholder is removed,
+      // so we hide it with delay
+      setTimeout(() => {
+        if (this.placeholder) {
+          this.placeholder.remove();
+          this.placeholder = null;
+        }
+      }, 500);
+    }
+    if (isError) {
+      this._handleError();
+    }
+  }
+
+  _handleError() {
+    this.setSlideHTML(this.pswp.options.errorMsg);
+    const errorLinkElement = this.container.querySelector('.pswp__error-msg a');
+    if (errorLinkElement && this.data.src) {
+      errorLinkElement.href = this.data.src;
+    }
+    this.loadError = true;
+    this.image = null;
+    this.calculateSize();
+    this.setZoomLevel(1);
+    this.panTo(0, 0);
+    this.pswp.dispatch('loadError', { slide: this });
+  }
+
+  /**
+   * Whether slide in the current state can be panned by the user
+   */
+  isPannable() {
+    return this.width && (this.currZoomLevel > this.zoomLevels.fit);
+  }
+
+  /**
+   * Whether the slide can be zoomed
+   */
+  isZoomable() {
+    return (this.width > 0);
+  }
+
+  updateContentSize() {
+    // Use initial zoom level
+    // if resolution is not defined (user didn't zoom yet)
+    const scaleMultiplier = this.currentResolution || this.zoomLevels.initial;
+
+    if (!scaleMultiplier) {
+      return;
+    }
+
+    if (!this.sizeChanged(scaleMultiplier, this.width, this.height)) {
+      return;
+    }
+
+    const width = Math.round(this.width * scaleMultiplier);
+    const height = Math.round(this.height * scaleMultiplier);
+
+    if (this.placeholder) {
+      setWidthHeight(this.placeholder, width, 'auto');
+    }
+
+    const { image } = this;
+    if (image) {
+      setWidthHeight(image, width, 'auto');
+
+      // Handle srcset sizes attribute.
+      //
+      // Never lower quality, if it was increased previously.
+      // Chrome does this automatically, Firefox and Safari do not,
+      // so we store largest used size in dataset.
+      if (image.srcset
+          && (!image.dataset.largestUsedSize || width > image.dataset.largestUsedSize)) {
+        image.sizes = width + 'px';
+        image.dataset.largestUsedSize = width;
+      }
+
+      this.pswp.dispatch('imageSizeChange', { slide: this, width, height });
+    }
+
+    return true;
+  }
+}
+
+class HTMLSlide extends Slide {
+
 }
 
 /**
@@ -1224,7 +1273,8 @@ class DragHandler {
     }
 
     // Restore zoom level
-    if (pswp.currSlide.currZoomLevel > pswp.currSlide.zoomLevels.max
+    if ((pswp.currSlide.currZoomLevel > pswp.currSlide.zoomLevels.max
+        && this.pswp.options.limitMaxZoom)
         || this.gestures.isMultitouch) {
       this.gestures.zoomLevels.correctZoomPan();
     } else {
@@ -1303,7 +1353,7 @@ class DragHandler {
           ));
         }
 
-        pan[axis] = pos;
+        pan[axis] = Math.floor(pos);
         currSlide.applyCurrentZoomPan();
       },
     });
@@ -1558,13 +1608,20 @@ class ZoomHandler {
    * Correct currZoomLevel and pan if they are
    * beyond minimum or maximum values.
    * With animation.
+   *
+   * @param {Boolean} ignoreGesture Wether gesture coordinates should be ignored
+   *                                when calculating destination pan position.
    */
-  correctZoomPan() {
+  correctZoomPan(ignoreGesture) {
     const { pswp } = this;
     const { currSlide } = pswp;
 
     if (!currSlide.isZoomable()) {
       return;
+    }
+
+    if (this._zoomPoint.x === undefined) {
+      ignoreGesture = true;
     }
 
     const prevZoomLevel = currSlide.currZoomLevel;
@@ -1588,6 +1645,14 @@ class ZoomHandler {
 
     const initialPan = equalizePoints({}, currSlide.pan);
     let destinationPan = equalizePoints({}, initialPan);
+
+    if (ignoreGesture) {
+      this._zoomPoint.x = 0;
+      this._zoomPoint.y = 0;
+      this._startZoomPoint.x = 0;
+      this._startZoomPoint.y = 0;
+      equalizePoints(this._startPan, this.pswp.currSlide.pan);
+    }
 
     if (currZoomLevelNeedsChange) {
       destinationPan = {
@@ -1716,6 +1781,10 @@ class TapHandler {
     const { pswp } = this.gestures;
     const { currSlide } = pswp;
     const optionValue = pswp.options[actionName + 'Action'];
+
+    if (pswp.dispatch(actionName + 'Action', { point, originalEvent }).defaultPrevented) {
+      return;
+    }
 
     if (typeof optionValue === 'function') {
       optionValue.call(pswp, point, originalEvent);
@@ -2398,8 +2467,7 @@ class MainScroll {
         naturalFrequency: 30,
         dampingRatio: 1, //0.7,
         onUpdate: (x) => {
-          this.x = x;
-          setTransform(this.pswp.container, x);
+          this.moveTo(x);
         },
         onComplete: () => {
           this.updateCurrItem();
@@ -2449,7 +2517,6 @@ class MainScroll {
     this._prevPositionIndex = this._currPositionIndex;
 
     pswp.currIndex = pswp.potentialIndex;
-    pswp.currItemData = pswp.getItemData(pswp.currIndex);
 
     let diffAbs = Math.abs(positionDifference);
     let tempHolder;
@@ -2533,6 +2600,8 @@ class MainScroll {
 
     this.x = x;
     setTransform(this.pswp.container, x);
+
+    this.pswp.dispatch('moveMainScroll', { x, dragging });
   }
 }
 
@@ -3010,17 +3079,22 @@ class ScrollWheel {
 
     this.pswp.dispatch('wheel');
 
-    if (e.deltaMode === 1 /* DOM_DELTA_LINE */) {
-      // 18 - average line height
-      deltaX *= 18;
-      deltaY *= 18;
-    }
-
     if (e.ctrlKey || this.pswp.options.wheelToZoom) {
       // zoom
       if (currSlide.isZoomable()) {
-        const destZoomLevel = currSlide.currZoomLevel
-                              - (currSlide.zoomLevels.fit * 0.04 * deltaY);
+        let zoomFactor = -deltaY;
+        if (e.deltaMode === 1 /* DOM_DELTA_LINE */) {
+          zoomFactor *= 0.05;
+        } else {
+          zoomFactor *= e.deltaMode ? 1 : 0.002;
+        }
+        zoomFactor = 2 ** zoomFactor;
+
+        if (this.pswp.options.getWheelZoomFactorFn) {
+          zoomFactor = this.pswp.options.getWheelZoomFactorFn(e, this.pswp);
+        }
+
+        const destZoomLevel = currSlide.currZoomLevel * zoomFactor;
         currSlide.zoomTo(destZoomLevel, {
           x: e.clientX,
           y: e.clientY
@@ -3029,6 +3103,12 @@ class ScrollWheel {
     } else {
       // pan
       if (currSlide.isPannable()) {
+        if (e.deltaMode === 1 /* DOM_DELTA_LINE */) {
+          // 18 - average line height
+          deltaX *= 18;
+          deltaY *= 18;
+        }
+
         currSlide.panTo(
           currSlide.pan.x - deltaX,
           currSlide.pan.y - deltaY
@@ -3077,6 +3157,8 @@ function addButtonHTML(htmlData) {
 class UIElement {
   constructor(pswp, data) {
     const name = data.name || data.class;
+    let elementHTML = data.html;
+
     if (pswp.options[name] === false) {
       // exit if element is disabled from options
       return;
@@ -3088,7 +3170,7 @@ class UIElement {
       // arrowNextSVG
       // closeSVG
       // zoomSVG
-      data.html = pswp.options[name + 'SVG'];
+      elementHTML = pswp.options[name + 'SVG'];
     }
 
     pswp.dispatch('uiElementCreate', { data });
@@ -3105,8 +3187,11 @@ class UIElement {
       element = createElement(className, 'button');
       element.type = 'button';
       // add either html or svg inside it
-      element.innerHTML = addButtonHTML(data.html);
-      if (data.title) {
+      element.innerHTML = addButtonHTML(elementHTML);
+
+      if (typeof pswp.options[name + 'Title'] === 'string') {
+        element.title = pswp.options[name + 'Title'];
+      } else if (data.title) {
         element.title = data.title;
       }
     } else {
@@ -3520,6 +3605,43 @@ function getThumbBounds(index, itemData, instance) {
 const MAX_SLIDES_TO_LAZY_LOAD = 15;
 
 /**
+ * Lazy-load an image
+ * This function is used both by Lightbox and PhotoSwipe core,
+ * thus it can be called before dialog is opened.
+ *
+ * @param {Object} itemData Data about the slide
+ * @param {Object}  instance PhotoSwipe or PhotoSwipeLightbox eventable instance
+ * @param {Boolean}  decode Wether decode() should be used.
+ * @returns {Object|Boolean} Image that is being decoded or false.
+ */
+function lazyLoadData(itemData, instance, decode) {
+  if (itemData.src && itemData.w && itemData.h) {
+    const { options } = instance;
+
+    // We need to know dimensions of the image to preload it,
+    // as it might use srcset and we need to define sizes
+    const viewportSize = instance.viewportSize || getViewportSize(options);
+    const panAreaSize = getPanAreaSize(options, viewportSize);
+
+    const zoomLevel = new ZoomLevel(options, itemData, -1);
+    zoomLevel.update(itemData.w, itemData.h, panAreaSize);
+
+    const image = document.createElement('img');
+    image.decoding = 'async';
+    image.sizes = Math.ceil(itemData.w * zoomLevel.initial) + 'px';
+    if (itemData.srcset) {
+      image.srcset = itemData.srcset;
+    }
+    image.src = itemData.src;
+    if (decode && ('decode' in image)) {
+      image.decode();
+    }
+
+    return image;
+  }
+}
+
+/**
  * Lazy-loads specific slide.
  * This function is used both by Lightbox and PhotoSwipe core,
  * thus it can be called before dialog is opened.
@@ -3536,25 +3658,7 @@ function lazyLoadSlide(index, instance) {
     return;
   }
 
-  if (itemData.src && itemData.w && itemData.h) {
-    const { options } = instance;
-
-    // We need to know dimensions of the image to preload it,
-    // as it might use srcset and we need to define sizes
-    const viewportSize = instance.viewportSize || getViewportSize(options);
-    const panAreaSize = getPanAreaSize(options, viewportSize);
-
-    const zoomLevel = new ZoomLevel(options, itemData, index);
-    zoomLevel.update(itemData.w, itemData.h, panAreaSize);
-
-    const image = document.createElement('img');
-    image.decoding = 'async';
-    image.sizes = Math.ceil(itemData.w * zoomLevel.initial) + 'px';
-    if (itemData.srcset) {
-      image.srcset = itemData.srcset;
-    }
-    image.src = itemData.src;
-  }
+  lazyLoadData(itemData, instance);
 }
 
 class LazyLoader {
@@ -3581,12 +3685,12 @@ class LazyLoader {
 
     // preload[1] - num items to preload in forward direction
     for (i = 0; i <= preload[1]; i++) {
-      this._loadSlideByIndex(pswp.currIndex + (isForward ? i : (-i)));
+      this.loadSlideByIndex(pswp.currIndex + (isForward ? i : (-i)));
     }
 
     // preload[0] - num items to preload in backward direction
     for (i = 1; i <= preload[0]; i++) {
-      this._loadSlideByIndex(pswp.currIndex + (isForward ? (-i) : i));
+      this.loadSlideByIndex(pswp.currIndex + (isForward ? (-i) : i));
     }
   }
 
@@ -3619,12 +3723,17 @@ class LazyLoader {
     return true;
   }
 
-  _loadSlideByIndex(index) {
+  loadSlideByIndex(index) {
     index = this.pswp.getLoopedIndex(index);
 
     if (this.addRecent(index)) {
       lazyLoadSlide(index, this.pswp);
     }
+  }
+
+  // @see lazyLoadData
+  loadSlideByData(data, decode) {
+    lazyLoadData(data, this.pswp, decode);
   }
 }
 
@@ -3785,8 +3894,12 @@ class PhotoSwipeBase extends Eventable {
    * @param {Element} galleryElement
    */
   _getGalleryDOMElements(galleryElement) {
-    if (this.options.childSelector) {
-      return galleryElement.querySelectorAll(this.options.childSelector) || [];
+    if (this.options.children || this.options.childSelector) {
+      return getElementsFromOption(
+        this.options.children,
+        this.options.childSelector,
+        galleryElement
+      ) || [];
     }
 
     return [galleryElement];
@@ -3847,6 +3960,9 @@ class PhotoSwipeBase extends Eventable {
 // we set it to the minimum amount
 const MIN_OPACITY = 0.003;
 
+// Transitions for slides wider than this will be discarded
+const MAX_SLIDE_WIDTH_TO_ANIMATE = 4000;
+
 class Opener {
   constructor(pswp) {
     this.pswp = pswp;
@@ -3870,10 +3986,18 @@ class Opener {
       return false;
     }
 
+    const slide = this.pswp.currSlide;
+
     this.isOpen = false;
     this.isOpening = false;
     this.isClosing = true;
     this._duration = this.pswp.options.hideAnimationDuration;
+
+    // Automatically disable transition if the current slide
+    // is at MAX_SLIDE_WIDTH_TO_ANIMATE or wider
+    if (slide && slide.currZoomLevel * slide.width >= MAX_SLIDE_WIDTH_TO_ANIMATE) {
+      this._duration = 0;
+    }
 
     this._applyStartProps();
     setTimeout(() => {
@@ -4192,6 +4316,7 @@ const defaultOptions = {
   escKey: true,
   arrowKeys: true,
   returnFocus: true,
+  limitMaxZoom: true,
 
   clickToCloseNonZoomable: true,
   imageClickAction: 'zoom-or-close',
@@ -4200,8 +4325,6 @@ const defaultOptions = {
   doubleTapAction: 'zoom',
 
   indexIndicatorSep: ' / ',
-
-  panPaddingRatio: 0.15, // 15%
 
   bgOpacity: 0.8,
 
@@ -4259,7 +4382,7 @@ class PhotoSwipe extends PhotoSwipeBase {
       this.options.loop = false;
     }
 
-    this._initializePlugins();
+    this.dispatch('init');
 
     this._createMainStructure();
 
@@ -4295,8 +4418,6 @@ class PhotoSwipe extends PhotoSwipeBase {
       this.currIndex = 0;
     }
 
-    this.currItemData = this.getItemData(this.currIndex);
-
     if (!this.gestures.supportsTouch) {
       // enable mouse features if no touch support detected
       this.mouseDetected();
@@ -4307,7 +4428,8 @@ class PhotoSwipe extends PhotoSwipeBase {
 
     this.offset.y = window.pageYOffset;
 
-    this.dispatch('gettingData', this.currIndex, this.currItemData, true);
+    this._initialItemData = this.getItemData(this.currIndex);
+    this.dispatch('gettingData', this.currIndex, this._initialItemData, true);
 
     // *Layout* - calculate size and position of elements here
     this._initialThumbBounds = this.getThumbBounds();
@@ -4494,8 +4616,9 @@ class PhotoSwipe extends PhotoSwipeBase {
     }
 
     const itemData = this.getItemData(index);
+    const SlideClass = this.getSlideClass(itemData, index);
 
-    holder.slide = new Slide(itemData, index, this);
+    holder.slide = new SlideClass(itemData, index, this);
 
     // set current slide
     if (index === this.currIndex) {
@@ -4503,6 +4626,22 @@ class PhotoSwipe extends PhotoSwipeBase {
     }
 
     holder.slide.append(holder.el);
+  }
+
+  getSlideClass(itemData, index) {
+    let CurrClass;
+
+    if (itemData.html) {
+      CurrClass = HTMLSlide;
+    } else if (itemData.src) {
+      CurrClass = ImageSlide;
+    } else {
+      CurrClass = Slide;
+    }
+
+    const eventData = this.dispatch('slideClass', { itemData, index, slideClass: CurrClass });
+
+    return eventData.slideClass || CurrClass;
   }
 
   getViewportCenterPoint() {
@@ -4642,21 +4781,11 @@ class PhotoSwipe extends PhotoSwipeBase {
    * Height is optional (calculated based on the large image)
    */
   getThumbBounds() {
-    return getThumbBounds(this.currIndex, this.currItemData, this);
-  }
-
-  _initializePlugins() {
-    this.plugins = {};
-
-    // pluginClasses should be defined by the lightbox module
-    if (this.pluginClasses) {
-      Object.keys(this.pluginClasses).forEach((name) => {
-        const PluginClass = this.pluginClasses[name];
-        if (typeof PluginClass === 'function') {
-          this.plugins[name] = new PluginClass(this);
-        }
-      });
-    }
+    return getThumbBounds(
+      this.currIndex,
+      this.currSlide ? this.currSlide.data : this._initialItemData,
+      this
+    );
   }
 
   _prepareOptions(options) {
@@ -4672,5 +4801,5 @@ class PhotoSwipe extends PhotoSwipeBase {
   }
 }
 
-export default PhotoSwipe;
+export { HTMLSlide, ImageSlide, Slide, PhotoSwipe as default };
 //# sourceMappingURL=photoswipe.esm.js.map

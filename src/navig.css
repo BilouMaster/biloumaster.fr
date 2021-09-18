@@ -22,7 +22,6 @@
     float: left;
     display: grid;
     grid-gap: 1px;
-    background-color: var(--biloulight);
     transition-property: width;
     transition-timing-function: var(--biloueazout);
     transition-duration: 0.3s;

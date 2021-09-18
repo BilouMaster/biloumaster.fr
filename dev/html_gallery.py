@@ -61,6 +61,7 @@ def write_gallery(images_data: dict, template: dict, folder: str, path: str) -> 
         description         = str_folder_desc(folder),
         meta_description    = str_folder_desc(folder),
         extralink           = '''<link rel="stylesheet" href="/src/gallery.css">
+    <link rel="stylesheet" href="/pswp/photoswipe.css">
     <script src="/src/gallery.js"></script>
     <script type="module" src="/src/pswp.js"></script>''',
         content             = str_indent('\n'.join(sections), 2),

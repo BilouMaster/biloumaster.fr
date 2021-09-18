@@ -1,5 +1,5 @@
 /*!
-  * PhotoSwipe Lightbox 5.0.2 - https://photoswipe.com
+  * PhotoSwipe Lightbox 5.1.4 - https://photoswipe.com
   * (c) 2021 Dmitry Semenov
   */
 /**
@@ -20,6 +20,31 @@ function specialKeyUsed(e) {
   if (e.which === 2 || e.ctrlKey || e.metaKey || e.altKey || e.shiftKey) {
     return true;
   }
+}
+
+/**
+ * Parse `gallery` or `children` options.
+ *
+ * @param {Element|NodeList|String} option
+ * @param {String|null} legacySelector
+ * @param {Element|null} parent
+ * @returns Element[]
+ */
+function getElementsFromOption(option, legacySelector, parent = document) {
+  let elements = [];
+
+  if (option instanceof Element) {
+    elements = [option];
+  } else if (option instanceof NodeList || Array.isArray(option)) {
+    elements = Array.from(option);
+  } else {
+    const selector = typeof option === 'string' ? option : legacySelector;
+    if (selector) {
+      elements = Array.from(parent.querySelectorAll(selector));
+    }
+  }
+
+  return elements;
 }
 
 function getViewportSize(options, pswp) {
@@ -56,8 +81,14 @@ function getPanAreaSize(options, viewportSize/*, pswp*/) {
 const MAX_IMAGE_WIDTH = 3000;
 
 class ZoomLevel {
-  constructor(options, itemData, index) {
-    // pswp options
+  /**
+   * @param {Object} options PhotoSwipe options
+   * @param {Object} itemData Slide data
+   * @param {Integer} index Slide index
+   * @param {PhotoSwipe|undefined} pswp PhotoSwipe instance, can be undefined if not initialized yet
+   */
+  constructor(options, itemData, index, pswp) {
+    this.pswp = pswp;
     this.options = options;
     this.itemData = itemData;
     this.index = index;
@@ -101,6 +132,10 @@ class ZoomLevel {
       this.initial,
       this.secondary
     );
+
+    if (this.pswp) {
+      this.pswp.dispatch('zoomLevelsUpdate', { zoomLevels: this, slideData: this.itemData });
+    }
   }
 
   /**
@@ -188,6 +223,43 @@ class ZoomLevel {
 }
 
 /**
+ * Lazy-load an image
+ * This function is used both by Lightbox and PhotoSwipe core,
+ * thus it can be called before dialog is opened.
+ *
+ * @param {Object} itemData Data about the slide
+ * @param {Object}  instance PhotoSwipe or PhotoSwipeLightbox eventable instance
+ * @param {Boolean}  decode Wether decode() should be used.
+ * @returns {Object|Boolean} Image that is being decoded or false.
+ */
+function lazyLoadData(itemData, instance, decode) {
+  if (itemData.src && itemData.w && itemData.h) {
+    const { options } = instance;
+
+    // We need to know dimensions of the image to preload it,
+    // as it might use srcset and we need to define sizes
+    const viewportSize = instance.viewportSize || getViewportSize(options);
+    const panAreaSize = getPanAreaSize(options, viewportSize);
+
+    const zoomLevel = new ZoomLevel(options, itemData, -1);
+    zoomLevel.update(itemData.w, itemData.h, panAreaSize);
+
+    const image = document.createElement('img');
+    image.decoding = 'async';
+    image.sizes = Math.ceil(itemData.w * zoomLevel.initial) + 'px';
+    if (itemData.srcset) {
+      image.srcset = itemData.srcset;
+    }
+    image.src = itemData.src;
+    if (decode && ('decode' in image)) {
+      image.decode();
+    }
+
+    return image;
+  }
+}
+
+/**
  * Lazy-loads specific slide.
  * This function is used both by Lightbox and PhotoSwipe core,
  * thus it can be called before dialog is opened.
@@ -204,82 +276,11 @@ function lazyLoadSlide(index, instance) {
     return;
   }
 
-  if (itemData.src && itemData.w && itemData.h) {
-    const { options } = instance;
-
-    // We need to know dimensions of the image to preload it,
-    // as it might use srcset and we need to define sizes
-    const viewportSize = instance.viewportSize || getViewportSize(options);
-    const panAreaSize = getPanAreaSize(options, viewportSize);
-
-    const zoomLevel = new ZoomLevel(options, itemData, index);
-    zoomLevel.update(itemData.w, itemData.h, panAreaSize);
-
-    const image = document.createElement('img');
-    image.decoding = 'async';
-    image.sizes = Math.ceil(itemData.w * zoomLevel.initial) + 'px';
-    if (itemData.srcset) {
-      image.srcset = itemData.srcset;
-    }
-    image.src = itemData.src;
-  }
+  lazyLoadData(itemData, instance);
 }
 
 function dynamicImportModule(module) {
-  // TODO: polyfill import?
-  return import(module);
-}
-
-function dynamicImportPlugin(pluginKey, pluginItem) {
-  return new Promise((resolve) => {
-    if (typeof pluginItem === 'string') {
-      dynamicImportModule(pluginItem).then((module) => {
-        resolve({
-          pluginKey,
-          moduleClass: module.default
-        });
-      }).catch(resolve);
-    } else {
-      resolve();
-    }
-  });
-}
-
-/**
- * Dynamically load CSS file.
- *
- * Based on loadCSS by Filament Group:
- * https://github.com/filamentgroup/loadCSS
- * https://filamentgroup.com
- *
- * @param {String} href URL
- */
-function loadCSS(href) {
-  return new Promise((resolve, reject) => {
-    // try to find existing CSS with the same href
-    let link = document.head.querySelector(`link[href="${href}"]`);
-
-    if (!link) {
-      link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = href;
-      link.media = 'all';
-      document.head.appendChild(link);
-    } else if (link.dataset.loaded) {
-      // already loaded
-      resolve();
-      return;
-    }
-
-    link.onload = () => {
-      link.dataset.loaded = true;
-      requestAnimationFrame(() => resolve());
-    };
-    link.onerror = () => {
-      link.remove();
-      reject();
-    };
-  });
+  return typeof module === 'string' ? import(/* webpackIgnore: true */ module) : module;
 }
 
 /**
@@ -439,8 +440,12 @@ class PhotoSwipeBase extends Eventable {
    * @param {Element} galleryElement
    */
   _getGalleryDOMElements(galleryElement) {
-    if (this.options.childSelector) {
-      return galleryElement.querySelectorAll(this.options.childSelector) || [];
+    if (this.options.children || this.options.childSelector) {
+      return getElementsFromOption(
+        this.options.children,
+        this.options.childSelector,
+        galleryElement
+      ) || [];
     }
 
     return [galleryElement];
@@ -500,30 +505,26 @@ class PhotoSwipeBase extends Eventable {
  *
  * Loader options use the same object as PhotoSwipe, and supports such options:
  *
- * gallerySelector
- * childSelector - child selector relative to the parent (should be inside)
+ * gallery - Element | Element[] | NodeList | string selector for the gallery element
+ * children - Element | Element[] | NodeList | string selector for the gallery children
  *
  */
 
 class PhotoSwipeLightbox extends PhotoSwipeBase {
   constructor(options) {
     super();
-    this.options = options;
-    this._additionalDynamicCSS = [];
-    this._pluginClasses = {};
+    this.options = options || {};
     this._uid = 0;
   }
 
   init() {
     this.onThumbnailsClick = this.onThumbnailsClick.bind(this);
 
-    if (this.options && this.options.gallerySelector) {
-      // Bind click events to each gallery
-      const galleryElements = document.querySelectorAll(this.options.gallerySelector);
-      galleryElements.forEach((galleryElement) => {
+    // Bind click events to each gallery
+    getElementsFromOption(this.options.gallery, this.options.gallerySelector)
+      .forEach((galleryElement) => {
         galleryElement.addEventListener('click', this.onThumbnailsClick, false);
       });
-    }
   }
 
   onThumbnailsClick(e) {
@@ -569,27 +570,28 @@ class PhotoSwipeLightbox extends PhotoSwipeBase {
     }
 
     const clickedTarget = e.target;
-    const clickedGallery = e.currentTarget;
+    const childElements = getElementsFromOption(
+      this.options.children,
+      this.options.childSelector,
+      e.currentTarget
+    );
+    const clickedChildIndex = childElements.findIndex(
+      child => child === clickedTarget || child.contains(clickedTarget)
+    );
 
-    if (this.options.childSelector) {
-      const clickedChild = clickedTarget.closest(this.options.childSelector);
-      const childElements = clickedGallery.querySelectorAll(this.options.childSelector);
-
-      if (clickedChild) {
-        for (let i = 0; i < childElements.length; i++) {
-          if (clickedChild === childElements[i]) {
-            return i;
-          }
-        }
-      }
-    } else {
-      // There is only one item (which is gallerySelector)
-      return 0;
+    if (clickedChildIndex !== -1) {
+      return clickedChildIndex;
+    } else if (this.options.children || this.options.childSelector) {
+      // click wasn't on a child element
+      return -1;
     }
+
+    // There is only one item (which is the gallery)
+    return 0;
   }
 
   /**
-   * Load JS/CSS files and open PhotoSwipe afterwards.
+   * Load and open PhotoSwipe
    *
    * @param {Integer} index
    * @param {Array|Object|null} dataSource
@@ -613,7 +615,7 @@ class PhotoSwipeLightbox extends PhotoSwipeBase {
   }
 
   /**
-   * Load JS/CSS files and the slide content by index
+   * Load the main module and the slide content by index
    *
    * @param {Integer} index
    */
@@ -627,14 +629,6 @@ class PhotoSwipeLightbox extends PhotoSwipeBase {
     // Add the main module
     const promiseArray = [dynamicImportModule(options.pswpModule)];
 
-    // Add plugin modules
-    Object.keys(this._pluginClasses).forEach((pluginKey) => {
-      promiseArray.push(dynamicImportPlugin(
-        pluginKey,
-        this._pluginClasses[pluginKey]
-      ));
-    });
-
     // Add custom-defined promise, if any
     if (typeof options.openPromise === 'function') {
       // allow developers to perform some task before opening
@@ -645,25 +639,9 @@ class PhotoSwipeLightbox extends PhotoSwipeBase {
       lazyLoadSlide(index, this);
     }
 
-    // Load main CSS
-    if (options.pswpCSS) {
-      promiseArray.push(loadCSS(options.pswpCSS));
-    }
-
-    // Load additional CSS, if any
-    this._additionalDynamicCSS.forEach((href) => {
-      promiseArray.push(loadCSS(href));
-    });
-
     // Wait till all promises resolve and open PhotoSwipe
     const uid = ++this._uid;
     Promise.all(promiseArray).then((iterableModules) => {
-      iterableModules.forEach((item) => {
-        if (item && item.pluginKey && item.moduleClass) {
-          this._pluginClasses[item.pluginKey] = item.moduleClass;
-        }
-      });
-
       if (this.shouldOpen) {
         const mainModule = iterableModules[0];
         this._openPhotoswipe(mainModule, uid);
@@ -689,11 +667,9 @@ class PhotoSwipeLightbox extends PhotoSwipeBase {
     }
 
     // Pass data to PhotoSwipe and open init
-    const pswp = new module.default( // eslint-disable-line
-      null,
-      this.options
-    );
-    pswp.pluginClasses = this._pluginClasses;
+    const pswp = typeof module === 'object'
+        ? new module.default(null, this.options) // eslint-disable-line
+        : new module(null, this.options); // eslint-disable-line
 
     this.pswp = pswp;
     window.pswp = pswp;
@@ -714,25 +690,6 @@ class PhotoSwipeLightbox extends PhotoSwipeBase {
     pswp.init();
   }
 
-  /**
-   * Register a plugin.
-   *
-   * @param {String} name
-   * @param {Class|String} pluginClass Plugin class or path to module (string).
-   */
-  addPlugin(name, pluginClass) {
-    this._pluginClasses[name] = pluginClass;
-  }
-
-  /**
-   * Add CSS file that will be loaded when PhotoSwipe dialog is opened.
-   *
-   * @param {String} href CSS file URL.
-   */
-  addCSS(href) {
-    this._additionalDynamicCSS.push(href);
-  }
-
   destroy() {
     if (this.pswp) {
       this.pswp.close();
@@ -741,12 +698,12 @@ class PhotoSwipeLightbox extends PhotoSwipeBase {
     this.shouldOpen = false;
     this._listeners = null;
 
-    const galleryElements = document.querySelectorAll(this.options.gallerySelector);
-    galleryElements.forEach((galleryElement) => {
-      galleryElement.removeEventListener('click', this.onThumbnailsClick, false);
-    });
+    getElementsFromOption(this.options.gallery, this.options.gallerySelector)
+      .forEach((galleryElement) => {
+        galleryElement.removeEventListener('click', this.onThumbnailsClick, false);
+      });
   }
 }
 
-export default PhotoSwipeLightbox;
+export { PhotoSwipeLightbox as default };
 //# sourceMappingURL=photoswipe-lightbox.esm.js.map

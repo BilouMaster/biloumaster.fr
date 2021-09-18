@@ -7,7 +7,6 @@ let options = {
   gallerySelector: 'body',
   childSelector: '.thumb',
   pswpModule: '/pswp/photoswipe.esm.js',
-  pswpCSS: '/pswp/photoswipe.css',
   bgOpacity: 0.8,
   spacing: 0.05,
   paddingTop: 72,
