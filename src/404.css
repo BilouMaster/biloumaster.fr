@@ -12,19 +12,24 @@ body {
     margin: 0 auto 1.5em;
 }
 header {
-    transform: rotate(180deg);
-    justify-content: end;
-    position: absolute;
-    z-index: 1000;
+    justify-content: start;
+}
+header nav {
+    position: relative;
+    left: 100px;
+    top: 20px;
+}
+header hgroup {
+    position: relative;
+    left: 100px;
+    top: 30px;
 }
 header nav a {
     transform: rotate(120deg);
-    position: relative;
-    bottom: 20px;
     transition-duration: 1s;
 }
 header nav a:hover {
-    transform: translateX(10px) rotate(130deg);
+    transform: translateX(-10px) rotate(130deg);
 }
 header nav a {
     height: 100%;

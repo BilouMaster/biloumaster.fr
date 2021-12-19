@@ -32,10 +32,6 @@ function toggleSections(el) {
   let m = document.querySelector('main');
   m.classList.toggle('folded');
   el.scrollIntoView({behavior: "instant", block: "start"});
-  let w = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-  if (w <= 420) {
-    window.scroll(0, window.scrollY - 110);
-  };
 };
 
 function trippyZone() {

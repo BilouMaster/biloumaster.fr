@@ -4,5 +4,8 @@ img/**/*.webp
 dev/images/**/*.jpg
 dev/images/**/*.png
 dev/images/recup
+dev/musiques/*
 dev/misc
+mp3/*
+img/album_art/*
 __pycache__
