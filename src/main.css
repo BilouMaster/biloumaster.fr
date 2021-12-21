@@ -80,7 +80,7 @@ header > nav > a {
     transition-timing-function: var(--biloustic);
     transition-duration: 0.4s;
 }
-header > nav > a:hover {
+html:not(.can-touch) header > nav > a:hover {
     transform: rotate(4deg);
 }
 header > nav > a > img {
@@ -96,6 +96,20 @@ header > hgroup > h1 {
     line-height: 1em;
     transform: rotate(-1deg);
     margin: 0.5em 0;
+    text-align: center;
+}
+#totop {
+    content: "ok";
+    position: fixed;
+    z-index: 1000;
+    background: var(--biloubgc50);
+    font-size: 1.5em;
+    width: 1.5em;
+    text-align: center;
+    border-radius: 50%;
+    top: 0.05em;
+    left: 0.5em;
+    display: none;
 }
 main {
     flex: 1;
@@ -117,7 +131,7 @@ main h1, main h2, .pswp h1 {
     margin: 0.5em 0;
 }
 .tags::before {
-    content: 'Mots-clés:';
+    content: "Mots-clés:";
     font-family: BilouFontLight;
 }
 .tags a, #current_tag span {
@@ -133,7 +147,7 @@ main h1, main h2, .pswp h1 {
     font-size: 0.8em;
     margin: 0.2em;
 }
-.tags a:hover {
+html:not(.can-touch) .tags a:hover {
     transform: scale(1.05);
 }
 footer {
@@ -152,8 +166,11 @@ footer > nav > a {
     transition-duration: 0.3s;
     transform-origin: 50% 90%;
 }
-footer > nav > a:hover {
+html:not(.can-touch) footer > nav > a:hover {
     transform: scale(1.1);
+}
+html footer > nav > a:active:hover {
+    transform: scale(0.95);
 }
 footer > nav > a > img {
     height: 4em;
@@ -223,8 +240,7 @@ a.biloulink:hover {
     border-radius: 0.5em;
     font-size: 1em;
     font-weight: normal;
-    min-width: min-content;
-    max-width: max-content;
+    max-width: 840px;
     padding: 0.25em 0.5em;
     margin: 4px;
     text-align: center;

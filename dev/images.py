@@ -15,6 +15,7 @@ def get_images_data(images: list) -> dict:
 def operate_images(infile: str) -> tuple:
     global th, tcolor
     filename = Path(infile).stem
+    ext = Path(infile).suffix
     img = Image.open(infile)
 
     #size
@@ -43,7 +44,7 @@ def operate_images(infile: str) -> tuple:
 
     #convert original to webp
     outfile = '../img/gallery/%s.webp' % (filename)
-    if not Path(outfile).exists():
+    if not Path(outfile).exists() and ext != '.webp':
         img.save(outfile, format='WebP', quality=80, method=6)
         # system('cwebp -m 6 -q 80 -quiet -mt "%s" -o "%s"' % (infile, outfile))
         system('webpmux -set xmp image.xmp "%s" -o "%s"' % (outfile, outfile))
@@ -54,13 +55,13 @@ def operate_images(infile: str) -> tuple:
             break
         data['set'].append(nw)
         outfile = '../img/gallery/responsive/%s_%d.webp' % (filename, nw)
-        if not Path(outfile).exists():
+        if not Path(outfile).exists() and ext != '.webp':
             system('cwebp -m 6 -q 80 -resize %d 0 -quiet -mt "%s" -o "%s"' % (nw, infile, outfile))
             system('webpmux -set xmp image.xmp "%s" -o "%s"' % (outfile, outfile))
     
     #generate thumbnails images
     outfile = '../img/gallery/thumbnail/%s_thumbnail.webp' % (filename)
-    if not Path(outfile).exists():
+    if not Path(outfile).exists() and ext != '.webp':
         system('cwebp -m 6 -q 80 -resize %d %d -quiet -mt "%s" -o "%s"' % (tw, th, infile, outfile))
 
     #generate placeholder images for thumbnails

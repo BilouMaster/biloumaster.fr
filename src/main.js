@@ -59,6 +59,14 @@ window.addEventListener('resize', psyche_origin);
     document.addEventListener('mouseover', removetouchclass, false) //this event gets called when input type is everything from touch to mouse/ trackpad
 })();
 
+window.addEventListener("scroll", function() {
+    if (document.documentElement.scrollTop > 300) {
+        document.getElementById("totop").style.display = 'block';
+    } else {
+        document.getElementById("totop").style.display = 'none';
+    }
+}, { passive: true });
+
 /*function docReady(fn) {
     if (document.readyState === "complete" || document.readyState === "interactive") {
         fn;

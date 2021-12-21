@@ -1,3 +1,4 @@
+AddType image/svg+xml .svg .svgz
 ErrorDocument 403 /html/403.html
 ErrorDocument 404 /html/404.html
 # url rewrite

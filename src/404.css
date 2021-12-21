@@ -4,15 +4,15 @@ html {
 }
 body {
     min-height: calc(100vh - 2em);
-    animation-timing-function: cubic-bezier(.65,.05,.36,1);
-    animation-direction: alternate-reverse;
-    animation-duration: 0.75s;
     --biloupsyche_left: 145px;
     --biloupsyche_top: 65px;
     margin: 0 auto 1.5em;
 }
 header {
     justify-content: start;
+    animation-timing-function: cubic-bezier(.65,.05,.36,1);
+    animation-direction: alternate-reverse;
+    animation-duration: 0.75s;
 }
 header nav {
     position: relative;
@@ -28,7 +28,7 @@ header nav a {
     transform: rotate(120deg);
     transition-duration: 1s;
 }
-header nav a:hover {
+html:not(.can-touch) header > nav > a:hover {
     transform: translateX(-10px) rotate(130deg);
 }
 header nav a {

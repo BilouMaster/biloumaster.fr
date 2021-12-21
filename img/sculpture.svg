@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="2048"
+   height="2048"
+   version="1.1"
+   viewBox="0 0 2048 2048"
+   id="svg894"
+   sodipodi:docname="sculpture.svg"
+   inkscape:version="1.2-dev (6c53583, 2021-05-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:Iptc4xmpCore="http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/"
+   xmlns:plus="http://ns.useplus.org/ldf/xmp/1.0/"
+   xmlns:xmpRights="http://ns.adobe.com/xap/1.0/rights/">
+  <defs
+     id="defs898" />
+  <sodipodi:namedview
+     id="namedview896"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     objecttolerance="10.0"
+     gridtolerance="10.0"
+     guidetolerance="10.0"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:snap-page="true"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:snap-smooth-nodes="true"
+     inkscape:zoom="0.08"
+     inkscape:cx="175"
+     inkscape:cy="1306.25"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg894">
+    <sodipodi:guide
+       position="1024.046,72.176"
+       orientation="0,-1"
+       id="guide959" />
+    <sodipodi:guide
+       position="72.046,1024.176"
+       orientation="1,0"
+       id="guide961" />
+    <sodipodi:guide
+       position="1976,1024.11"
+       orientation="1,0"
+       id="guide963" />
+    <sodipodi:guide
+       position="1024,1976.01"
+       orientation="0,-1"
+       id="guide965" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata888">
+    <rdf:RDF>
+      <rdf:Description
+         rdf:about="">
+        <Iptc4xmpCore:CreatorContactInfo
+           rdf:parseType="Resource">
+          <Iptc4xmpCore:CiEmailWork>joke@biloumaster.fr</Iptc4xmpCore:CiEmailWork>
+          <Iptc4xmpCore:CiUrlWork>https://biloumaster.fr</Iptc4xmpCore:CiUrlWork>
+        </Iptc4xmpCore:CreatorContactInfo>
+      </rdf:Description>
+      <rdf:Description
+         rdf:about="">
+        <dc:creator>
+          <rdf:Seq>
+            <rdf:li>BilouMaster Joke</rdf:li>
+          </rdf:Seq>
+        </dc:creator>
+        <dc:rights>
+          <rdf:Alt>
+            <rdf:li
+               xml:lang="x-default">©2021 BilouMaster Joke CC-BY-NC</rdf:li>
+          </rdf:Alt>
+        </dc:rights>
+      </rdf:Description>
+      <rdf:Description
+         rdf:about="">
+        <plus:Licensor>
+          <rdf:Seq>
+            <rdf:li
+               rdf:parseType="Resource">
+              <plus:LicensorName>BilouMaster Joke</plus:LicensorName>
+              <plus:LicensorURL>https://biloumaster.fr/about</plus:LicensorURL>
+            </rdf:li>
+          </rdf:Seq>
+        </plus:Licensor>
+      </rdf:Description>
+      <rdf:Description
+         rdf:about="">
+        <xmpRights:UsageTerms>
+          <rdf:Alt>
+            <rdf:li
+               xml:lang="x-default">Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)</rdf:li>
+          </rdf:Alt>
+        </xmpRights:UsageTerms>
+        <xmpRights:WebStatement>http://creativecommons.org/licenses/by-nc/4.0/</xmpRights:WebStatement>
+      </rdf:Description>
+    </rdf:RDF>
+  </metadata>
+  <circle
+     cx="1024"
+     cy="1024"
+     r="968.20001"
+     fill="#ffffff"
+     id="circle890"
+     style="display:inline" />
+  <path
+     id="path957"
+     style="display:inline;opacity:1;fill:#010000;fill-opacity:1;stroke:none;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers"
+     d="M 1024,0 A 1024,1024 0 0 0 0,1024 1024,1024 0 0 0 1024,2048 1024,1024 0 0 0 2048,1024 1024,1024 0 0 0 1024,0 Z m 0.023,71.990234 A 951.97699,951.91699 0 0 1 1976,1023.9062 951.97699,951.91699 0 0 1 1024.0234,1975.8242 951.97699,951.91699 0 0 1 72.046875,1023.9062 951.97699,951.91699 0 0 1 1024.0234,71.990234 Z" />
+  <path
+     id="path14830"
+     style="fill:#010000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 973.92578,224.07227 C 861.13281,224.80469 742.1875,266.40625 709.375,334.375 665.625,425 675.16659,613.80516 728.125,662.5 796.33883,725.22209 848.32646,763.25825 951.45146,766.38325 1138.9515,753.88325 1265.625,687.5 1262.5,518.75 1259.375,350 1212.5,275 1081.25,237.5 1048.4375,228.125 1011.5234,223.82812 973.92578,224.07227 Z M 810.15625,434.375 c 20.27921,0 36.71875,22.03598 36.71875,49.21875 0,27.18277 -16.43954,49.21875 -36.71875,49.21875 -20.27921,0 -36.71875,-22.03598 -36.71875,-49.21875 0,-27.18277 16.43954,-49.21875 36.71875,-49.21875 z m 236.71875,23.4375 c 22.4366,0 40.625,18.88799 40.625,42.1875 0,23.29951 -18.1884,42.1875 -40.625,42.1875 -22.4366,0 -40.625,-18.88799 -40.625,-42.1875 0,-23.29951 18.1884,-42.1875 40.625,-42.1875 z M 768.75,728.125 c 0,0 -318.75,178.125 -346.875,262.5 -28.125,84.375 12.5,181.25 100,200 87.5,18.75 171.11675,-82.3223 171.11675,-82.3223 l 63.79442,-148.39153 c 0,0 -119.28617,661.96383 -109.91117,715.08883 9.375,53.125 109.375,106.25 190.625,106.25 81.25,0 143.75,-37.5 137.5,-115.625 -6.25,-78.125 -9.375,-281.25 -9.375,-281.25 l -121.875,-40.625 190.625,15.625 c 0,0 34.375,240.625 25,337.5 -9.375,96.875 128.125,156.25 271.875,100 143.75,-56.25 68.75,-140.625 65.625,-190.625 -3.125,-50 -65.782,-470.4235 -65.782,-470.4235 L 1227.2097,1028.7532 1202.3398,981.25 c 0,0 185.1602,153.125 232.0352,212.5 46.875,59.375 129.5765,71.2738 217.0765,-25.6012 87.5,-96.875 -8.7165,-200.89703 -123.3265,-252.5238 -125.2221,-56.40704 -356.407,-178.34709 -356.407,-178.34709 0,0 -143.593,62.72209 -234.218,59.59709 -90.625,-3.125 -168.75,-68.75 -168.75,-68.75 z"
+     sodipodi:nodetypes="ssscssssssssssssscssccssscccssscccssscsc" />
+</svg>

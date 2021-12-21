@@ -21,6 +21,7 @@ def write_view(image: str) -> None:
     images = shared['images']
     template = shared['templates']
     folder = shared['folder']
+    path = shared['path']
     filename = data['filename']
     srcset, sizes, max_height = str_srcset(filename, data)
     go_prev, go_next = str_nav(image, images)
@@ -46,7 +47,7 @@ def write_view(image: str) -> None:
         go_gallery          = '<a id="return_gallery" class="biloulink" href="../%s#%s" alt="Galerie">Galerie</a>' % (folder, filename)
     )
     content = template['main'].format(
-        nav                 = str_indent(template['header_nav_3'], 2),
+        nav                 = str_indent(template['header_nav_3'].format(img0='view',img1=folder,img2='creations'), 2),
         title               = 'Bilou %s Art' % (folder.capitalize()),
         meta_title          = '%s - Bilou %s Art by BilouMaster Joke' % (data['title'], folder.capitalize()),
         description         = str_folder_desc(folder),

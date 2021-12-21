@@ -45,39 +45,40 @@ def get_lists():
     #sort albums by year
     album_list = dict(sorted(album_list.items(), key=lambda item: item[1]['min_year'], reverse=True))
 
-template = get_templates()
-get_lists()
-content = ''
-for a in album_list:
-    tracks = ''
-    if album_list[a]['min_year'] != album_list[a]['max_year']:
-        date = str(album_list[a]['min_year']) + " - " + str(album_list[a]['max_year'])
-    else:
-        date = album_list[a]['min_year']
-    for t in album_list[a]['tracks']:
-        tracks += template['tracklist_item'].format(
-            filename = t,
-            num = music_list[t]['track_num'],
-            title = music_list[t]['title'],
-            year = music_list[t]['year']
+def write_compositions():
+    template = get_templates()
+    get_lists()
+    content = ''
+    for a in album_list:
+        tracks = ''
+        if album_list[a]['min_year'] != album_list[a]['max_year']:
+            date = str(album_list[a]['min_year']) + " - " + str(album_list[a]['max_year'])
+        else:
+            date = album_list[a]['min_year']
+        for t in album_list[a]['tracks']:
+            tracks += template['tracklist_item'].format(
+                filename = t,
+                num = music_list[t]['track_num'],
+                title = music_list[t]['title'],
+                year = music_list[t]['year']
+            )
+        content += template['album_section'].format(
+            title = a,
+            date = date,
+            tracks = str_indent(tracks, 2),
+            album_art = str_tofilename(a)
         )
-    content += template['album_section'].format(
-        title = a,
-        date = date,
-        tracks = str_indent(tracks, 2),
-        album_art = str_tofilename(a)
-    )
-content += template['player']
+    content += template['player']
 
-content = template['main'].format(
-    nav                 = str_indent(template['header_nav_1'], 2),
-    title               = "bilou",
-    meta_title          = "bilou",
-    description         = "bilou",
-    meta_description    = "bilou",
-    extralink           = '''<link rel="stylesheet" href="/src/audio.css">
-<script src="/src/audio.js"></script>''',
-    content             = str_indent(content, 2),
-    footer              = ''
-)
-open('../html/musics.html', 'w').write(str_clean(content))
+    content = template['main'].format(
+        nav                 = str_indent(template['header_nav_2'].format(img0='compositions',img1='creations'), 2),
+        title               = "Bilou Compositions",
+        meta_title          = "Bilou Compositions",
+        description         = "Des musiques que j'ai composées au dualo du-touch, au piano, à la guitare, ou sur l'ordinateur",
+        meta_description    = "Des musiques que j'ai composées au dualo du-touch, au piano, à la guitare, ou sur l'ordinateur",
+        extralink           = '''<link rel="stylesheet" href="/src/audio.css">
+    <script src="/src/audio.js"></script>''',
+        content             = str_indent(content, 2),
+        footer              = ''
+    )
+    open('../html/compositions.html', 'w').write(str_clean(content))

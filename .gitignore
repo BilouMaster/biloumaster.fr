@@ -3,9 +3,11 @@ html/**/*.html
 img/**/*.webp
 dev/images/**/*.jpg
 dev/images/**/*.png
+dev/images/**/*.webp
 dev/images/recup
 dev/musiques/*
 dev/misc
+dev/animation/*
 mp3/*
 img/album_art/*
 __pycache__

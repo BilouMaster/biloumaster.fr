@@ -55,9 +55,9 @@ def write_gallery(images_data: dict, template: dict, folder: str, path: str) -> 
             )
         )
     content = template['main'].format(
-        nav                 = str_indent(template['header_nav_2'], 2),
-        title               = 'Bilou %s Art' % (folder.capitalize()),
-        meta_title          = 'Bilou %s Art' % (folder.capitalize()),
+        nav                 = str_indent(template['header_nav_2'].format(img0=folder,img1='creations'), 2),
+        title               = 'Bilou %s' % (folder.capitalize()),
+        meta_title          = 'Bilou %s' % (folder.capitalize()),
         description         = str_folder_desc(folder),
         meta_description    = str_folder_desc(folder),
         extralink           = '''<link rel="stylesheet" href="/src/gallery.css">

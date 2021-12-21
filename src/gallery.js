@@ -7,6 +7,7 @@ window.addEventListener('DOMContentLoaded', () => {
     document.body.querySelector('#current_tag span').innerHTML = tagfr;
     document.body.querySelector('header > hgroup > h1').innerHTML += ' - ' + tagfr;
     document.body.querySelector('header > hgroup > h2').innerHTML = tagdesc;
+    document.body.querySelector('header > nav > a:nth-child(2)').href = '../..';
     document.body.querySelectorAll('.thumb:not(.' + tag + ')').forEach(img => {
       img.outerHTML = '';
     });

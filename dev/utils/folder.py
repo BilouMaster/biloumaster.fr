@@ -3,7 +3,7 @@ from os import path, makedirs
 description = {
     'tradi': 'Peintures et dessins traditionnels',
     'digi': 'Peintures et dessins numériques',
-    'sculpture': 'Modelages en argile, ou pâte Fimo pour les vieux trucs... et même de la pâte à sel !',
+    'sculpture': 'Modelages en argile, pâte Fimo, pâte à sel...',
     'creations': 'Des trucs créatifs et bilouteux'
 }
 

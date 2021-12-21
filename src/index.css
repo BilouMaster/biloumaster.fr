@@ -1,0 +1,42 @@
+header {
+    height: 11em;
+}
+.navig {
+    display: block;
+    cursor: pointer;
+    box-shadow: 0px 0px 6px var(--biloubgc);
+    background: linear-gradient(135deg, var(--biloubgct) 0%, var(--biloubgc33) 600px);
+    padding: 0.5em;
+    text-align: center;
+    width: 50%;
+    margin: auto;
+    margin-top: 1.5em;
+    transition-property: background-color;
+    transition-timing-function: var(--biloueazout);
+    transition-duration: 0.3s;
+}
+.navig img {
+    width: 6em;
+}
+.navig h1, .navig img {
+    cursor: pointer;
+    transition-timing-function: var(--biloustic);
+    transition-duration: 0.3s;
+    transition-property: transform;
+}
+html:not(.can-touch) .navig:hover {
+    background-color: var(--biloubgc33);
+}
+html:not(.can-touch) .navig:hover h1 {
+    color: var(--biloulightgreen);
+    transform: scale(1.05);
+}
+html:not(.can-touch) .navig:hover img {
+    transform: rotate(15deg) scale(1.2);
+}
+footer > nav > a > img {
+    height: 6em;
+}
+footer > p {
+    text-align: center;
+}
