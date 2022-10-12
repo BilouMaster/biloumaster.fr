@@ -40,6 +40,7 @@ def write_gallery(images_data: dict, template: dict, folder: str, path: str) -> 
                 date                = data['date']
             )
         )
+    elements = dict(sorted(elements.items(), reverse=True))
     sections = [
         '<div id="tag_list"><h1>Mots-clés</h1>' + str_tags(gallery_tags, path + '/tag/') + '</div>',
         '<p id="current_tag">Galerie filtrée avec le mot-clé «<span>...</span>», <a href="..">cliquez ici</a> pour revenir sur la galerie entière.</p>',
