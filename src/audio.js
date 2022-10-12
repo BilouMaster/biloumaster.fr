@@ -55,6 +55,9 @@ function pl_pause() {
         let pl = document.getElementById('player');
         pl.classList.remove('play');
         pl.classList.add('pause');
+        if ('mediaSession' in navigator) {
+            navigator.mediaSession.playbackState = "paused";
+        }
     }, 50);
 }
 
@@ -88,16 +91,19 @@ function toggleSections(el) {
     el.parentNode.scrollIntoView({behavior: "instant", block: "start"});
 }
 
-function tr_play(el) {
+function tr_play(el = lastTrack) {
     const audioElem = document.getElementById('pl-audio');
     if (!vizuexists) {
         new visualiser(audioElem);
         vizuexists = true;
     }
     audioElem.src = "/mp3/" + el.getAttribute('data-filename') + ".mp3";
-    document.querySelector('#player .pl-title').innerText = el.childNodes[3].innerText;
-    document.querySelector('#player .pl-album').innerText = el.parentNode.parentNode.childNodes[1].innerText;
-    document.querySelector('#player .pl-head').style.backgroundImage = 'url("' + el.parentNode.parentNode.childNodes[5].src; + '")';
+    const title = el.childNodes[3].innerText;
+    const album = el.parentNode.parentNode.childNodes[1].innerText;
+    const artwork = el.parentNode.parentNode.childNodes[5].src;
+    document.querySelector('#player .pl-title').innerText = title;
+    document.querySelector('#player .pl-album').innerText = album;
+    document.querySelector('#player .pl-head').style.backgroundImage = 'url("' + artwork + '")';
     const pl = document.getElementById('player');
     if (!pl.classList.contains('active')) {
         pl.classList.add('active');
@@ -110,6 +116,26 @@ function tr_play(el) {
     }
     el.classList.add('playing');
     lastTrack = el;
+    if ('mediaSession' in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: title,
+          artist: 'BilouMaster Joke',
+          album: album,
+          artwork: [{ src: artwork, type: 'image/jpeg' }]
+        });
+        navigator.mediaSession.setActionHandler('play', pl_play);
+        navigator.mediaSession.setActionHandler('pause', pl_pause);
+        navigator.mediaSession.setActionHandler('previoustrack', pl_prev);
+        navigator.mediaSession.setActionHandler('nexttrack', pl_next);
+        navigator.mediaSession.setActionHandler('seekto', (details) => {
+            if (details.fastSeek && 'fastSeek' in audioElem) {
+                audioElem.fastSeek(details.seekTime);
+                return;
+            }
+            audioElem.currentTime = details.seekTime;
+        });
+        navigator.mediaSession.playbackState = "playing";
+    }
 }
 
 function mmss(sec) {
@@ -118,12 +144,12 @@ function mmss(sec) {
 
 var timeChanging = false;
 function pl_time(el) {
-    document.querySelector('#player .pl-current-time').innerText = mmss(el.currentTime);
+    document.querySelector('.pl-bar .pl-current-time').innerText = mmss(el.currentTime);
     if (timeChanging == false) {
         if (isNaN(el.duration)) {
-            document.querySelector('#player input').value = 0;
+            document.querySelector('.pl-bar input').value = 0;
         } else {
-            document.querySelector('#player input').value = el.currentTime * 100 / el.duration;
+            document.querySelector('.pl-bar input').value = el.currentTime * 100 / el.duration;
         }
     }
 }
@@ -131,6 +157,28 @@ function pl_time(el) {
 function pl_timeChange(el) {
     const audioEl = document.getElementById('pl-audio');
     audioEl.currentTime = Math.floor(el.value * audioEl.duration / 100);
+}
+
+function pl_change_volume(el) {
+    document.getElementById('pl-audio').volume = el.value;
+    var r, g, b, f = el.value;
+    if (f < 0.5) {
+        r = 31 + (214 - 31) * f * 2;
+        g = 30 + (184 - 30) * f * 2;
+        b = 36 + (163 - 36) * f * 2;
+    } else {
+        r = 214 + (159 - 214) * (f - 0.5) * 2;
+        g = 184 + (235 - 184) * (f - 0.5) * 2;
+        b = 163 + (163 - 163) * (f - 0.5) * 2;
+    }
+    el.style.setProperty('--r-track-lfc', 'rgba('+r+','+g+','+b+',.5)')
+    if (el.value == 0.0) {
+        document.querySelector('.pl-volume').classList = "pl-volume nosound";
+    } else if (el.value <= 0.5) {
+        document.querySelector('.pl-volume').classList = "pl-volume midlevel";
+    } else {
+        document.querySelector('.pl-volume').classList = "pl-volume";
+    }
 }
 
 function pl_duration(el) {

@@ -16,7 +16,10 @@ def operate_images(infile: str) -> tuple:
     global th, tcolor
     filename = Path(infile).stem
     ext = Path(infile).suffix
-    img = Image.open(infile)
+    if ext == '.webp':
+        img = Image.open('animation/' + filename + '.jpg')
+    else:
+        img = Image.open(infile)
 
     #size
     w, h = img.size

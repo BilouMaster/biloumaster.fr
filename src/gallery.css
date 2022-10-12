@@ -123,7 +123,7 @@ main.folded .gallery {
     width: max-content;
     cursor: pointer;
     margin-top: 0.5em;
-    float: right;
+    margin-left: auto;
     z-index: 1000;
     transition-property: transform;
     transition-timing-function: var(--biloustic);

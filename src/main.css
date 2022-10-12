@@ -248,7 +248,7 @@ a.biloulink:hover {
 .caption:before {
     content: "";
     display: block;
-    background-image: url(/img/bubble_tail_left.svg);
+    background-image: url("data:image/svg+xml,%3Csvg width='36' height='28' version='1.1' viewBox='0 0 36 28' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m36.42 22.65s-11.61-3.686-14.64-9.744c7.17 0.6679 14.64-1.355 14.64-1.355' fill='%23f0e9f2' stroke='%231f1e24' stroke-width='3'/%3E%3C/svg%3E%0A");
     width: 36px;
     height: 28px;
     margin-bottom: -28px;
