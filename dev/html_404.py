@@ -10,7 +10,7 @@ content = template.format(
     meta_title          = "Bilou Fail 404",
     description         = "Aïe...",
     meta_description    = "Cette page n'existe pas...",
-    extralink           = '<link rel="stylesheet" href="/src/404.css">',
+    extralink           = '<link rel="stylesheet" href="/src/404.css"><meta name="robots" content="noindex">',
     content             = '<p><span>404</span><br>PAJ NOT FOUND</p>',
     footer              = ''
 )

@@ -15,7 +15,7 @@ section:last-of-type {
 .folded section {
     margin-top: 1em;
 }
-section h1 {
+section h2 {
     position: sticky;
     top: 0;
     z-index: 900;
@@ -26,7 +26,7 @@ section h1 {
     margin: 0.5em auto;
     width: max-content;
 }
-html:not(.can-touch) section h1:hover {
+html:not(.can-touch) section h2:hover {
     color: var(--biloulightgreen);
     transform: scale(1.05);
 }
@@ -64,7 +64,7 @@ html:not(.can-touch) .thumb:hover {
     width: 100%;
     object-fit: cover;
     color: var(--biloubgc);
-    background-color: var(--biloubgc);
+    background-color: #36333d;
 }
 main.folded .gallery {
     display: none;
@@ -88,6 +88,24 @@ main.folded .gallery {
     text-shadow: 0 0 1px black, 0 0 2px black, 0 0 3px black, 0 0 4px black;
     margin: 0;
 }
+.pswp__button--arrow .pswp__icn {
+    fill: var(--biloulight);
+    fill-opacity: 0.33;
+    stroke: var(--biloubgc);
+    stroke-width: 0.5;
+    stroke-opacity: 0.5;
+    transition-timing-function: var(--biloustic);
+    transition-duration: 0.3s;
+    transition-property: transform;
+}
+
+.pswp__button--arrow:hover .pswp__icn {
+    transform: scale(0.9);
+}
+.pswp__button--arrow--next:hover .pswp__icn {
+    transform: scale(-0.9, 0.9);
+}
+
 .pswp__description {
     margin: 0 auto;
     width: 100vw;
@@ -101,6 +119,12 @@ main.folded .gallery {
 }
 .pswp .caption {
     box-shadow: 0 0 8px var(--biloubgc33);
+}
+.pswp .caption p {
+    max-height: 8em;
+    overflow-y: auto;
+    margin: 0;
+    scrollbar-width: thin;
 }
 .pswp .tags a {
     color: var(--bilouhighlight);

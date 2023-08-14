@@ -217,7 +217,7 @@ html .pl-icons :not(.pl-volume-bar) svg:active:hover {
 .album:last-of-type {
     margin-bottom: 1.5em;
 }
-.album h1 {
+.album h2 {
     grid-column: 1;
     color: var(--biloulight);
     cursor: pointer;
@@ -228,14 +228,21 @@ html .pl-icons :not(.pl-volume-bar) svg:active:hover {
     transition-duration: 0.3s;
     transition-property: transform;
 }
-html:not(.can-touch) .album h1:hover {
+html:not(.can-touch) .album h2:hover {
     color: var(--biloulightgreen);
     transform: scale(1.05);
 }
-.album h2 {
+.album p {
     grid-column: 2;
     text-align: right;
     padding-right: 1em;
+    font-size: 1.5em;
+    letter-spacing: 0.25ex;
+    color: var(--biloulight);
+    text-shadow: var(--biloutextborder);
+    line-height: 1.75em;
+    margin: 0.5em 0;
+    font-weight: lighter;
 }
 .album img {
     grid-column: 1;
@@ -289,7 +296,7 @@ html .track:active:hover {
     grid-column: 3;
     color: var(--biloulight);
 }
-.album h2, .track_num, .track_year {
+.album p, .track_num, .track_year {
     font-family: BilouFontLight;
 }
 .folded .album img, .folded .tracklist {
@@ -327,16 +334,16 @@ html .track:active:hover {
         display: flex;
         flex-direction: column;
     }
-    .album h2 {
+    .album p {
         font-size: 1em;
         line-height: 1em;
         padding: 0;
         text-align: center;
     }
-    .album h1 {
+    .album h2 {
         order: 1;
     }
-    .album h2 {
+    .album p {
         order: 3;
     }
     .album img {
@@ -358,6 +365,7 @@ input[type="range"] {
     --r-track-bgc: var(--biloubgc33);
     --r-track-lfc: rgba(214, 184, 231, 0.33);
     margin: auto;
+    appearance: none;
     -webkit-appearance: none;
     position: relative;
     overflow: hidden;
@@ -374,6 +382,7 @@ input[type="range"] {
 }
 
 ::-webkit-slider-thumb {
+    appearance: none;
     -webkit-appearance: none;
     width: var(--r-thumb-w);
     height: var(--r-track-h);

@@ -10,13 +10,13 @@ th = 250
 tcolor = (31, 30, 36)
 
 def get_images_data(images: list) -> dict:
-    return dict(Pool().map(operate_images, images))
+    return dict(sorted(Pool().map(operate_images, images), reverse=True))
 
 def operate_images(infile: str) -> tuple:
     global th, tcolor
     filename = Path(infile).stem
     ext = Path(infile).suffix
-    if ext == '.webp':
+    if ext == '.webp' and Path('animation/' + filename + '.jpg').exists():
         img = Image.open('animation/' + filename + '.jpg')
     else:
         img = Image.open(infile)
@@ -30,6 +30,23 @@ def operate_images(infile: str) -> tuple:
     title = str_exif(0x9C9B, img_exif, "Sans titre")
     description = str_exif(0x9C9C, img_exif, '')
     tags = str_exif(0x9C9E, img_exif)
+
+    #textfile metadata
+    txtfile = infile.split('.')
+    txtfile.pop(-1)
+    txtfile = '.'.join(txtfile) + '.txt'
+    if Path(txtfile).exists():
+        with open(txtfile) as f:
+            contents = f.read()
+        lines = contents.split('\n')
+        for line in lines:
+            line = line.split('$: ')
+            if line[0] == 'title':
+                title = line[1]
+            elif line[0] == 'desc':
+                description = line[1].replace('/n','\n')
+            elif line[0] == 'tags':
+                tags = line[1]
 
     #date
     datetime = filename.split('_')[0]
@@ -47,10 +64,14 @@ def operate_images(infile: str) -> tuple:
 
     #convert original to webp
     outfile = '../img/gallery/%s.webp' % (filename)
-    if not Path(outfile).exists() and ext != '.webp':
-        img.save(outfile, format='WebP', quality=80, method=6)
-        # system('cwebp -m 6 -q 80 -quiet -mt "%s" -o "%s"' % (infile, outfile))
-        system('webpmux -set xmp image.xmp "%s" -o "%s"' % (outfile, outfile))
+    if not Path(outfile).exists():
+        if ext == '.webp':
+            print('copy: ' + infile + ', ' + outfile)
+            system('cp ' + infile + ' ' + outfile)
+        else:
+            img.save(outfile, format='WebP', quality=80, method=6)
+            # system('cwebp -m 6 -q 80 -quiet -mt "%s" -o "%s"' % (infile, outfile))
+            system('webpmux -set xmp image.xmp "%s" -o "%s"' % (outfile, outfile))
     
     #generate responsive images
     for nw in [320, 640, 808, 1024, 2048]:
@@ -64,8 +85,12 @@ def operate_images(infile: str) -> tuple:
     
     #generate thumbnails images
     outfile = '../img/gallery/thumbnail/%s_thumbnail.webp' % (filename)
-    if not Path(outfile).exists() and ext != '.webp':
-        system('cwebp -m 6 -q 80 -resize %d %d -quiet -mt "%s" -o "%s"' % (tw, th, infile, outfile))
+    if not Path(outfile).exists():
+        if ext == '.webp':
+            print('copy: ' + infile + ', ' + outfile)
+            system('cp ' + infile + ' ' + outfile)
+        else:
+            system('cwebp -m 6 -q 80 -resize %d %d -quiet -mt "%s" -o "%s"' % (tw, th, infile, outfile))
 
     #generate placeholder images for thumbnails
     outfile = '../img/gallery/placeholder/%d.webp' % (tw)

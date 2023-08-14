@@ -10,7 +10,7 @@ content = template.format(
     meta_title          = "Bilou Restricted Area",
     description         = "Aïe...",
     meta_description    = "Accès interdit...",
-    extralink           = '<link rel="stylesheet" href="/src/404.css">',
+    extralink           = '<link rel="stylesheet" href="/src/404.css"><meta name="robots" content="noindex">',
     content             = '<p><span>403</span><br>Access for Biden</p>',
     footer              = ''
 )

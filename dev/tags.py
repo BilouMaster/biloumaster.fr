@@ -40,7 +40,11 @@ fr = {
     'decadence':'Décadence',
     'bogossstory':'BogossStory',
     'selfportrait':'Auto-portrait',
-    'chinaink':'Encre de Chine'
+    'chinaink':'Encre de Chine',
+    'ceramic':'Céramique',
+    'clay':'Argile',
+    'mask':'Masque',
+    'saltdough':'Pâte à sel'
 }
 desc_fr = {
     'pencil': "Dessins au crayon de bois, crayon gris, crayon à papier ou peu importe comment vous appellez ça... Notez que je ne suis pas fana des critériums.",
@@ -86,7 +90,8 @@ desc_fr = {
     'observation':"Dessins d'observation",
     'chinaink':"Dessins à l'encre de Chine",
     'stupeflip':'Le Stupeflip CROU ne MOURRA JAMAIS !!',
-    'stopart':"Le Stop-Art est un genre que j'ai inventé en mélangeant plein de notions comme la programmation, les mathématiques, le dessin technique, la calligraphie, l'heuristique et la cryptographie... En gros."
+    'stopart':"Le Stop-Art est un genre que j'ai inventé en mélangeant plein de notions comme la programmation, les mathématiques, le dessin technique, la calligraphie, l'heuristique et la cryptographie... En gros.",
+    'gouache':'Peintures à la gouache'
 }
 
 def str_tag_fr(tag: str) -> str:
@@ -110,7 +115,7 @@ def str_tags(tags: str, path: str) -> str:
         if type(tags) == set:
             tags = list(tags - {''})
         tags.sort(key=lambda k: str_tag_fr(k))
-        return '<aside class="tags">' + ''.join(map(lambda k: '<a href="' + path + k + '" rel="tag" class="' + k + '" title="' + str_tag_desc_fr(k) + '">' + str_tag_fr(k) + '</a>', tags)) + '</aside>'
+        return '<aside class="tags">' + ''.join(map(lambda k: '<a href="' + path + k + '" rel="tag nofollow" class="' + k + '" title="' + str_tag_desc_fr(k) + '">' + str_tag_fr(k) + '</a>', tags)) + '</aside>'
     else:
         return '<!--no tags-->'
 

@@ -47,7 +47,7 @@ h1, h2 {
 body {
     display: flex;
     flex-direction: column;
-    color: white;
+    color: var(--bilouhighlight);
     background-color: var(--biloudark);
     max-width: min(max(66vw, 840px), calc(100vw - 2em));
     min-height: 100vh;
@@ -99,17 +99,24 @@ header > hgroup > h1 {
     text-align: center;
 }
 #totop {
-    content: "ok";
+    cursor: pointer;
     position: fixed;
     z-index: 1000;
-    background: var(--biloubgc50);
-    font-size: 1.5em;
     width: 1.5em;
-    text-align: center;
-    border-radius: 50%;
-    top: 0.05em;
+    top: 0.5em;
     left: 0.5em;
     display: none;
+    transition-timing-function: var(--biloustic);
+    transition-duration: 0.3s;
+    transition-property: transform;
+    fill: var(--biloulight);
+    fill-opacity: 0.33;
+    stroke: var(--biloubgc);
+    stroke-width: 1px;
+    stroke-opacity: 0.66;
+}
+#totop:hover {
+    transform: scale(0.9);
 }
 main {
     flex: 1;
@@ -150,32 +157,8 @@ main h1, main h2, .pswp h1 {
 html:not(.can-touch) .tags a:hover {
     transform: scale(1.05);
 }
-footer {
-    text-align: right;
-}
-footer > nav {
-    display: flex;
-    flex-direction: row-reverse;
-    align-items: center;
-    padding: 1em;
-    margin: auto;
-}
-footer > nav > a {
-    transition-property: transform;
-    transition-timing-function: var(--biloustic);
-    transition-duration: 0.3s;
-    transform-origin: 50% 90%;
-}
-html:not(.can-touch) footer > nav > a:hover {
-    transform: scale(1.1);
-}
-html footer > nav > a:active:hover {
-    transform: scale(0.95);
-}
-footer > nav > a > img {
-    height: 4em;
-}
 footer > small {
+    text-align: right;
     display: block;
     min-height: 2.5em;
     color: var(--biloumedium);
@@ -204,7 +187,8 @@ a.biloulink {
     background-color: white;
     border: var(--bilouborder);
     border-radius: 1.5em;
-    padding: 0.25em 0.5em;
+    padding: 0.5ex;
+    margin: 0.5ex;
     height: min-content;
     width: max-content;
     text-decoration: none;
@@ -212,6 +196,8 @@ a.biloulink {
     transition-property: transform;
     transition-timing-function: var(--biloustic);
     transition-duration: 0.3s;
+    box-sizing: border-box;
+    max-width: 100%;
 }
 a.biloulink:visited {
     color: var(--biloubgc);
@@ -220,13 +206,15 @@ a.biloulink::before {
     content: "→";
     font-size: 1.5em;
     color: var(--biloulight);
+    padding-right: 0.5ex;
 }
 a.biloulink::after {
     content: "...";
     color: var(--biloulight);
+    padding-left: 0.5ex;
 }
 a.biloulink:hover {
-    transform: scale(0.95);
+    transform: scale(0.98);
 }
 .caption_container {
     align-self: center;
@@ -242,7 +230,7 @@ a.biloulink:hover {
     font-weight: normal;
     max-width: 840px;
     padding: 0.25em 0.5em;
-    margin: 4px;
+    margin: 0.5em;
     text-align: center;
 }
 .caption:before {

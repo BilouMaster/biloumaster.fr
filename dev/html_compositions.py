@@ -10,6 +10,7 @@ from unidecode import unidecode
 from templates import get_templates
 from utils.clean import str_clean
 from utils.indent import str_indent
+from utils.folder import str_folder_desc, str_folder_title
 
 def str_tofilename(text: str) -> str:
     return re.sub(r'-$', '', re.sub(r'-+','-', re.sub(r" |'|\.|\(|\)|\[|\]|\&|\:|\/|\~|\!|\?|\^|,|=|@|\$|\*|\+", "-", unidecode(text).lower())))
@@ -71,11 +72,11 @@ def write_compositions():
     content += template['player']
 
     content = template['main'].format(
-        nav                 = str_indent(template['header_nav_2'].format(img0='compositions',img1='creations'), 2),
-        title               = "Bilou Compositions",
-        meta_title          = "Bilou Compositions",
-        description         = "Des musiques que j'ai composées au dualo du-touch, au piano, à la guitare, ou sur l'ordinateur",
-        meta_description    = "Des musiques que j'ai composées au dualo du-touch, au piano, à la guitare, ou sur l'ordinateur",
+        nav                 = str_indent(template['header_nav_1'].format(img0='compositions'), 2),
+        title               = str_folder_title('compositions'),
+        meta_title          = str_folder_title('compositions'),
+        description         = str_folder_desc('compositions'),
+        meta_description    = str_folder_desc('compositions'),
         extralink           = '''<link rel="stylesheet" href="/src/audio.css">
     <script src="/src/audio.js"></script>''',
         content             = str_indent(content, 2),

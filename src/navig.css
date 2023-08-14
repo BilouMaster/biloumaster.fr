@@ -19,12 +19,13 @@
     padding: 0 0.5em;
     width: 46%;
 }
-.navig_element > h1 {
+.navig_element > h2 {
     cursor: pointer;
     width: 46%;
     transition-timing-function: var(--biloustic);
     transition-duration: 0.3s;
     transition-property: transform;
+    line-height: 1.3em;
 }
 .preview_images {
     width: 50%;
@@ -53,9 +54,13 @@ html:not(.can-touch) .navig_element:hover > .preview_images {
 }
 html:not(.can-touch) .navig_element:hover > .navig_icon {
     left: 48%;
-    transform: rotate(20deg) scale(1.2);
+    transform: rotate(15deg) scale(1.2);
 }
-html:not(.can-touch) .navig_element:hover > h1 {
+html:not(.can-touch) .navig_element:nth-child(odd):hover > .navig_icon {
+    left: 48%;
+    transform: rotate(-15deg) scale(1.2);
+}
+html:not(.can-touch) .navig_element:hover > h2 {
     color: var(--biloulightgreen);
     transform: scale(1.05);
 }
@@ -89,7 +94,7 @@ html:not(.can-touch) .navig_element:hover > h1 {
 }
 
 @media (max-width: 640px) {
-    .navig_element > h1, .navig_element > p {
+    .navig_element > h2, .navig_element > p {
         width: 100%;
     }
     .preview_images {

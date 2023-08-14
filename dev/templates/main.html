@@ -1,11 +1,14 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" prefix="og: https://ogp.me/ns#">
 <head>
     <meta charset="utf-8">
     <title>{meta_title}</title>
     <meta name="description" content="{meta_description}">
     <meta name="author" content="BilouMaster Joke">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@biloumaster">
+    <meta name="twitter:creator" content="@biloumaster">
     <link rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">
     <link rel="stylesheet" href="/src/main.css">
     <link rel="icon" type="image/svg+xml" href="/img/biloumaster.svg">
@@ -17,9 +20,11 @@
         {nav}
         <hgroup>
             <h1>{title}</h1>
-            <h2 class="caption">{description}</h2>
+            <p class="caption">{description}</p>
         </hgroup>
-        <a id="totop" href="#">↑</a>
+        <span id="totop" onclick='window.scrollTo({{top: 0, left: 0, behavior: "smooth"}})' title="Retour en haut de la page">
+            <svg width="32" height="32" version="1.1" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="m2.242 17.981c3.4802 3.9598 5.5555 1.7468 8.6176-4.9699 3.0623-6.7169 7.3569-7.089 10.312 0 2.9552 7.0888 5.246 9.6624 8.6176 4.9699 1.6859-2.3462-1.7549-5.5283-4.8677-8.9947-3.1126-3.4663-5.8971-7.217-8.9058-7.2075-3.0085 0.017777-5.8916 3.7415-9.0179 7.2948-3.1263 3.5533-6.4956 6.9275-4.7556 8.9074z"/><ellipse cx="16" cy="21.661" rx="4.2483" ry="8.5607"/></svg>
+        </span>
     </header>
     <main>
         {content}
@@ -27,7 +32,7 @@
     <footer>
         {footer}
         <small xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/">
-            <a rel="cc:attributionURL" href="https://biloumaster.fr">biloumaster.fr</a> © 2021 by <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://biloumaster.fr/joke">BilouMaster Joke</a> <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.fr" target="_blank" rel="license noopener noreferrer" title="CC BY-NC 4.0"><img src="/img/cc.svg" alt="Creative Commons"><img src="/img/by.svg" alt="Attribution"><img src="/img/nc.svg" alt="Non Commercial"></a>
+            <a rel="cc:attributionURL" href="https://biloumaster.fr">biloumaster.fr</a> © 2023 by <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://biloumaster.fr/joke">BilouMaster Joke</a> <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.fr" target="_blank" rel="license noopener noreferrer" title="CC BY-NC 4.0"><img src="/img/cc.svg" alt="Creative Commons"><img src="/img/by.svg" alt="Attribution"><img src="/img/nc.svg" alt="Non Commercial"></a>
         </small>
     </footer>
 </body>
