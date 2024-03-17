@@ -142,21 +142,20 @@ function mmss(sec) {
     return ("00" + Math.floor(sec / 60)).slice(-2) + ":" + ("00" + Math.floor(sec % 60)).slice(-2);
 }
 
-var timeChanging = false;
-function pl_time(el) {
-    document.querySelector('.pl-bar .pl-current-time').innerText = mmss(el.currentTime);
-    if (timeChanging == false) {
-        if (isNaN(el.duration)) {
-            document.querySelector('.pl-bar input').value = 0;
-        } else {
-            document.querySelector('.pl-bar input').value = el.currentTime * 100 / el.duration;
-        }
+function pl_time() {
+    const audioEl = document.getElementById('pl-audio');
+    document.querySelector('.pl-bar .pl-current-time').innerText = mmss(audioEl.currentTime);
+    if (isNaN(audioEl.duration)) {
+        document.querySelector('.pl-bar input').value = 0;
+    } else {
+        document.querySelector('.pl-bar input').value = audioEl.currentTime * 100 / audioEl.duration;
     }
 }
+setInterval(pl_time, 100);
 
 function pl_timeChange(el) {
     const audioEl = document.getElementById('pl-audio');
-    audioEl.currentTime = Math.floor(el.value * audioEl.duration / 100);
+    audioEl.currentTime = el.value * audioEl.duration / 100;
 }
 
 function pl_change_volume(el) {

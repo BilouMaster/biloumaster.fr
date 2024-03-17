@@ -1,8 +1,53 @@
+.navig {
+    box-sizing: border-box;
+    display: block;
+    box-shadow: 0px 0px 6px var(--biloubgc80);
+    background: linear-gradient(135deg, var(--biloubgct) 0%, var(--biloubgc33) 600px);
+    padding: 0.5em 2em;
+    text-align: center;
+    width: 66%;
+    margin: auto;
+    margin-top: 1.5em;
+    transition-property: background-color;
+    transition-timing-function: var(--biloueazout);
+    transition-duration: 0.3s;
+}
+.navig:last-of-type {
+    margin-bottom: 1.5em;
+}
+.navig img {
+    width: 6em;
+    margin: -1.5em;
+}
+.navig h2, .navig img {
+    transition-timing-function: var(--biloustic);
+    transition-duration: 0.3s;
+    transition-property: transform;
+}
+.navig p {
+    font-family: BilouFontLight;
+    padding: 0;
+    margin-top: -1em;
+    color: var(--bilouhighlight);
+}
+html:not(.can-touch) .navig:hover {
+    background-color: var(--biloubgc33);
+}
+html:not(.can-touch) .navig:hover h2 {
+    color: var(--biloulightgreen);
+    transform: scale(1.05);
+}
+html:not(.can-touch) .navig:hover img {
+    transform: rotate(15deg) scale(1.1);
+}
+html:not(.can-touch) .navig:nth-child(even):hover img {
+    transform: rotate(-15deg) scale(1.1);
+}
 .navig_element {
     display: inline-block;
     width: 100%;
     margin-top: 1.5em;
-    box-shadow: 0px 0px 6px var(--biloubgc);
+    box-shadow: 0px 0px 6px var(--biloubgc80);
     background: linear-gradient(135deg, var(--biloubgct) 0%, var(--biloubgc33) 600px);
     box-sizing: border-box;
     transition-property: background-color;
@@ -34,8 +79,11 @@
     display: grid;
     grid-gap: 1px;
     transition-property: width;
-    transition-timing-function: var(--biloustic);
+    transition-timing-function: var(--biloueazout);
     transition-duration: 0.3s;
+    background-image: url('data:image/svg+xml,<svg width="20px" height="20px" version="1.1" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="rgba(22, 21, 28, .33)"><rect width="10" height="10"/><rect x="10" y="10" width="10" height="10"/></svg>');
+    background-attachment: fixed;
+    background-size: 2em;
 }
 .navig_icon {
     width: 4em;
@@ -43,7 +91,7 @@
     left: 50%;
     margin: -2em;
     transition-property: left, transform;
-    transition-timing-function: var(--biloustic);
+    transition-timing-function: var(--biloueazout);
     transition-duration: 0.3s;
 }
 html:not(.can-touch) .navig_element:hover {
@@ -104,11 +152,13 @@ html:not(.can-touch) .navig_element:hover > h2 {
     }
     .navig_icon {
         bottom: 1em;
+        transition-timing-function: var(--biloustic);
     }
     html:not(.can-touch) .navig_element:hover > .preview_images {
         width: 100%;
     }
     html:not(.can-touch) .navig_element:hover > .navig_icon {
-        left: 50%;
+        left: 50% !important;
+        transform: rotate(15deg) scale(1.1);
     }
 }

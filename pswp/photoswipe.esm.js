@@ -1090,7 +1090,7 @@ class Slide {
    * If the slide in the current state can be panned by the user
    */
   isPannable() {
-    return this.width && (this.currZoomLevel > this.zoomLevels.fit);
+    return this.width && (this.currZoomLevel > this.zoomLevels.initial);
   }
 
   /**
@@ -1225,7 +1225,7 @@ class DragHandler {
 
     if (dragAxis === 'y'
         && pswp.options.closeOnVerticalDrag
-        && currSlide.currZoomLevel <= currSlide.zoomLevels.fit
+        && currSlide.currZoomLevel <= currSlide.zoomLevels.initial
         && !this.gestures.isMultitouch) {
       // Handle vertical drag to close
       const panY = currSlide.pan.y + (p1.y - prevP1.y);

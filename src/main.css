@@ -7,24 +7,33 @@
     src: url('/src/BilouFont_Light.ttf');
 }
 :root {
-    --biloubgc: rgb(31, 30, 36);
-    --biloubgc33: rgb(31, 30, 36, 0.33);
-    --biloubgc50: rgb(31, 30, 36, 0.5);
-    --biloubgc80: rgb(31, 30, 36, 0.8);
-    --biloubgct: rgba(31, 30, 36, 0);
-    --biloudark: rgb(62, 60, 70);
-    --biloudarkt: rgba(62, 60, 70, 0);
-    --biloumedium: rgb(143, 129, 158);
+    /* anciennes couleurs */
+    --bbgc: 31, 30, 36;
+    --bdark: 62, 60, 70;
     --biloulight: rgb(214, 184, 231);
     --bilouhighlight: rgb(240, 233, 242);
     --biloulightgreen: rgb(159, 235, 163);
+    /* nouvelles */
+    --bbgc: 22, 21, 28;
+    --bdark: 52, 49, 57;
+    --biloulight: rgb(184, 194, 231);
+    --biloulightgreen: rgb(223, 238, 167);
+    --bilouhighlight: rgb(240, 233, 242);
+    --biloubgc: rgb(var(--bbgc));
+    --biloubgc33: rgba(var(--bbgc), 0.33);
+    --biloubgc50: rgba(var(--bbgc), 0.5);
+    --biloubgc80: rgba(var(--bbgc), 0.8);
+    --biloubgct: rgba(var(--bbgc), 0);
+    --biloudark: rgb(var(--bdark));
+    --biloudarkt: rgba(var(--bdark), 0);
+    /* --biloumedium: rgb(143, 129, 158); */
     --biloustic: cubic-bezier(0.6, 3.0, 0.5, 0.7);
     --biloueazout: cubic-bezier(0.4, 1, 0.6, 0.9);
     --bilouborder: solid var(--biloubgc) 3px;
     --bilouborder33: solid var(--biloubgc33) 3px;
     --biloutextborder: -2px -2px 0 var(--biloubgc), -3px 0 0 var(--biloubgc), -2px 2px 0 var(--biloubgc), 0 3px 0 var(--biloubgc), 2px 2px 0 var(--biloubgc), 3px 0 0 var(--biloubgc), 2px -2px 0 var(--biloubgc), 0 -3px 0 var(--biloubgc);
     --biloufade_offset: 19px;
-    --biloufade: linear-gradient(179.5deg, var(--biloubgc) calc(1em + var(--biloufade_offset)), var(--biloubgct) calc(1em + var(--biloufade_offset) + 1px)),
+    --biloufade: linear-gradient(179deg, var(--biloubgc) calc(1em + var(--biloufade_offset)), var(--biloubgct) calc(1em + var(--biloufade_offset) + 1px)),
                  linear-gradient(-200deg, var(--biloudarkt) 50px, var(--biloudark) 280px);
     --biloupsyche_top: 36px;
     --biloupsyche_left: 139px;
@@ -32,7 +41,19 @@
     font-family: BilouFont, "Comic Sans MS", "Comic Sans", cursive, sans-serif;
     box-sizing: border-box;
     scrollbar-width: thin;
+    scrollbar-color: rgba(var(--bdark), 0.33) var(--biloubgct);
     -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
+}
+::-webkit-scrollbar {
+    height: 1ex;
+    width: 1ex;
+    background: var(--biloubgct);
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(var(--bdark), 0.33);
+    border-radius: .5ex;
+    opacity: .5;
 }
 a {
     text-decoration: none;
@@ -40,9 +61,6 @@ a {
 }
 a:visited {
     color: var(--biloulight);
-}
-h1, h2 {
-    cursor: default;
 }
 body {
     display: flex;
@@ -53,12 +71,18 @@ body {
     min-height: 100vh;
     margin: 0 auto;
 }
+body::before {
+    background-color: var(--biloubgc);
+    content: '';
+    flex: .25;
+}
 header {
     display: flex;
-    align-items: center;
+    /* align-items: center; */
     justify-content: center;
     animation: 2s steps(20, end) infinite biloupsyche;
     box-shadow: 0 1px 3px var(--biloubgc50);
+    flex: .5;
 }
 header > img, header > nav {
     width: 8em;
@@ -69,6 +93,7 @@ header > img, header > nav {
     max-height: 25vw;
     margin: 0.25em;
     margin-bottom: -1em;
+    z-index: 100;
 }
 header > nav > * {
     display: block;
@@ -89,6 +114,7 @@ header > nav > a > img {
 header > hgroup {
     max-width: 70%;
     margin: 0.25em;
+    z-index: 100;
 }
 header > hgroup > h1 {
     color: var(--biloulight);
@@ -102,27 +128,31 @@ header > hgroup > h1 {
     cursor: pointer;
     position: fixed;
     z-index: 1000;
-    width: 1.5em;
-    top: 0.5em;
-    left: 0.5em;
+    top: 0;
+    left: max(min(calc((100% - 840px)/2 - 4em), calc(17vw - 4em)), 0px);
+    padding: 0.5em;
     display: none;
     transition-timing-function: var(--biloustic);
     transition-duration: 0.3s;
     transition-property: transform;
     fill: var(--biloulight);
-    fill-opacity: 0.33;
+    fill-opacity: 0.85;
     stroke: var(--biloubgc);
-    stroke-width: 1px;
+    stroke-width: 2px;
     stroke-opacity: 0.66;
+    display: none;
 }
 #totop:hover {
     transform: scale(0.9);
 }
+.not-trippy #totop {
+    display: block;
+}
 main {
-    flex: 1;
+    flex: 0;
     padding: 0 1em;
 }
-main h1, main h2, .pswp h1 {
+main h1, main h2 {
     font-size: 1.5em;
     letter-spacing: 0.25ex;
     color: var(--biloulight);
@@ -157,18 +187,25 @@ main h1, main h2, .pswp h1 {
 html:not(.can-touch) .tags a:hover {
     transform: scale(1.05);
 }
+footer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
 footer > small {
     text-align: right;
     display: block;
     min-height: 2.5em;
-    color: var(--biloumedium);
+    color: gray;
     background-color: var(--biloubgc);
     font-family: BilouFontLight;
+    flex: 1;
 }
 footer > small > a {
     display: inline-block;
     text-decoration: none;
     color: var(--biloulight);
+    z-index: 100;
 }
 footer > small > a:visited {
     color: var(--biloulight);
@@ -232,8 +269,9 @@ a.biloulink:hover {
     padding: 0.25em 0.5em;
     margin: 0.5em;
     text-align: center;
+    width: fit-content;
 }
-.caption:before {
+.caption::before {
     content: "";
     display: block;
     background-image: url("data:image/svg+xml,%3Csvg width='36' height='28' version='1.1' viewBox='0 0 36 28' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m36.42 22.65s-11.61-3.686-14.64-9.744c7.17 0.6679 14.64-1.355 14.64-1.355' fill='%23f0e9f2' stroke='%231f1e24' stroke-width='3'/%3E%3C/svg%3E%0A");
@@ -244,7 +282,7 @@ a.biloulink:hover {
     top: -0.5em;
     left: calc(-36px - 0.5em);
 }
-.caption.avatar:before {
+.caption.avatar::before {
     content: "";
     background-image: url(/img/bubble_tail_left.svg), url(/img/biloumaster.svg);
     background-size: auto, contain;
@@ -256,7 +294,7 @@ a.biloulink:hover {
     top: -1.5em;
     left: -5.5em;
 }
-date {
+time {
     color: var(--bilouhighlight);
     text-align: center;
     margin: 0.1em;
@@ -264,8 +302,51 @@ date {
     font-family: BilouFontLight;
     font-weight: bold;
 }
+#overbiloulay {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    z-index: 100;
+    background: radial-gradient(transparent, transparent, black);
+    pointer-events: none;
+}
+
+@media (max-width: 840px) {
+    :root {
+        --biloufade: linear-gradient(-200deg, var(--biloudarkt), var(--biloudark) 280px);
+    }
+    body {
+        max-width: none;
+        min-height: 100vh;
+        margin: 0;
+    }
+    body::before {
+        flex: 0;
+    }
+    main {
+        flex: 1;
+    }
+    footer {
+        text-align: center;
+        flex: 0;
+    }
+    footer > small {
+        padding: 1em;
+    }
+    header {
+        margin-top: 0;
+    }
+    header > hgroup >  h1 {
+        transform: rotate(0deg);
+    }
+}
 
 @media (max-width: 640px) {
+    header > a {
+        margin-right: 0;
+    }
     header > hgroup >  h1 {
         font-size: 1.7em;
     }
@@ -279,6 +360,9 @@ date {
     header > hgroup >  h1 {
         font-size: 1.6em;
     }
+    .navig, .navig_element {
+        font-size: 0.95em;
+    }
     .caption {
         font-size: 0.9em;
         padding: 0.225em 0.5em;
@@ -286,12 +370,11 @@ date {
 }
 
 @media (max-width: 420px) {
-    :root {
-        --biloufade: linear-gradient(-200deg, var(--biloudarkt), var(--biloudark) 280px);
-    }
     header > hgroup > h1 {
         font-size: 1.5em;
-        transform: rotate(0deg);
+    }
+    .navig, .navig_element {
+        font-size: 0.9em;
     }
     .caption {
         font-size: 0.8em;
@@ -299,26 +382,6 @@ date {
     }
     header > a > img {
         transform: scale(1.1);
-    }
-    :root {
-        background-color: var(--biloudark);
-    }
-    body {
-        max-width: none;
-        min-height: 100vh;
-        margin: 0;
-    }
-    footer {
-        text-align: center;
-    }
-    footer small {
-        padding: 1em;
-    }
-    header {
-        margin-top: 0;
-    }
-    header > a {
-        margin-right: 0;
     }
 }
 

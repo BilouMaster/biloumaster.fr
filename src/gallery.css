@@ -1,111 +1,297 @@
+* {
+    box-sizing: border-box;
+}
 body.blur > :not(.pswp) {
     filter: blur(2px);
 }
-main, main * {
-    user-select: none;
-}
-section {
-    margin-top: 1.5em;
-    box-shadow: 0px 0px 6px var(--biloubgc);
-    background: linear-gradient(135deg, var(--biloubgct) 0%, var(--biloubgc33) 600px);
-}
-section:last-of-type {
-    margin-bottom: 1.5em;
-}
-.folded section {
-    margin-top: 1em;
-}
-section h2 {
-    position: sticky;
-    top: 0;
-    z-index: 900;
-    cursor: pointer;
-    transition-property: transform, color;
-    transition-timing-function: var(--biloustic);
-    transition-duration: 0.3s;
-    margin: 0.5em auto;
-    width: max-content;
-}
-html:not(.can-touch) section h2:hover {
-    color: var(--biloulightgreen);
-    transform: scale(1.05);
-}
-.gallery {
-    --ratio: 7;
+main {
     display: flex;
     flex-wrap: wrap;
-}
-.gallery:after {
-    content: '';
-    flex-grow: 5;
-}
-.gallery .tags {
-    display: none;
-}
-.thumb {
-    margin: 1px;
-    flex-grow: 1;
-    overflow: hidden;
-    max-height: 250px;
-    opacity: 0.9;
-    transition-property: transform, opacity;
-    transition-duration: 0.3s;
-    transition-timing-function: var(--biloueazout);
-}
-html:not(.can-touch) .thumb:hover {
-    transition-timing-function: var(--biloustic);
-    transform: scale(1.05);
-    opacity: 1.0;
-    z-index: 10;
-    box-shadow: 0px 0px 8px var(--biloubgc);
-}
-.thumb img {
-    height: 100%;
+    align-content: flex-start;
+    padding: 0.5em;
     width: 100%;
-    object-fit: cover;
-    color: var(--biloubgc);
-    background-color: #36333d;
 }
-main.folded .gallery {
+main > small {
+    font-family: BilouFontLight;
+    padding: 0.5em;
+    margin-top: -1em;
+    z-index: 100;
+    text-align: right;
+    width: 100%;
+}
+main > small span.bubble-style {
+    transform: scale(.5);
+    margin: -.8em;
+}
+main > small span.bubble-style::before {
+    top: 88%;
+}
+main > small b {
+    color: var(--biloulight);
+}
+main.folded > small {
     display: none;
 }
+section {
+    flex-grow: 1;
+    margin: 1px;
+    max-width: 100%;
+}
+.bubble-style {
+    width: 3em;
+    height: 3em;
+    line-height: 3em;
+    font-size: 1.25em;
+    color: var(--biloubgc);
+    font-family: BilouFont;
+    letter-spacing: normal;
+    text-align: center;
+    text-shadow: none;
+    box-sizing: border-box;
+    background: var(--bilouhighlight);
+    border: solid 2px var(--biloubgc);
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: var(--biloubgc50) 0 0 .5em;
+}
+.bubble-style::before {
+    content: '';
+    position: relative;
+    width: 36px;
+    height: 28px;
+    margin-right: -36px;
+    margin-bottom: -28px;
+    display: block;
+    left: 50%;
+    top: 91%;
+    box-sizing: border-box;
+    transform: rotate(65deg) scale(-.8,.8);
+    background-image: url("data:image/svg+xml,%3Csvg width='36' height='28' version='1.1' viewBox='0 0 36 28' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m36.42 22.65s-11.61-3.686-14.64-9.744c7.17 0.6679 14.64-1.355 14.64-1.355' fill='%23f0e9f2' stroke='%231f1e24' stroke-width='2'/%3E%3C/svg%3E%0A");
+}
+section h2 {
+    cursor: pointer;
+    position: sticky;
+    margin: -1.5em;
+    margin-bottom: 1.5em;
+    float: left;
+    top: -0.75em;
+    z-index: 100;
+    transform: translate(1em,1em) rotate(-15deg);
+    transition-property: transform;
+    transition-timing-function: var(--biloustic);
+    transition-duration: 0.3s;
+}
+html:not(.can-touch) section h2:hover, html:not(.can-touch) .folded section:hover h2 {
+    transform: translate(1em,1em) scale(1.05) rotate(-15deg);
+}
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    height: 100%;
+    background-color: var(--biloudark);
+    background-image: url('data:image/svg+xml,<svg width="20px" height="20px" version="1.1" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="rgba(22, 21, 28, .33)"><rect width="10" height="10"/><rect x="10" y="10" width="10" height="10"/></svg>');
+    background-attachment: fixed;
+    background-size: 2em;
+}
+.gallery > a {
+    filter: brightness(.9);
+    aspect-ratio: var(--r);
+    width: calc(min(220px, 33vw)*var(--r));
+    max-height: 360px;
+    flex-grow: calc(1 + var(--r)*100);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: transform .6s var(--biloueazout), filter .6s var(--biloueazout);
+}
+.gallery > a > * {
+    display: none;
+}
+.gallery > .tags {
+    display: none;
+}
+html:not(.can-touch) .gallery > a:hover {
+    filter: brightness(1);
+    cursor: pointer;
+    z-index: 10;
+    transform: scale(1.02);
+    box-shadow: 0px 0px 8px var(--biloubgc50);
+    transition: transform .3s var(--biloustic), filter .3s var(--biloueazout);
+}
+.folded .gallery {
+    overflow: hidden;
+    height: 100%;
+}
+.folded section {
+    height: 6em;
+    margin: 0;
+    position: relative;
+    border: solid 1px var(--biloudark);
+    transition-property: margin, height;
+    transition-timing-function: var(--biloueazout);
+    transition-duration: .3s;
+}
+.folded section h2 {
+    position: absolute;
+    top: 0;
+}
+.folded section:last-child {
+    height: 12em;
+}
+html:not(.can-touch) .folded section {
+    z-index: 100;
+}
+html:not(.can-touch) .folded section:hover {
+    margin-top: -1em;
+    height: 7em;
+    cursor: pointer;
+}
+html:not(.can-touch) .folded section:last-child:hover {
+    height: 13em;
+}
+html:not(.can-touch) .folded section:hover a {
+    filter: brightness(1.1);
+}
+.folded .gallery > a:nth-child(n+8) {
+    display: none;
+}
+.folded .gallery::before {
+    content: '';
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at top, var(--biloubgct) 50%, var(--biloubgc80) 100%);
+    z-index: 2;
+    margin-bottom: -100%;
+}
+#tag_list {
+    display: none;
+}
+#current_tag {
+    display: none;
+    order: -1;
+}
+#current_tag a {
+    font-family: BilouFont;
+}
+@media (max-width: 1024px) {
+    main > small {
+        margin: 0;
+        text-align: left;
+    }
+    section h2.bubble-style {
+        font-size: 1em;
+        float: right;
+        transform: translate(-2em,1em) rotate(15deg);
+    }
+    .folded section h2 {
+        right: 0;
+    }
+    section h2.bubble-style::before {
+        transform: rotate(-70deg) scale(.7,.7);
+        left: -0.5em;
+        top: 2.5em;
+    }
+    html:not(.can-touch) section h2:hover, html:not(.can-touch) .folded section:hover h2 { 
+        transform: translate(-2em,1em) scale(1.05) rotate(15deg);
+    }
+}
+@media (max-width: 840px) {
+    main {
+        padding: 0;
+    }
+    .folded .gallery > a:nth-child(n+5) {
+        display: none;
+    }
+}
+
+/*pswp*/
+
 .pswp {
     --pswp-bg: var(--biloubgc) !important;
-    --pswp-placeholder-bg: var(--biloubgc) !important;
+    --pswp-bg: radial-gradient(var(--biloubgc), var(--biloubgc), black) !important;
+    --pswp-placeholder-bg: var(--biloubgct) no-repeat center/75px url(/img/placeholder.svg) !important;
 }
 .pswp__title {
+    height: 100px;
     width: max-content;
     margin: 0 auto;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
-.pswp h1 {
+.pswp h1, .pswp h2 {
     text-shadow: var(--biloutextborder), 0 0 5px var(--biloubgc), 0 0 6px var(--biloubgc), 0 0 7px var(--biloubgc), 0 0 8px var(--biloubgc);
     margin: 0;
     max-width: 100vw;
     line-height: 1.5em;
+    font-size: 1.5em;
+    letter-spacing: 0.25ex;
+    color: var(--biloulight);
+    font-weight: lighter;
+    text-align: center;
 }
-.pswp date {
+.pswp time {
     text-shadow: 0 0 1px black, 0 0 2px black, 0 0 3px black, 0 0 4px black;
     margin: 0;
 }
-.pswp__button--arrow .pswp__icn {
-    fill: var(--biloulight);
-    fill-opacity: 0.33;
-    stroke: var(--biloubgc);
-    stroke-width: 0.5;
-    stroke-opacity: 0.5;
+.pswp__button {
+    opacity: 1.0;
+    height: 50px !important;
+    z-index: 10;
+}
+.pswp__button--share-button {
+    opacity: 1;
+    top: -1.75em;
+    z-index: 10;
+    position: absolute;
+    transform: scale(.7);
+    transition: opacity var(--pswp-transition-duration) cubic-bezier(0.4, 0, 0.22, 1), transform .3s var(--biloustic) !important;
+}
+.pswp--share-hidden .pswp__button--share-button {
+    transform: scale(.7) translateY(-2em);
+}
+html:not(.can-touch) .pswp__button--share-button:hover {
+    cursor: pointer;
+    transform: scale(.8);
+}
+.pswp__button--share-button svg {
+    width: 100%;
+    height: 100%;
+    padding: .3em;
+}
+.pswp__icn {
+    position: unset !important;
+    fill: var(--biloulight) !important;
     transition-timing-function: var(--biloustic);
     transition-duration: 0.3s;
     transition-property: transform;
+    stroke: none;
+    fill-opacity: 0.66;
 }
-
-.pswp__button--arrow:hover .pswp__icn {
+.pswp__button--close {
+    margin-right: 0 !important;
+}
+.pswp__icn-shadow {
+    stroke: var(--biloubgc) !important;
+}
+.pswp__button--arrow .pswp__icn {
+    fill-opacity: 0.33;
+    margin-top: 0 !important;
+    width: 48px !important;
+    height: 48px !important;
+}
+.pswp__button--arrow .pswp__icn-shadow {
+    stroke-opacity: 0.5;
+    stroke-width: 0.5 !important;
+}
+html:not(.can-touch) .pswp__button:hover .pswp__icn {
     transform: scale(0.9);
 }
-.pswp__button--arrow--next:hover .pswp__icn {
+html:not(.can-touch) .pswp__button--arrow--next:hover .pswp__icn {
     transform: scale(-0.9, 0.9);
 }
-
 .pswp__description {
     margin: 0 auto;
     width: 100vw;
@@ -119,12 +305,14 @@ main.folded .gallery {
 }
 .pswp .caption {
     box-shadow: 0 0 8px var(--biloubgc33);
+    margin: 1em;
 }
 .pswp .caption p {
-    max-height: 8em;
+    max-height: 10em;
     overflow-y: auto;
     margin: 0;
     scrollbar-width: thin;
+    touch-action: none;
 }
 .pswp .tags a {
     color: var(--bilouhighlight);
@@ -135,32 +323,37 @@ main.folded .gallery {
 .pswp .tags::before, #show_tag_list {
     margin: 0.2em;
     border-radius: 0.5em;
-    background-color: var(--biloubgc80);
+    background-color: var(--biloubgc50);
     box-shadow: 0 0 8px var(--biloubgc50);
     text-shadow: 0 0 1px black, 0 0 2px black, 0 0 3px black, 0 0 4px black;
     padding: 0.25em 0.5em;
 }
 #show_tag_list {
-    position: sticky;
-    top: 0.25em;
     color: var(--biloulight);
     width: max-content;
     cursor: pointer;
-    margin-top: 0.5em;
+    margin: 1em;
     margin-left: auto;
-    z-index: 1000;
     transition-property: transform;
     transition-timing-function: var(--biloustic);
     transition-duration: 0.3s;
+    pointer-events: all;
 }
-#show_tag_list:hover {
+#show_tag_list_container {
+    z-index: 1000;
+    position: sticky;
+    bottom: 0.5em;
+    width: 100%;
+    pointer-events: none;
+}
+html:not(.can-touch) #show_tag_list:hover {
     transform: scale(1.05);
+}
+.pswp .tags::before {
+    font-size: 0.9em;
 }
 .pswp__description, .pswp__description * {
     box-sizing: content-box !important;
-}
-#tag_list {
-    display: none;
 }
 .pswp #tag_list {
     display: block;
@@ -172,51 +365,16 @@ main.folded .gallery {
 .pswp #tag_list .tags::before {
     content: none;
 }
-#current_tag {
-    background-color: var(--biloubgc50);
-    border-radius: 0.5em;
-    text-align: center;
-    font-family: BilouFontLight;
-    margin: 0.5em 0;
-    padding: 0.5em;
-    display: none;
-}
-#current_tag a {
-    font-family: BilouFont;
-}
-@media (min-width: 1024px) {
-    .gallery {
-        --ratio: 8;
-    }
-}
-@media (max-width: 840px) {
-    .gallery {
-        --ratio: 6.5;
-    }
-}
-@media (max-width: 680px) {
-    .gallery {
-        --ratio: 6;
-    }
-}
-@media (max-width: 580px) {
-    .gallery {
-        --ratio: 5;
-    }
-}
 @media (max-width: 420px) {
     .pswp__title {
-        position: relative;
-        top: 2.5em;
+        justify-content: flex-end;
     }
     .pswp {
         --pswp-bg: var(--biloudark) !important;
-    }
-    #show_tag_list {
-        font-family: BilouFontLight;
+        --pswp-bg: radial-gradient(var(--biloudark), var(--biloudark), black) !important;
+
     }
     #current_tag {
-        font-size: 0.8em;
         margin: 0.5em;
     }
 }

@@ -1,15 +1,16 @@
 window.addEventListener('DOMContentLoaded', () => {
   if (tag) {
-    var el = document.body.querySelector('#tag_list a.' + tag);
-    tagfr = el.innerHTML;
-    tagdesc = el.title;
-    window.document.title += ' - ' + tagfr;
-    document.body.querySelector('#current_tag span').innerHTML = tagfr;
-    document.body.querySelector('header > hgroup > h1').innerHTML += ' - ' + tagfr;
+    const el = document.body.querySelector('#tag_list a.' + tag),
+      tagtitle = el.innerHTML,
+      tagdesc = el.title;
+    window.document.title += ' - ' + tagtitle;
+    document.body.querySelector('#current_tag span').innerHTML = tagtitle;
+    document.body.querySelector('header > hgroup > h1').innerHTML = tagtitle;
     document.body.querySelector('header > hgroup > p').innerHTML = tagdesc;
     document.body.querySelector('header > nav > a:nth-child(2)').href = '../..';
-    document.body.querySelectorAll('.thumb:not(.' + tag + ')').forEach(img => {
-      img.outerHTML = '';
+    document.body.querySelectorAll('.gallery > a:not(.' + tag + ')').forEach(a => {
+      a.nextSibling.nextSibling.outerHTML = '';
+      a.outerHTML = '';
     });
     document.body.querySelectorAll('section:not(.' + tag + ')').forEach(s => {
       s.outerHTML = '';
@@ -19,35 +20,51 @@ window.addEventListener('DOMContentLoaded', () => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         let thumb = entry.target;
-        thumb.src = thumb.dataset.src;
+        thumb.style.backgroundImage = "url('/img/gallery/thumbnail/" + thumb.dataset.name + "_thumbnail.webp')";
         lazyThumbs.unobserve(thumb);
-      };
+      }
     });
   }, {rootMargin: "1000px 0px"});
-  document.querySelectorAll('.thumb img').forEach(thumb => {
+  document.querySelectorAll('.gallery a').forEach(thumb => {
     lazyThumbs.observe(thumb);
+  });
+  document.querySelectorAll('section').forEach(section => {
+    section.addEventListener('click', toggleSelf);
   });
 });
 
 function toggleSections(el) {
-  let m = document.querySelector('main');
+  const m = document.querySelector('main');
   m.classList.toggle('folded');
   el.scrollIntoView({behavior: "instant", block: "start"});
-};
+  window.scrollBy(0, -25);
+}
 
-function trippyZone() {
-  if (window.scrollY > 320) {
-    document.body.classList.add('not-trippy');
-  } else if (document.body.classList.contains('not-trippy')) {
-    document.body.classList.remove('not-trippy');
-  };
-};
-document.addEventListener('scroll', trippyZone);
+function toggleSelf(el) {
+  if (el.target.tagName == 'DIV') {
+    toggleSections(el.target.children[0]);
+  }
+  if (el.target.tagName == 'H2') {
+    toggleSections(el.target);
+  }
+}
+
+let focusel;
+let olwwidth = window.innerWidth;
+window.addEventListener('resize', () => {
+  if (focusel && window.innerWidth != olwwidth) {
+    focusel.scrollIntoView({behavior: "instant", block: "center"});
+  }
+  olwwidth = window.innerWidth;
+});
+setInterval(function () {
+  focusel = document.elementFromPoint(window.innerWidth/2, window.innerHeight/2) || focusel;
+}, 500);
 
 var tag = window.location.pathname.split('/tag/');
 if (tag.length > 1) {
   tag = tag[1];
-  var css = '.thumb:not(.' + tag + '), section:not(.' + tag +') { display: none; } #current_tag {display: block}',
+  var css = '.gallery > a:not(.' + tag + '), section:not(.' + tag +'), #note { display: none; } #current_tag {display: block}',
     head = document.head,
     style = document.createElement('style');
   head.appendChild(style);

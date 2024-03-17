@@ -2,8 +2,12 @@ from multiprocessing import Pool
 from pathlib import Path
 from glob import glob
 
+templates = None
+
 def get_templates() -> dict:
-    return dict(Pool().map(get_template, glob("templates/*.html")))
+    global templates
+    templates = templates or dict(Pool().map(get_template, glob("templates/*.html")))
+    return templates
 
 def get_template(infile: str) -> tuple:
     content = str_template(infile)

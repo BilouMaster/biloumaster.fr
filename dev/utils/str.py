@@ -1,3 +1,11 @@
+def str_indent(text:str, level: int, char=' ', size=4) -> str:
+    base_indent = len(text) - len(text.lstrip(char))
+    return ('\n' + char * size * level).join([text[base_indent:] for text in text.split('\n')])
+
+# removes empty lines
+def str_clean(text: str) -> str:
+    return '\n'.join([line for line in text.split('\n') if line.strip()])
+
 months = {
     '01':'janvier',
     '02':'février',

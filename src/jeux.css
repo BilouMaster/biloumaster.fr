@@ -6,7 +6,7 @@
     margin: 16px auto;
     width: 100%;
     margin-top: 1.5em;
-    box-shadow: 0px 0px 6px var(--biloubgc);
+    box-shadow: 0px 0px 6px var(--biloubgc80);
     background: linear-gradient(135deg, var(--biloubgct) 0%, var(--biloubgc33) 600px);
     box-sizing: border-box;
 }

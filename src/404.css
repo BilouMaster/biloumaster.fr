@@ -1,12 +1,23 @@
 html {
-    transform: rotate(181.5deg);
+    transform: rotate(181.404deg);
     overflow: hidden;
+    animation: roll .8s var(--biloustic);
+}
+@keyframes roll {
+    0% {
+        transform: rotate(179.404deg);
+    }
+    100% {
+    }
 }
 body {
     min-height: calc(100vh - 2em);
     --biloupsyche_left: 145px;
     --biloupsyche_top: 65px;
     margin: 0 auto 1.5em;
+}
+body::before {
+    flex: 1 !important;
 }
 header {
     justify-content: start;
@@ -19,6 +30,11 @@ header nav {
     left: 100px;
     top: 20px;
 }
+@media (max-width: 840px) {
+    header nav {
+        top: -5px;
+    }
+}
 header hgroup {
     position: relative;
     left: 100px;
@@ -27,6 +43,14 @@ header hgroup {
 header nav a {
     transform: rotate(120deg);
     transition-duration: 1s;
+    animation: roll2 1s cubic-bezier(.65,.05,.36,1);
+}
+@keyframes roll2 {
+    50% {
+        transform: translateX(-10px) rotate(130deg);
+    }
+    100% {
+    }
 }
 html:not(.can-touch) header > nav > a:hover {
     transform: translateX(-10px) rotate(130deg);
@@ -50,26 +74,23 @@ main p {
     line-height: 1.404em;
     opacity: 0.404;
     transform: rotate(175deg);
+    animation: shake .5s var(--biloustic);
+}
+@keyframes shake {
+    0% {
+        transform: translateY(-5px) rotate(175deg) scaleY(0);
+    }
+    25% {
+        transform: translateY(15px) rotate(175deg);
+    }
+    50% {
+        transform: translateY(-15px) rotate(175deg);
+    }
+    100% {
+    }
 }
 span {
     font-size: 4.04em;
-}
-@media (max-width: 420px) {
-    html {
-        transform: rotate(180deg);
-        min-height: 100vh;
-        margin: 0;
-    }
-    body {
-        --biloupsyche_left: 120px;
-        --biloupsyche_top: 55px;
-    }
-    footer {
-        display: none;
-    }
-    header {
-        margin-top: -1em;
-    }
 }
 @keyframes biloupsyche {
     0% {

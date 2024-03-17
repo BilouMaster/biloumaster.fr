@@ -72,7 +72,7 @@ figure img {
     object-fit: contain;
     border-radius: 0.5em;
 }
-/* figure > div.img_container:before {
+/* figure > div.img_container::before {
     content: 'biloumaster';
     position: absolute;
     background-image: url(/img/cc.svg), url(/img/by.svg), url(/img/nc.svg);
