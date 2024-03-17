@@ -135,7 +135,7 @@ html:not(.can-touch) .gallery > a:hover {
     position: absolute;
     top: 0;
 }
-.folded section:last-child {
+.folded section:last-of-type {
     height: 12em;
 }
 html:not(.can-touch) .folded section {
@@ -146,7 +146,7 @@ html:not(.can-touch) .folded section:hover {
     height: 7em;
     cursor: pointer;
 }
-html:not(.can-touch) .folded section:last-child:hover {
+html:not(.can-touch) .folded section:last-of-type:hover {
     height: 13em;
 }
 html:not(.can-touch) .folded section:hover a {

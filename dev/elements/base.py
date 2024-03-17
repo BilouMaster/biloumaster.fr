@@ -55,12 +55,18 @@ class Element:
         pass
 
     def html(self, lang='fr') -> str:
-        if len(self.parents) > 1:
+        footer = ""
+        if self.parent:
             p = self.parents[1:]
             p.append(self)
             p.reverse()
             nav_args = dict(('img'+str(index), value.name) for index, value in enumerate(p))
             nav = get_templates()['header_nav_' + str(len(p))].format(**nav_args)
+            spc = self.parent.children
+            footer = '<nav id="navig_footer">' + self.parent.html_return() + spc[spc.index(self)-1].html_return()
+            if len(spc) > 1:
+                footer += spc[(spc.index(self) + 1) % len(spc)].html_return()
+            footer += '</nav>'
         else:
             nav = get_templates()['header_nav_0']
         args = {
@@ -72,7 +78,7 @@ class Element:
             'canon_url':        self.canon_url[lang],
             'extralink':        '',
             'content':          str_indent(self.html_content(lang), 2),
-            'footer':           ''
+            'footer':           footer
         }
         self.spec_args(args, lang)
         html = get_templates()['main'].format(**args)

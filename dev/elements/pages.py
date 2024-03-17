@@ -3,9 +3,9 @@ from templates import get_templates
 from utils.str import str_indent
 
 class Page(Element):
-    def spec_args(self, args, lang='fr') -> dict:
-        args['extralink'] = str_indent("""\
-            <link rel="stylesheet" href="/src/navig.css">""", 1)
+    # def spec_args(self, args, lang='fr') -> dict:
+    #     args['extralink'] = str_indent("""\
+    #         <link rel="stylesheet" href="/src/navig.css">""", 1)
 
     def get_name(self) -> str:
         return str.split(self.source.stem, '_')[-1]
