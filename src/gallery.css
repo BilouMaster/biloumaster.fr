@@ -8,7 +8,7 @@ main {
     display: flex;
     flex-wrap: wrap;
     align-content: flex-start;
-    padding: 0.5em;
+    padding-bottom: 0;
     width: 100%;
 }
 main > small {
@@ -30,11 +30,10 @@ main > small b {
     color: var(--biloulight);
 }
 main.folded > small {
-    display: none;
+    visibility: hidden;
 }
 section {
     flex-grow: 1;
-    margin: 1px;
     max-width: 100%;
 }
 .bubble-style {
@@ -53,6 +52,7 @@ section {
     border-radius: 50%;
     display: inline-block;
     box-shadow: var(--biloubgc50) 0 0 .5em;
+    user-select: none;
 }
 .bubble-style::before {
     content: '';
@@ -126,7 +126,6 @@ html:not(.can-touch) .gallery > a:hover {
     height: 6em;
     margin: 0;
     position: relative;
-    border: solid 1px var(--biloudark);
     transition-property: margin, height;
     transition-timing-function: var(--biloueazout);
     transition-duration: .3s;
@@ -208,8 +207,7 @@ html:not(.can-touch) .folded section:hover a {
 /*pswp*/
 
 .pswp {
-    --pswp-bg: var(--biloubgc) !important;
-    --pswp-bg: radial-gradient(var(--biloubgc), var(--biloubgc), black) !important;
+    --pswp-bg: var(--biloubgc) var(--overbiloulay) !important;
     --pswp-placeholder-bg: var(--biloubgct) no-repeat center/75px url(/img/placeholder.svg) !important;
 }
 .pswp__title {
@@ -345,6 +343,8 @@ html:not(.can-touch) .pswp__button--arrow--next:hover .pswp__icn {
     bottom: 0.5em;
     width: 100%;
     pointer-events: none;
+    height: 4em;
+    margin-bottom: -4em;
 }
 html:not(.can-touch) #show_tag_list:hover {
     transform: scale(1.05);
@@ -370,9 +370,7 @@ html:not(.can-touch) #show_tag_list:hover {
         justify-content: flex-end;
     }
     .pswp {
-        --pswp-bg: var(--biloudark) !important;
-        --pswp-bg: radial-gradient(var(--biloudark), var(--biloudark), black) !important;
-
+        --pswp-bg: var(--biloudark) var(--overbiloulay) !important;
     }
     #current_tag {
         margin: 0.5em;

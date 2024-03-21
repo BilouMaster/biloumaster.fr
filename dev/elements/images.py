@@ -1,10 +1,10 @@
-from .base import Element
-from .pages import Page
+from elements.base import Element
+from elements.pages import Page
+from elements.tags import Tag
 from templates import get_templates
 from utils.str import str_indent, str_date_fr
 from PIL import Image as Pilimage, ImageStat
 from multiprocessing import Pool
-from .tags import Tag
 
 class Image(Element):
     all = list()
@@ -57,6 +57,7 @@ class Image(Element):
         )
 
 class Gallery(Page):
+    
     def spec_args(self, args, lang='fr') -> dict:
         args['extralink'] = str_indent("""\
             <link rel="stylesheet" href="/pswp/photoswipe.css">
@@ -67,7 +68,9 @@ class Gallery(Page):
             args['extralink'] += '\n' + str_indent(get_templates()['pixelart_style'], 1)
 
     def html_content(self, lang='fr') -> str:
-        self.children.reverse()
+        if not self.reversed:
+            self.children.reverse()
+            self.reversed = True
         imgs = [{'year': e.name[:4], 'html': e.html(lang), 'tags': set(e.tags.split(';'))} for e in self.children]
         note = '<small id="note"><span class="bubble-style">...</span> <em>Cliquez sur l\'année pour voyager dans le temps !</em></small>'
         if len(self.children) < 100:
@@ -92,6 +95,9 @@ class Gallery(Page):
             + [tag_list])
 
     def html_return(self, lang='fr') -> str:
+        if not self.reversed:
+            self.children.reverse()
+            self.reversed = True
         return get_templates()['navig_element'].format(
             href        = self.url,
             title       = self.title[lang],

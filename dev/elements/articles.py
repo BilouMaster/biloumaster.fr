@@ -1,4 +1,4 @@
-from .base import Element
+from elements.base import Element
 
 class Article(Element):
     pass

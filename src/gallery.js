@@ -36,8 +36,10 @@ window.addEventListener('DOMContentLoaded', () => {
 function toggleSections(el) {
   const m = document.querySelector('main');
   m.classList.toggle('folded');
-  el.scrollIntoView({behavior: "instant", block: "start"});
-  window.scrollBy(0, -25);
+  if (el.getBoundingClientRect().top + window.pageYOffset > 180) {
+    el.scrollIntoView({behavior: "instant", block: "start"});
+    window.scrollBy({top:-25, behavior:"smooth"})
+  }
 }
 
 function toggleSelf(el) {

@@ -20,6 +20,7 @@ class Element:
         self.canon_url = dict([self.get_canon_url(l) for l in ['fr', 'en']])
         if isinstance(self.parent, Element):
             self.parent.children.append(self)
+        self.reversed = False
 
     def get_name(self) -> str:
         return self.source.stem
@@ -33,11 +34,13 @@ class Element:
         return (lang, 'https://biloumaster.fr' + self.url)
 
     def get_title(self, lang='fr') -> tuple:
+        from elements.metadata import MetaData
         if self.name in MetaData.all and 'title' in MetaData.all[self.name].data:
             return (lang, MetaData.all[self.name].data['title'])
         return (lang, '')
 
     def get_desc(self, lang='fr') -> tuple:
+        from elements.metadata import MetaData
         if self.name in MetaData.all and 'desc' in MetaData.all[self.name].data:
             return (lang, MetaData.all[self.name].data['desc'])
         return (lang, '')
@@ -49,6 +52,7 @@ class Element:
         return ''
     
     def output_path(self) -> str:
+        from elements.index import Index
         return self.parent.name + '/' if self.parent and not isinstance(self.parent, Index) else ''
 
     def spec_args(self, args, lang='fr') -> dict:
@@ -62,11 +66,13 @@ class Element:
             p.reverse()
             nav_args = dict(('img'+str(index), value.name) for index, value in enumerate(p))
             nav = get_templates()['header_nav_' + str(len(p))].format(**nav_args)
+            foot_nav = [self.parent.html_return()]
             spc = self.parent.children
-            footer = '<nav id="navig_footer">' + self.parent.html_return() + spc[spc.index(self)-1].html_return()
             if len(spc) > 1:
-                footer += spc[(spc.index(self) + 1) % len(spc)].html_return()
-            footer += '</nav>'
+                foot_nav.append(spc[(spc.index(self) - 1) % len(spc)].html_return())
+            if len(spc) > 2:
+                foot_nav.append(spc[(spc.index(self) + 1) % len(spc)].html_return())
+            footer = '<nav id="navig_footer">\n\t\t\t' + str_indent('\n'.join(foot_nav), 3) + '\n\t\t</nav>'
         else:
             nav = get_templates()['header_nav_0']
         args = {
@@ -92,13 +98,19 @@ class Element:
         return f'<{self.__class__.__name__} "{self.name}">'
 
 def identify(path: Path, parent) -> Element:
+    from elements.articles import Article
+    from elements.images import Image, Gallery
+    from elements.pages import Page
+    from elements.tracks import Track, Album
     s = path.suffix.lower()
     if s in ('.txt', '.tsv'):
         return None
     if s in ('.jpg', '.jpeg', '.png', '.webp', '.gif', '.bmp'):
         return Image(path, parent)
-    if s in ('.ogg', '.mp3'):
+    if s == '.mp3':
         return Track(path, parent)
+    if s == '.ogg':
+        return None
     if s in ('.md', '.html'):
         return Article(path, parent)
     if s == '':
@@ -109,10 +121,3 @@ def identify(path: Path, parent) -> Element:
         return Page(path, parent)
     print('unidentified: ', path)
     return Element(path, parent)
-
-from .articles import Article
-from .images import Image, Gallery
-from .metadata import MetaData
-from .pages import Page
-from .tracks import Track, Album
-from .index import Index

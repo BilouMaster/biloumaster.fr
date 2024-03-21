@@ -37,6 +37,7 @@
                  linear-gradient(-200deg, var(--biloudarkt) 50px, var(--biloudark) 280px);
     --biloupsyche_top: 36px;
     --biloupsyche_left: 139px;
+    --overbiloulay: radial-gradient(circle at center, transparent 40%, black 110%);
     background-color: var(--biloubgc);
     font-family: BilouFont, "Comic Sans MS", "Comic Sans", cursive, sans-serif;
     box-sizing: border-box;
@@ -62,6 +63,10 @@ a {
 a:visited {
     color: var(--biloulight);
 }
+/* h1, h2, p {
+    position: relative;
+    z-index: 100;
+} */
 body {
     display: flex;
     flex-direction: column;
@@ -84,6 +89,9 @@ header {
     box-shadow: 0 1px 3px var(--biloubgc50);
     flex: .5;
 }
+header > * {
+    z-index: 100;
+}
 header > img, header > nav {
     width: 8em;
     height: 8em;
@@ -93,7 +101,7 @@ header > img, header > nav {
     max-height: 25vw;
     margin: 0.25em;
     margin-bottom: -1em;
-    z-index: 100;
+    z-index: 150;
 }
 header > nav > * {
     display: block;
@@ -114,7 +122,6 @@ header > nav > a > img {
 header > hgroup {
     max-width: 70%;
     margin: 0.25em;
-    z-index: 100;
 }
 header > hgroup > h1 {
     color: var(--biloulight);
@@ -150,7 +157,6 @@ header > hgroup > h1 {
 }
 main {
     flex: 0;
-    padding: 0 1em;
 }
 main h1, main h2 {
     font-size: 1.5em;
@@ -305,12 +311,13 @@ time {
 }
 #overbiloulay {
     position: fixed;
-    width: 100vw;
+    width: 100vmax;
     height: 100vh;
-    left: 0;
-    top: 0;
+    left: 50%;
+    top: 50%;
+    margin: -50vh -50vmax;
     z-index: 100;
-    background: radial-gradient(transparent, transparent, black);
+    background: var(--overbiloulay);
     pointer-events: none;
 }
 

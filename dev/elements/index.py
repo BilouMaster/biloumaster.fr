@@ -1,4 +1,4 @@
-from .pages import Page
+from elements.pages import Page
 from templates import get_templates
 from utils.str import str_indent
 
@@ -24,11 +24,3 @@ class Index(Page):
             </nav>""", 2)
         args['extralink'] = str_indent("""\
             <link rel="stylesheet" href="/src/index.css">""", 1)
-
-    def html_return(self, lang='fr') -> str:
-        return get_templates()['navig_simple'].format(
-            href=self.url,
-            icon=self.name,
-            title=self.title[lang],
-            desc=self.desc[lang]
-        )
