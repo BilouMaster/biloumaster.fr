@@ -1,11 +1,12 @@
 from pathlib import Path
 from templates import get_templates
 from utils.str import str_indent, str_clean
-from os import makedirs
+from os import makedirs, stat
 import config
 
 class Element:
     def __init__(self, src_path: Path, parent = None):
+        self.mtime = stat(src_path).st_mtime
         self.source = src_path
         self.parent = parent
         if parent == None:
@@ -37,7 +38,7 @@ class Element:
         from elements.metadata import MetaData
         if self.name in MetaData.all and 'title' in MetaData.all[self.name].data:
             return (lang, MetaData.all[self.name].data['title'])
-        return (lang, '')
+        return (lang, self.get_name())
 
     def get_desc(self, lang='fr') -> tuple:
         from elements.metadata import MetaData
@@ -45,11 +46,46 @@ class Element:
             return (lang, MetaData.all[self.name].data['desc'])
         return (lang, '')
 
+    def get_icon(self) -> str:
+        icon = self.name
+        if not Path('../img/' + icon + '.svg').exists():
+            icon = self.__class__.__name__.lower()
+        return icon
+    
+    def get_img_prev(self) -> list:
+        img_prev = []
+        if len(self.children) > 0:
+            for i in range(1, min(len(self.children)+1, 6)):
+                cip = self.children[i-1].get_img_prev()
+                if len(cip) > 0:
+                    img_prev.append(self.children[i-1].get_img_prev()[0])
+        return img_prev
+
     def html_content(self, lang='fr') -> str:
         return '\n'.join([e.html(lang) for e in self.children])
     
     def html_return(self, lang='fr') -> str:
-        return ''
+        return self.html_nav(lang)
+    
+    def html_nav(self, lang='fr', simple=False) -> str:
+        img_prev = self.get_img_prev()
+        if simple or len(img_prev) == 0:
+            return get_templates()['navig_simple'].format(
+                href=self.url,
+                icon=self.get_icon(),
+                title=self.title[lang],
+                desc=self.desc[lang]
+            )
+        else:
+            args = {
+                'href':        self.url,
+                'title':       self.title[lang],
+                'description': self.desc[lang],
+                'icon':        self.get_icon()
+            }
+            for i in range(1, len(img_prev) + 1):
+                args[f'img{i}'] = img_prev[i-1]
+            return get_templates()[f'navig_element_{len(img_prev)}'].format(**args)
     
     def output_path(self) -> str:
         from elements.index import Index
@@ -64,14 +100,14 @@ class Element:
             p = self.parents[1:]
             p.append(self)
             p.reverse()
-            nav_args = dict(('img'+str(index), value.name) for index, value in enumerate(p))
+            nav_args = dict(('img'+str(index), value.get_icon()) for index, value in enumerate(p))
             nav = get_templates()['header_nav_' + str(len(p))].format(**nav_args)
-            foot_nav = [self.parent.html_return()]
+            foot_nav = [self.parent.html_nav(lang, True)]
             spc = self.parent.children
             if len(spc) > 1:
-                foot_nav.append(spc[(spc.index(self) - 1) % len(spc)].html_return())
+                foot_nav.append(spc[(spc.index(self) - 1) % len(spc)].html_nav())
             if len(spc) > 2:
-                foot_nav.append(spc[(spc.index(self) + 1) % len(spc)].html_return())
+                foot_nav.append(spc[(spc.index(self) + 1) % len(spc)].html_nav())
             footer = '<nav id="navig_footer">\n\t\t\t' + str_indent('\n'.join(foot_nav), 3) + '\n\t\t</nav>'
         else:
             nav = get_templates()['header_nav_0']

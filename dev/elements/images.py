@@ -12,15 +12,19 @@ class Image(Element):
 
     def __init__(self, *args):
         super().__init__(*args)
-        self.date = {'fr': str_date_fr(self.name.split('_')[0]), 'en': ''}
-        Image.all.append(self)
+        if self.name != 'cover':
+            self.date = {'fr': str_date_fr(self.name.split('_')[0]), 'en': ''}
+            Image.all.append(self)
+    
+    def get_img_prev(self) -> list:
+        return ['/img/gallery/thumbnail/' + self.name + '_thumbnail.webp']
 
     def merge_data(self, lang='fr'):
         self.width  = Image.data[self.name]['width']
         self.height = Image.data[self.name]['height']
         self.median = Image.data[self.name]['median']
-        self.title[lang] = self.title[lang] or Image.data[self.name]['title']
-        self.desc[lang]  = self.desc[lang]  or Image.data[self.name]['desc']
+        self.title[lang] = Image.data[self.name]['title']
+        self.desc[lang]  = Image.data[self.name]['desc']
         self.tags = Image.data[self.name]['tags'].lower()
 
     def srcset(self) -> str:
@@ -57,6 +61,11 @@ class Image(Element):
         )
 
 class Gallery(Page):
+    all = list()
+
+    def __init__(self, *args):
+        super().__init__(*args)
+        Gallery.all.append(self)
     
     def spec_args(self, args, lang='fr') -> dict:
         args['extralink'] = str_indent("""\
@@ -68,9 +77,6 @@ class Gallery(Page):
             args['extralink'] += '\n' + str_indent(get_templates()['pixelart_style'], 1)
 
     def html_content(self, lang='fr') -> str:
-        if not self.reversed:
-            self.children.reverse()
-            self.reversed = True
         imgs = [{'year': e.name[:4], 'html': e.html(lang), 'tags': set(e.tags.split(';'))} for e in self.children]
         note = '<small id="note"><span class="bubble-style">...</span> <em>Cliquez sur l\'année pour voyager dans le temps !</em></small>'
         if len(self.children) < 100:
@@ -94,30 +100,24 @@ class Gallery(Page):
             ) for title, data in sections.items()]
             + [tag_list])
 
-    def html_return(self, lang='fr') -> str:
-        if not self.reversed:
-            self.children.reverse()
-            self.reversed = True
-        return get_templates()['navig_element'].format(
-            href        = self.url,
-            title       = self.title[lang],
-            description = self.desc[lang],
-            img_01      = self.children[0].name,
-            img_02      = self.children[1].name,
-            img_03      = self.children[2].name,
-            img_04      = self.children[3].name,
-            img_05      = self.children[4].name,
-            img_06      = self.children[5].name,
-            icon        = self.name
-        )
-
 def str_exif(key: str, exif: str, default='') -> str:
     if key in exif and not isinstance(exif[key], tuple):
         return exif[key].decode('utf-16').rstrip('\x00').replace('<', '&lt;').replace('\n', '<br>').replace('\r', '')
     else:
         return default
 
+import store
 def process(inst: Image) -> tuple:
+    old = store.DATA[inst.source]
+    if old.mtime == inst.mtime:
+        return (inst.name, {
+            'width':  old.width,
+            'height': old.height,
+            'median': old.median,
+            'title':  old.title['fr'],
+            'desc':   old.desc['fr'],
+            'tags':   old.tags
+        })
     img = Pilimage.open(str(inst.source))
     w, h = img.size
     m = ImageStat.Stat(img).median
@@ -138,3 +138,6 @@ def process(inst: Image) -> tuple:
 
 def process_all_images():
     Image.data = dict(Pool().map(process, Image.all))
+    # Image.data = dict(process(i) for i in Image.all)
+    for gal in Gallery.all:
+        gal.children.reverse()

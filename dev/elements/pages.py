@@ -10,7 +10,7 @@ class Page(Element):
                 <link rel="stylesheet" href="/src/audio.css">
                 <script src="/src/audio.js"></script>""", 1)
         if type(self) == Album:
-            args['footer'] = get_templates()['player'] + args['footer']
+            args['content'] += get_templates()['player']
 
     def html_content(self, lang='fr') -> str:
         player = ''
@@ -22,10 +22,10 @@ class Page(Element):
     def get_name(self) -> str:
         return str.split(self.source.stem, '_')[-1]
     
-    def html_return(self, lang='fr') -> str:
-        return get_templates()['navig_simple'].format(
-            href=self.url,
-            icon=self.name,
-            title=self.title[lang],
-            desc=self.desc[lang]
-        )
+    # def html_return(self, lang='fr') -> str:
+    #     return get_templates()['navig_simple'].format(
+    #         href=self.url,
+    #         icon=self.name,
+    #         title=self.title[lang],
+    #         desc=self.desc[lang]
+    #     )
