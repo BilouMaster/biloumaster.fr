@@ -6,6 +6,7 @@ from elements.metadata import MetaData
 from elements.index import Index
 from elements.images import process_all_images
 from elements.tracks import process_all_tracks
+from os import makedirs
 import config
 import pickle
 
@@ -25,8 +26,11 @@ if __name__ == "__main__":
     website = [Index(Path(config.input))]
     crawl(Path(config.input), website[0])
 
-    if Path(config.output).exists():
-        rmtree(config.output + '/')
+    # if Path(config.output).exists():
+    #     rmtree(config.output + '/')
+    makedirs(f'{config.output}/img/gallery/', exist_ok=True)
+    makedirs(f'{config.output}/img/gallery/responsive/', exist_ok=True)
+    makedirs(f'{config.output}/img/gallery/thumbnail/', exist_ok=True)
 
     print_time('tracks','')
     process_all_tracks()

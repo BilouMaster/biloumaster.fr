@@ -88,8 +88,12 @@ html:not(.can-touch) .navig:nth-child(even):hover img {
     background-image: url('data:image/svg+xml,<svg width="20px" height="20px" version="1.1" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="rgba(22, 21, 28, .33)"><rect width="10" height="10"/><rect x="10" y="10" width="10" height="10"/></svg>');
     background-attachment: fixed;
     background-size: 2em;
+    mask-image: linear-gradient(to top left, transparent 0%, black 80%);
     /* grid-gap: 1px; */
     /* grid-template-columns: 3fr 2fr 1fr; */
+}
+.preview_images > div {
+    box-shadow: 0px 0px 1px var(--biloubgc80);
 }
 .navig_icon {
     width: 4em;

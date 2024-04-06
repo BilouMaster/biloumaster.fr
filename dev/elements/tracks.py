@@ -86,15 +86,16 @@ def str_tofilename(text: str) -> str:
 
 import store
 def process(inst: Track) -> tuple:
-    old = store.DATA[inst.source]
-    if old.mtime == inst.mtime:
-        return (inst.source, {
-            'track_num': old.track_num,
-            'title':     old.track_title,
-            'album':     old.album,
-            'year':      old.year,
-            'filename':  old.filename
-        })
+    if inst.source in store.DATA:
+        old = store.DATA[inst.source]
+        if old.mtime == inst.mtime:
+            return (inst.source, {
+                'track_num': old.track_num,
+                'title':     old.track_title,
+                'album':     old.album,
+                'year':      old.year,
+                'filename':  old.filename
+            })
     audiofile = eyed3.load(inst.source)
     track_num = audiofile.tag.track_num[0]
     album     = audiofile.tag.album

@@ -3,8 +3,9 @@ from elements.pages import Page
 from elements.tags import Tag
 from templates import get_templates
 from utils.str import str_indent, str_date_fr
-from PIL import Image as Pilimage, ImageStat
+from PIL import Image as Pilimage, ImageStat, ImageSequence
 from multiprocessing import Pool
+import config
 
 class Image(Element):
     all = list()
@@ -29,8 +30,8 @@ class Image(Element):
 
     def srcset(self) -> str:
         srcset = []
-        for nw in [320, 640, 808, 1024, 2048]:
-            if self.width * 250 / self.height > nw:
+        for nw in [640, 1024, 2048]:
+            if self.width > nw:
                 next
             if self.width - nw < nw / 3:
                 break
@@ -108,17 +109,19 @@ def str_exif(key: str, exif: str, default='') -> str:
 
 import store
 def process(inst: Image) -> tuple:
-    old = store.DATA[inst.source]
-    if old.mtime == inst.mtime:
-        return (inst.name, {
-            'width':  old.width,
-            'height': old.height,
-            'median': old.median,
-            'title':  old.title['fr'],
-            'desc':   old.desc['fr'],
-            'tags':   old.tags
-        })
+    if inst.source in store.DATA:
+        old = store.DATA[inst.source]
+        if old.mtime == inst.mtime:
+            return (inst.name, {
+                'width':  old.width,
+                'height': old.height,
+                'median': old.median,
+                'title':  old.title['fr'],
+                'desc':   old.desc['fr'],
+                'tags':   old.tags
+            })
     img = Pilimage.open(str(inst.source))
+    generate_images(img, inst.name)
     w, h = img.size
     m = ImageStat.Stat(img).median
     if len(m) != 3:
@@ -136,8 +139,40 @@ def process(inst: Image) -> tuple:
         'tags':   str_exif(0x9C9E, img_exif)
     })
 
+def generate_images(img, name):
+    w, h = img.size
+    th = 250
+    args = dict()
+    animated = getattr(img, "is_animated", False)
+    if animated:
+        frame_duration = []
+        for f in ImageSequence.Iterator(img):
+            if 'duration' in f.info:
+                frame_duration.append(f.info["duration"] or 100)
+            else:
+                frame_duration.append(200)
+        args = {'save_all':True, 'duration':frame_duration}
+    img.save(f'{config.output}/img/gallery/{name}.webp', **args)
+    if int(w*th/h > w):
+        img.save(f'{config.output}/img/gallery/thumbnail/{name}_thumbnail.webp', **args)
+    else:
+        if animated:
+            seq = ImageSequence.all_frames(img, lambda x : x.resize((int(w*th/h), th)))
+            seq[0].save(f'{config.output}/img/gallery/thumbnail/{name}_thumbnail.webp', save_all=True, append_images=seq[1:], duration=frame_duration)
+        else:
+            img.resize((int(w*th/h), th)).save(f'{config.output}/img/gallery/thumbnail/{name}_thumbnail.webp')
+    for nw in [640, 1024, 2048]:
+        if w > nw:
+            next
+        if w - nw < nw / 3:
+            break
+        if animated:
+            seq = ImageSequence.all_frames(img, lambda x : x.resize((nw, int(h*nw/w))))
+            seq[0].save(f'{config.output}/img/gallery/responsive/{name}_{nw}.webp', save_all=True, append_images=seq[1:], duration=frame_duration)
+        else:
+            img.resize((nw, int(h*nw/w))).save(f'{config.output}/img/gallery/responsive/{name}_{nw}.webp')
+
 def process_all_images():
     Image.data = dict(Pool().map(process, Image.all))
-    # Image.data = dict(process(i) for i in Image.all)
     for gal in Gallery.all:
         gal.children.reverse()

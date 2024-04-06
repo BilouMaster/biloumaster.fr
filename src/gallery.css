@@ -94,7 +94,8 @@ html:not(.can-touch) section h2:hover, html:not(.can-touch) .folded section:hove
     background-size: 2em;
 }
 .gallery > a {
-    filter: brightness(.9);
+    box-shadow: 0px 0px 1px var(--biloubgc80);
+    filter: brightness(.95);
     aspect-ratio: var(--r);
     width: calc(min(220px, 33vw)*var(--r));
     max-height: 360px;
