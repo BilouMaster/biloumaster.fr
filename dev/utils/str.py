@@ -32,3 +32,8 @@ def str_date_fr(date: str) -> str:
     else:
         date[1] = months[date[1]]
         return ' '.join(reversed(date))
+
+import re
+from unidecode import unidecode
+def str_tofilename(text: str) -> str:
+    return re.sub(r'-$', '', re.sub(r'-+','-', re.sub(r" |'|\.|\(|\)|\[|\]|\&|\:|\/|\~|\!|\?|\^|,|=|@|\$|\*|\+", "-", unidecode(text).lower())))

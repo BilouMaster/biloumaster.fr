@@ -1,31 +1,26 @@
 from elements.base import Element
 from elements.pages import Page
 from templates import get_templates
-from utils.str import str_clean, str_indent
+from utils.str import str_indent, str_tofilename
 from pathlib import Path
-from glob import glob
 from shutil import copyfile
 from multiprocessing import Pool
 import eyed3
-import re
-from unidecode import unidecode
 from os import makedirs
 import config
 
 class Album(Page):
+    def spec_args(self, args, lang='fr') -> dict:
+        args['extralink'] = str_indent("""\
+            <link rel="stylesheet" href="/pswp/photoswipe.css">
+            <link rel="stylesheet" href="/src/pswp.css">
+            <link rel="stylesheet" href="/src/audio.css">
+            <script src="/src/audio.js"></script>
+            <script type="module" src="/src/pswp.js"></script>""", 1)
+        args['content'] += get_templates()['player']
 
     def get_img_prev(self) -> list:
-        return [f'/img/album_art/{str_tofilename(self.children[0].album)}.jpg']
-
-    def get_name(self) -> str:
-        return str.split(self.source.stem, '_')[-1]
-
-    def get_date(self) -> str:
-        min_year = min([e.year for e in self.children])
-        max_year = max([e.year for e in self.children])
-        if (min_year != max_year):
-            return f'{min_year} - {max_year}'
-        return str(min_year)
+        return [f'/img/album_art/{self.name}.jpg']
 
     def copy_cover(self):
         from elements.images import Image
@@ -33,24 +28,20 @@ class Album(Page):
         self.children.remove(cover)
         path = f'{config.output}/img/album_art/'
         makedirs(path, exist_ok=True)
-        if not Path(path + str_tofilename(self.children[0].album) + '.jpg').exists():
-            copyfile(cover.source, path + str_tofilename(self.children[0].album) + '.jpg')
+        if not Path(path + self.name + '.jpg').exists():
+            copyfile(cover.source, path + self.name + '.jpg')
 
     def html(self, lang='fr') -> str:
         self.copy_cover()
-        self.title[lang] = self.children[0].album
         return super().html(lang)
     
     def html_content(self, lang='fr') -> str:
-        if not hasattr(self, 'str_content'):
-            tracks = '\n'.join([e.html_return(lang) for e in sorted(self.children, key=lambda t:t.track_num)])
-            self.str_content = get_templates()['album_section'].format(
-                title     = self.children[0].album,
-                date      = self.get_date(),
-                tracks    = tracks,
-                album_art = str_tofilename(self.children[0].album)
-            )
-        return self.str_content
+        tracks = '\n'.join([e.html(lang) for e in sorted(self.children, key=lambda t:t.track_num)])
+        return get_templates()['album_section'].format(
+            title     = self.title[lang],
+            tracks    = tracks,
+            album_art = self.name
+        )
 
 class Track(Element):
     all = list()
@@ -66,23 +57,49 @@ class Track(Element):
         self.album       = Track.data[self.source]['album']
         self.year        = Track.data[self.source]['year']
         self.filename    = Track.data[self.source]['filename']
+        self.name        = str_tofilename(self.track_title)
+        self.url         = self.get_url()
+        self.title['fr'] = f'{self.track_title} ({self.year})'
+        self.desc['fr']  = f'Titre {self.track_num} de l\'album "{self.album}"'
+        self.date = str(self.year)
+        self.parent.title['fr'] = self.album
     
     def get_img_prev(self) -> list:
         return [f'/img/album_art/{str_tofilename(self.album)}.jpg']
-    
+
+    def spec_args(self, args, lang='fr') -> dict:
+        args['extralink'] = str_indent("""\
+            <link rel="stylesheet" href="/pswp/photoswipe.css">
+            <link rel="stylesheet" href="/src/pswp.css">
+            <link rel="stylesheet" href="/src/audio.css">
+            <script src="/src/audio.js"></script>
+            <script type="module" src="/src/pswp.js"></script>""", 1)
+        args['content'] += get_templates()['player']
+
     def html_return(self, lang='fr') -> str:
         return get_templates()['tracklist_item'].format(
             filename = self.filename,
             num      = self.track_num,
             title    = self.track_title,
-            year     = self.year
+            year     = self.year,
+            url      = self.url
+        )
+
+    def html_content(self, lang='fr') -> str:
+        return get_templates()['track'].format(
+            filename = self.filename,
+            num      = self.track_num,
+            title    = self.track_title,
+            year     = self.year,
+            album    = self.album,
+            album2    = self.album.replace("'","\\'"),
+            album_art = self.parent.name,
+            url       = self.parent.url
         )
     
-    def html(self, lang='fr') -> str:
-        return ''
-
-def str_tofilename(text: str) -> str:
-    return re.sub(r'-$', '', re.sub(r'-+','-', re.sub(r" |'|\.|\(|\)|\[|\]|\&|\:|\/|\~|\!|\?|\^|,|=|@|\$|\*|\+", "-", unidecode(text).lower())))
+    def html_footer(self, lang='fr') -> str:
+        foot_nav = self.parent.html_simple_nav(lang)
+        return '<nav id="navig_footer">\n\t\t\t' + str_indent(foot_nav, 3) + '\n\t\t</nav>'
 
 import store
 def process(inst: Track) -> tuple:
@@ -115,7 +132,7 @@ def process(inst: Track) -> tuple:
     })
 
 def process_all_tracks():
-    Track.data = dict(Pool().map(process, Track.all))
-    for t in Track.all:
-        t.merge_data()
-    Track.all[0].parent.parent.children.reverse()
+    if Track.all:
+        Track.data = dict(Pool().map(process, Track.all))
+        for t in Track.all:
+            t.merge_data()

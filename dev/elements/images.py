@@ -2,10 +2,12 @@ from elements.base import Element
 from elements.pages import Page
 from elements.tags import Tag
 from templates import get_templates
-from utils.str import str_indent, str_date_fr
+from utils.str import str_indent, str_date_fr, str_tofilename
 from PIL import Image as Pilimage, ImageStat, ImageSequence
 from multiprocessing import Pool
+from pathlib import Path
 import config
+from elements.metadata import MetaData
 
 class Image(Element):
     all = list()
@@ -14,18 +16,31 @@ class Image(Element):
     def __init__(self, *args):
         super().__init__(*args)
         if self.name != 'cover':
-            self.date = {'fr': str_date_fr(self.name.split('_')[0]), 'en': ''}
+            if self.date:
+                self.str_date = {'fr': str_date_fr(self.date), 'en': ''}
+            else:
+                self.str_date = {'fr': '', 'en': ''}
             Image.all.append(self)
     
     def get_img_prev(self) -> list:
-        return ['/img/gallery/thumbnail/' + self.name + '_thumbnail.webp']
+        if Path(config.output + f'/img/gallery/responsive/{self.name}_640.webp').exists():
+            return [f'/img/gallery/responsive/{self.name}_640.webp']
+        return [f'/img/gallery/{self.name}.webp']
+    
+    def get_name(self) -> str:
+        return str_tofilename(self.source.stem)
+    
+    def get_title(self, lang='fr') -> tuple:
+        if self.name in MetaData.all and 'title' in MetaData.all[self.name].data:
+            return (lang, MetaData.all[self.name].data['title'])
+        return (lang, '')
 
     def merge_data(self, lang='fr'):
         self.width  = Image.data[self.name]['width']
         self.height = Image.data[self.name]['height']
         self.median = Image.data[self.name]['median']
-        self.title[lang] = Image.data[self.name]['title']
-        self.desc[lang]  = Image.data[self.name]['desc']
+        self.title[lang] = self.get_title(lang)[1] or Image.data[self.name]['title']
+        self.desc[lang]  = self.get_desc(lang)[1] or Image.data[self.name]['desc']
         self.tags = Image.data[self.name]['tags'].lower()
 
     def srcset(self) -> str:
@@ -39,9 +54,58 @@ class Image(Element):
         srcset.append('/img/gallery/%s.webp %dw' % (self.name, self.width))
         srcset = ', '.join(srcset)
         return srcset
+    
+    def spec_args(self, args, lang='fr') -> dict:
+        args['extralink'] = '<link rel="stylesheet" href="/src/view.css">'
+        if self.parent.name == 'pixelart':
+            args['extralink'] += '\n' + str_indent(get_templates()['pixelart_style'], 1)
+    
+    def str_nav(self) -> tuple:
+        spc = self.parent.children
+        ico = '<svg width="32" height="32" version="1.1" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="m13.954 31.466c3.4105-3.9122 1.5044-6.2452-4.2804-9.6874-5.785-3.4424-6.1055-8.2702 0-11.592 6.1053-3.322 8.3219-5.8972 4.2804-9.6874-2.0207-1.8952-4.7613 1.9728-7.7468 5.472-2.9854 3.499-6.2157 6.6292-6.2076 10.011 0.015311 3.382 3.2225 6.623 6.2828 10.137 3.0603 3.5144 5.9664 7.302 7.6716 5.346z" /><path d="m19.875 16a3.875 3.875 0 0 1-3.8593 3.875 3.875 3.875 0 0 1-3.8905-3.8437 3.875 3.875 0 0 1 3.8279-3.906 3.875 3.875 0 0 1 3.9215 3.8121"/></svg>'
+        if spc.index(self) == 0:
+            go_prev = ''
+        else:
+            go_prev = '<a href="./' + spc[spc.index(self) - 1].name + '" rel="prev" title="Image précédente">' + ico + '</a>'
+        if spc.index(self) == len(spc) - 1:
+            go_next = ''
+        else:
+            go_next = '<a href="./' + spc[spc.index(self) + 1].name + '" rel="next" title="Image suivante" style="rotate: 180deg">' + ico + '</a>'
+        return go_prev, go_next
+    
+    def str_srcset(self) -> tuple:
+        srcset = []
+        sizes = []
+        for w in [640, 1024, 2048]:
+            if self.width > w:
+                next
+            if self.width - w < w / 3:
+                break
+            srcset.append('/img/gallery/responsive/%s_%d.webp %dw' % (self.name, w, w))
+            sizes.append('(max-width: %dpx) %dpx' % (w + 32, w))
+        srcset.append('/img/gallery/%s.webp %dw' % (self.name, self.width))
+        sizes.append('%dpx' % (self.width))
+        srcset = ', '.join(srcset)
+        sizes = ', '.join(sizes)
+        return srcset, sizes
+
+    def html_content(self, lang='fr') -> str:
+        srcset, sizes = self.str_srcset()
+        go_prev, go_next = self.str_nav()
+        return get_templates()['view'].format(
+            go_prev=    go_prev,
+            go_next=    go_next,
+            max_height= self.height,
+            date=       self.str_date[lang],
+            datetime=   self.name.split('_')[0],
+            srcset=     srcset,
+            sizes=      sizes,
+            filename=   self.name,
+            alt=        '',
+            tags=       Tag.str_tags(self.tags, self.parent.url, lang)
+        )
 
     def html_return(self, lang='fr') -> str:
-        self.merge_data(lang)
         desc = ''
         if self.desc[lang]:
             desc = f'<p>{self.desc[lang]}</p>'
@@ -55,11 +119,15 @@ class Image(Element):
             srcset=     self.srcset(),
             tags_cls=   self.tags.replace(';', ' '),
             datetime=   self.name.split('_')[0],
-            date=       self.date[lang],
+            date=       self.str_date[lang],
             title=      self.title[lang],
             desc=       desc,
             tags=       tags
         )
+    
+    def html_footer(self, lang='fr') -> str:
+        foot_nav = self.parent.html_simple_nav(lang)
+        return '<nav id="navig_footer">\n\t\t\t' + str_indent(foot_nav, 3) + '\n\t\t</nav>'
 
 class Gallery(Page):
     all = list()
@@ -72,13 +140,25 @@ class Gallery(Page):
         args['extralink'] = str_indent("""\
             <link rel="stylesheet" href="/pswp/photoswipe.css">
             <link rel="stylesheet" href="/src/gallery.css">
+            <link rel="stylesheet" href="/src/pswp.css">
             <script type="module" src="/src/pswp.js"></script>
             <script src="/src/gallery.js"></script>""", 1)
         if self.name == 'pixelart':
             args['extralink'] += '\n' + str_indent(get_templates()['pixelart_style'], 1)
+    
+    def get_year(self, name) -> str:
+        if name[:2] in ('20', '19'):
+            return name[:4]
+        return ''
+    
+    def html_year(self, year):
+        if year:
+            return f'<h2 class="bubble-style">{year}</h2>'
+        return ''
 
     def html_content(self, lang='fr') -> str:
-        imgs = [{'year': e.name[:4], 'html': e.html(lang), 'tags': set(e.tags.split(';'))} for e in self.children]
+        # imgs = [{'year': self.get_year(e.name), 'html': e.html(lang), 'tags': set(e.tags.split(';'))} for e in self.children]
+        imgs = [{'year': e.date[:4], 'html': e.html(lang), 'tags': set(e.tags.split(';'))} for e in self.children]
         note = '<small id="note"><span class="bubble-style">...</span> <em>Cliquez sur l\'année pour voyager dans le temps !</em></small>'
         if len(self.children) < 100:
             note = ''
@@ -93,13 +173,14 @@ class Gallery(Page):
         tag_list = ''
         if len(all_tags - {''}):
             tag_list = get_templates()['tag_list'].format(tags=Tag.str_tags(all_tags, self.url, lang))
-        return '\n'.join([note]
+        return '<div id="gallery">' + '\n'.join([note]
             + [get_templates()['gallery_section'].format(
-                title=      title,
+                title=      year,
+                year=       self.html_year(year),
                 tags=       ' '.join(data['tags'] - {''}),
                 content=    str_indent('\n'.join(data['contents']), 2)
-            ) for title, data in sections.items()]
-            + [tag_list])
+            ) for year, data in sections.items()]
+            + [tag_list]) + '</div>'
 
 def str_exif(key: str, exif: str, default='') -> str:
     if key in exif and not isinstance(exif[key], tuple):
@@ -112,6 +193,8 @@ def process(inst: Image) -> tuple:
     if inst.source in store.DATA:
         old = store.DATA[inst.source]
         if old.mtime == inst.mtime:
+            img = Pilimage.open(str(inst.source))
+            generate_images(img, inst.name)
             return (inst.name, {
                 'width':  old.width,
                 'height': old.height,
@@ -140,6 +223,9 @@ def process(inst: Image) -> tuple:
     })
 
 def generate_images(img, name):
+    if Path(f'{config.output}/img/gallery/{name}.webp').exists():
+        return
+    print(name)
     w, h = img.size
     th = 250
     args = dict()
@@ -174,5 +260,5 @@ def generate_images(img, name):
 
 def process_all_images():
     Image.data = dict(Pool().map(process, Image.all))
-    for gal in Gallery.all:
-        gal.children.reverse()
+    for img in Image.all:
+        img.merge_data('fr')

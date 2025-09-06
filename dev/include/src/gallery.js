@@ -34,7 +34,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 function toggleSections(el) {
-  const m = document.querySelector('main');
+  const m = document.querySelector('#gallery');
   m.classList.toggle('folded');
   if (el.getBoundingClientRect().top + window.pageYOffset > 180) {
     el.scrollIntoView({behavior: "instant", block: "start"});

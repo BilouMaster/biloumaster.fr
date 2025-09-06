@@ -1,2 +1,2 @@
-input = 'website'
-output = 'test'
+input = '../input'
+output = '../output'

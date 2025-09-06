@@ -46,6 +46,54 @@ let options = {
 
 const lightbox = new PhotoSwipeLightbox(options);
 
+const simple_lightbox = new PhotoSwipeLightbox({
+  gallery: 'body',
+  children: '.viewable',
+  thumbSelector: '.viewable',
+  pswpModule: PhotoSwipe,
+  showAnimationDuration: 333,
+  hideAnimationDuration: 180,
+  bgOpacity: 0.8,
+  spacing: 0.05,
+  paddingTop: 100,
+  paddingBottom: 100,
+  preload: [4, 4],
+  loop: true,
+  zoom: false,
+  counter: false,
+  wheelToZoom: true,
+  returnFocus: true,
+  closeTitle: 'Fermer',
+  arrowPrevTitle: 'Précédent',
+  arrowNextTitle: 'Suivant',
+  arrowPrevSVG: arrowPrevSVG,
+  arrowNextSVG: arrowNextSVG,
+  errorMsg: 'Mince, il y a un petit souci avec cette image...',
+  easing: 'cubic-bezier(0.4, 1, 0.6, 0.9)',
+  tapAction: (point, originalEvent) => {
+    if (!document.elementFromPoint(point.x, point.y).classList.contains('pswp__no-toggle')) {
+      pswp.element.classList.toggle('pswp--ui-visible');
+    }
+  }
+});
+simple_lightbox.addFilter('domItemData', (itemData, element, linkEl) => {
+  itemData.src = itemData.msrc = element.src;
+  itemData.w = itemData.width = element.naturalWidth;
+  itemData.h = itemData.height = element.naturalHeight;
+  itemData.thumbCropped = false;
+  return itemData;
+});
+simple_lightbox.on('close', () => {
+  document.body.classList.remove('blur');
+  if (fullscreenAPI && fullscreenAPI.isFullscreen()) {
+    fullscreenAPI.exit();
+  };
+});
+simple_lightbox.on('afterInit', () => {
+  document.body.classList.add('blur');
+});
+simple_lightbox.init();
+
 lightbox.addFilter('domItemData', (itemData, element, linkEl) => {
   if (linkEl) {
     const sizeAttr = linkEl.style.getPropertyValue('--r');

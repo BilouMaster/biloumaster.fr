@@ -1,10 +1,14 @@
 @font-face {
     font-family: BilouFont;
-    src: url('/src/BilouFont_Regular.ttf');
+    src: url('/fonts/biloufont_regular.woff2') format('woff2'),
+         url('/fonts/biloufont_regular.woff') format('woff'),
+         url('/fonts/biloufont_regular.ttf') format('truetype');
 }
 @font-face {
     font-family: BilouFontLight;
-    src: url('/src/BilouFont_Light.ttf');
+    src: url('/fonts/biloufont_light.woff2') format('woff2'),
+         url('/fonts/biloufont_light.woff') format('woff'),
+         url('/fonts/biloufont_light.ttf') format('truetype');
 }
 :root {
     /* anciennes couleurs */
@@ -13,10 +17,13 @@
     --biloulight: rgb(214, 184, 231);
     --bilouhighlight: rgb(240, 233, 242);
     --biloulightgreen: rgb(159, 235, 163);
-    /* nouvelles */
     --bbgc: 22, 21, 28;
     --bdark: 52, 49, 57;
     --biloulight: rgb(184, 194, 231);
+    /* nouvelles */
+    --bbgc: 42, 37, 66;
+    --bdark: 92, 70, 128;
+    --biloulight: rgb(231, 206, 184);
     --biloulightgreen: rgb(223, 238, 167);
     --bilouhighlight: rgb(240, 233, 242);
     --biloubgc: rgb(var(--bbgc));
@@ -37,7 +44,7 @@
                  linear-gradient(-200deg, var(--biloudarkt) 50px, var(--biloudark) 280px);
     --biloupsyche_top: 36px;
     --biloupsyche_left: 139px;
-    --overbiloulay: radial-gradient(circle at center, transparent 40%, black 110%);
+    --overbiloulay: radial-gradient(circle at center, transparent 40%, black 150%);
     background-color: var(--biloubgc);
     font-family: BilouFont, "Comic Sans MS", "Comic Sans", cursive, sans-serif;
     box-sizing: border-box;
@@ -45,6 +52,7 @@
     scrollbar-color: rgba(var(--bdark), 0.33) var(--biloubgct);
     -webkit-tap-highlight-color: transparent;
     overflow-x: hidden;
+    line-height: 1.3em;
 }
 ::-webkit-scrollbar {
     height: 1ex;
@@ -102,6 +110,7 @@ header > img, header > nav {
     margin: 0.25em;
     margin-bottom: -1em;
     z-index: 150;
+    user-select: none;
 }
 header > nav > * {
     display: block;
@@ -112,6 +121,7 @@ header > nav > a {
     transition-property: transform;
     transition-timing-function: var(--biloustic);
     transition-duration: 0.4s;
+    height: 100%;
 }
 html:not(.can-touch) header > nav > a:hover {
     transform: rotate(4deg);
@@ -130,6 +140,9 @@ header > hgroup > h1 {
     transform: rotate(-1deg);
     margin: 0.5em 0;
     text-align: center;
+}
+header > hgroup > p:empty {
+    display: none;
 }
 #totop {
     cursor: pointer;
@@ -158,9 +171,9 @@ header > hgroup > h1 {
 main {
     flex: 0;
 }
-main h1, main h2 {
+main h1, main h2, .navig h2 {
     font-size: 1.5em;
-    letter-spacing: 0.25ex;
+    /* letter-spacing: 0.25ex; */
     color: var(--biloulight);
     text-shadow: var(--biloutextborder);
     line-height: 1.75em;
@@ -273,7 +286,7 @@ a.biloulink:hover {
     font-size: 1em;
     font-weight: normal;
     max-width: 840px;
-    padding: 0.25em 0.5em;
+    padding: 0.4em 0.5em;
     margin: 0.5em;
     text-align: center;
     width: fit-content;
@@ -311,11 +324,11 @@ time {
 }
 #overbiloulay {
     position: fixed;
-    width: 100vmax;
-    height: 100vh;
+    width: 120vmax;
+    height: 120vh;
     left: 50%;
     top: 50%;
-    margin: -50vh -50vmax;
+    margin: -60vh -60vmax;
     z-index: 100;
     background: var(--overbiloulay);
     pointer-events: none;
@@ -337,7 +350,6 @@ time {
         flex: 1;
     }
     footer {
-        text-align: center;
         flex: 0;
     }
     footer > small {

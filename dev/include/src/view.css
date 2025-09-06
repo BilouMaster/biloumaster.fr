@@ -22,10 +22,10 @@
     height: 100%;
 }
 #arrows > a[rel='prev'] {
-    left: -0.5em;
+    left: 0.5em;
 }
 #arrows > a[rel='next'] {
-    right: -0.5em;
+    right: 0.5em;
 }
 #arrows > a:hover {
     transform: scale(0.9);
@@ -44,9 +44,14 @@ figure h1 {
     margin-bottom: 0;
     color: var(--biloulight);
 }
+figure time {
+    margin-top: .5em;
+    text-shadow: 0 0 1px black, 0 0 2px black, 0 0 3px black, 0 0 4px black;
+    text-align: center;
+}
 figure {
-    max-height: 100vh;
-    min-height: 100vh;
+    max-height: 80vh;
+    min-height: 80vh;
     display: flex;
     flex-direction: column;
     margin: 0;
@@ -70,7 +75,6 @@ figure img {
     cursor: zoom-in;
     max-width: 100%;
     object-fit: contain;
-    border-radius: 0.5em;
 }
 /* figure > div.img_container::before {
     content: 'biloumaster';

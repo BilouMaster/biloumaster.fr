@@ -1,6 +1,7 @@
 from elements.pages import Page
 from templates import get_templates
 from utils.str import str_indent
+import config
 
 class Index(Page):
     def get_name(self) -> str:
@@ -9,18 +10,15 @@ class Index(Page):
     def get_url(self) -> str:
         return '/'
 
+    def html_header_nav(self):
+        return '<img id="logo" src="/img/biloumaster.svg" alt="logo BilouMaster">'
+
     def spec_args(self, args, lang='fr') -> dict:
-        args['footer'] = str_indent("""\
-            <nav>
-                <p><small>@biloumaster</small> sur les résos :</p>
-                <a href="https://twitter.com/biloumaster" rel="external" target="_blank" title="@biloumaster sur Twitter...">
-                    <img alt="Twitter" src="/img/twitter.svg">
-                    <p>twitter</p>
-                </a>
-                <a href="https://www.facebook.com/biloumaster" rel="external" target="_blank" title="@biloumaster sur Facebook...">
-                    <img alt="Facebook" src="/img/facebook.svg">
-                    <p>facebook</p>
-                </a>
-            </nav>""", 2)
-        args['extralink'] = str_indent("""\
-            <link rel="stylesheet" href="/src/index.css">""", 1)
+        args['footer'] = str_indent(get_templates()['index_footer'], 2)
+        args['extralink'] = '<link rel="stylesheet" href="/src/index.css">'
+    
+    def output_path(self, lang='fr') -> str:
+        return f'{config.output}/'
+    
+    def html_nav_time(self, lang='fr') -> str:
+        return ''

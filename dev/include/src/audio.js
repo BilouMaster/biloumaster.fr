@@ -85,11 +85,11 @@ function pl_prev() {
     }
 }
 
-function toggleSections(el) {
-    const m = document.querySelector('main');
-    m.classList.toggle('folded');
-    el.parentNode.scrollIntoView({behavior: "instant", block: "start"});
-}
+// function toggleSections(el) {
+//     const m = document.querySelector('main');
+//     m.classList.toggle('folded');
+//     el.parentNode.scrollIntoView({behavior: "instant", block: "start"});
+// }
 
 function tr_play(el = lastTrack) {
     const audioElem = document.getElementById('pl-audio');
@@ -99,10 +99,12 @@ function tr_play(el = lastTrack) {
     }
     audioElem.src = "/mp3/" + el.getAttribute('data-filename') + ".mp3";
     const title = el.childNodes[3].innerText;
-    const album = el.parentNode.parentNode.childNodes[1].innerText;
-    const artwork = el.parentNode.parentNode.childNodes[5].src;
+    const year = el.childNodes[5].innerText;
+    const album = document.querySelector('header > hgroup > h1').innerText;
+    const artwork = el.parentNode.parentNode.childNodes[1].src;
     document.querySelector('#player .pl-title').innerText = title;
-    document.querySelector('#player .pl-album').innerText = album;
+    document.querySelector('#player .pl-title').href = el.getAttribute('data-url');
+    document.querySelector('#player .pl-album').innerText = album + ' (' + year + ')';
     document.querySelector('#player .pl-head').style.backgroundImage = 'url("' + artwork + '")';
     const pl = document.getElementById('player');
     if (!pl.classList.contains('active')) {
@@ -135,6 +137,48 @@ function tr_play(el = lastTrack) {
             audioElem.currentTime = details.seekTime;
         });
         navigator.mediaSession.playbackState = "playing";
+    }
+}
+
+function spec_play(filename, title, album, album_art) {
+    const audioElem = document.getElementById('pl-audio');
+    if (vizuexists) {
+        audioElem.play();
+        let pl = document.getElementById('player');
+        pl.classList.remove('pause');
+        pl.classList.add('play');
+    } else {
+        const artwork = '/img/album_art/' + album_art + '.jpg';
+        if (!vizuexists) {
+            new visualiser(audioElem);
+            vizuexists = true;
+        }
+        audioElem.src = "/mp3/" + filename + ".mp3";
+        const pl = document.getElementById('player');
+        if (!pl.classList.contains('active')) {
+            pl.classList.add('active');
+        }
+        pl.classList.remove('pause');
+        pl.classList.add('play');
+        audioElem.play();
+        if ('mediaSession' in navigator) {
+            navigator.mediaSession.metadata = new MediaMetadata({
+            title: title,
+            artist: 'BilouMaster Joke',
+            album: album,
+            artwork: [{ src: artwork, type: 'image/jpeg' }]
+            });
+            navigator.mediaSession.setActionHandler('play', pl_play);
+            navigator.mediaSession.setActionHandler('pause', pl_pause);
+            navigator.mediaSession.setActionHandler('seekto', (details) => {
+                if (details.fastSeek && 'fastSeek' in audioElem) {
+                    audioElem.fastSeek(details.seekTime);
+                    return;
+                }
+                audioElem.currentTime = details.seekTime;
+            });
+            navigator.mediaSession.playbackState = "playing";
+        }
     }
 }
 
@@ -184,6 +228,7 @@ function pl_duration(el) {
     document.querySelector('#player .pl-time').innerText = mmss(el.duration);
 }
 
+
 class visualiser {
     constructor(audioElem) {
         this.audioContext = new AudioContext();
@@ -191,13 +236,12 @@ class visualiser {
         const analyser = this.audioContext.createAnalyser();
         const canvas = document.getElementById('pl-vizu');
         const ctx = canvas.getContext('2d');
+        const idk = Math.max(1, Math.floor(this.audioContext.sampleRate / 44100));
         this.src.connect(analyser);
         analyser.connect(this.audioContext.destination);
-        analyser.fftSize = 2**8;
-        const bufferLength = analyser.frequencyBinCount;
+        analyser.fftSize = 2**8 * idk;
+        const bufferLength = analyser.frequencyBinCount / idk;
         const dataArray = new Uint8Array(bufferLength);
-        let barHeight;
-        let bar;
         const bg = document.querySelector('#player .pl-head');
 
         function renderFrame() {
@@ -207,19 +251,16 @@ class visualiser {
             } else {
                 bg.style.backgroundPositionY = audioElem.currentTime * 100 / audioElem.duration + '%';
             }
-            bar = 1;
+            let bar = 0;
             analyser.getByteFrequencyData(dataArray);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             canvas.width = canvas.offsetWidth;
             canvas.height = canvas.offsetHeight;
-            const barWidth = (canvas.width / bufferLength) * 1.2;
-            // 31, 30, 36
-            // 214, 184, 231
-            // 159, 235, 163
+            let barWidth = canvas.width / bufferLength * 1.2;
             for (let i = 0; i < bufferLength; i++) {
-                const f = dataArray[i] / 255;
-                var r, g, b;
-                barHeight = f * canvas.height;
+                let f = dataArray[i] / 255;
+                let r, g, b;
+                let barHeight = f * canvas.height;
                 if (f < 0.5) {
                     r = 31 + (214 - 31) * f * 2;
                     g = 30 + (184 - 30) * f * 2;
@@ -234,7 +275,7 @@ class visualiser {
                 bar += barWidth + 1;
             }
         }
-
+        
         renderFrame();
     }
 }

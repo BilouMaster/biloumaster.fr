@@ -1,48 +1,84 @@
 from pathlib import Path
 from utils.print_time import print_time
-from shutil import rmtree
-from elements.base import identify
 from elements.metadata import MetaData
+from elements.base import Element
 from elements.index import Index
-from elements.images import process_all_images
-from elements.tracks import process_all_tracks
-from os import makedirs
+from elements.images import Image, Gallery, process_all_images
+from elements.tracks import Track, Album, process_all_tracks
+from elements.pages import Page
+from elements.articles import Article
 import config
 import pickle
+from shutil import rmtree, copytree, move
+import subprocess
+
+def identify(path: Path, parent) -> Element:
+    s = path.suffix.lower()
+    if s in ('.txt', '.tsv', '.pickle', '.ogg') or path.stem in ('_temoins', 'include'):
+        return None
+    if s in ('.jpg', '.jpeg', '.png', '.webp', '.gif', '.bmp'):
+        return Image(path, parent)
+    if s == '.mp3':
+        return Track(path, parent)
+    if s in ('.md', '.html'):
+        return Article(path, parent)
+    if s == '':
+        if len(list(path.glob('*.mp3'))):
+            return Album(path, parent)
+        if len(list(path.glob('*.jpg'))) or len(list(path.glob('*.webp'))) or len(list(path.glob('*.png'))):
+            return Gallery(path, parent)
+        return Page(path, parent)
+    print('unidentified: ', path)
+    return Element(path, parent)
+
+def crawl(path, parent):
+    global website
+    for e in path.glob('*'):
+        website.append(identify(e, parent))
+        if e.is_dir() and e.stem != 'include':
+            crawl(e, website[-1])
 
 if __name__ == "__main__":
-    def crawl(path, parent):
-        global website
-        for e in sorted(path.glob('*')):
-            website.append(identify(e, parent))
-            if e.is_dir():
-                crawl(e, website[-1])
+    print_time('copy ','first')
+    copytree('include/', f'{config.output}/', dirs_exist_ok=True)
+    subprocess.call(['rsync', '-a', f'{config.input}/include/', f'{config.output}/'])
 
-    print_time('metadata','first')
+    print_time('metadatas')
     [MetaData(e) for e in Path(config.input).glob('**/*.txt')]
     [MetaData(e) for e in Path(config.input).glob('**/*.tsv')]
 
-    print_time('website','')
+    print_time('crawl')
     website = [Index(Path(config.input))]
     crawl(Path(config.input), website[0])
 
-    # if Path(config.output).exists():
-    #     rmtree(config.output + '/')
-    makedirs(f'{config.output}/img/gallery/', exist_ok=True)
-    makedirs(f'{config.output}/img/gallery/responsive/', exist_ok=True)
-    makedirs(f'{config.output}/img/gallery/thumbnail/', exist_ok=True)
-
-    print_time('tracks','')
+    print_time('tracks')
     process_all_tracks()
 
-    print_time('images','')
+    print_time('images')
     process_all_images()
 
-    print_time('html ','')
+    print_time('sort ')
+    for e in Element.all:
+        if e.date:
+            for p in e.parents:
+                if not p.max_date:
+                    p.min_date = p.max_date = e.date
+                else:
+                    p.min_date = min(e.date, p.min_date)
+                    p.max_date = max(e.date, p.max_date)
+
+    for e in Element.all:
+        if e and e.children:
+            e.children.sort(key=lambda i:i.max_date + i.name, reverse=True)
+
+    print_time('html ')
+    if Path(config.output + '/html').exists():
+        rmtree(config.output + '/html/')
+    [e.html() for e in Article.detached]
     website[0].html()
 
-    print_time('pickle','')
-    with open('data.pickle', 'wb') as f:
+    print_time('pickle')
+    with open(f'{config.input}/data.pickle', 'wb') as f:
         pickle.dump(website, f, pickle.HIGHEST_PROTOCOL)
 
     print_time('bilou','last')

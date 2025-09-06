@@ -1,4 +1,4 @@
-main, main * {
+section, section * {
     user-select: none;
 }
 #player {
@@ -10,6 +10,24 @@ main, main * {
     background-color: var(--biloudark);
     box-shadow: 0px -1px 4px var(--biloubgc);
     z-index: 50;
+}
+#player.big, .big .pl-head, .big .pl-overlay {
+    height: 12em;
+}
+#player.big {
+    margin: 1em;
+    margin-bottom: 0;
+}
+.big .pl-overlay {
+    top: -12em;
+}
+.big .pl-icons {
+    position: absolute;
+    background: none;
+}
+.big .pl-overlay p {
+    text-align: left;
+    padding: 1em;
 }
 #player, #player * {
     touch-action: none;
@@ -58,6 +76,20 @@ main, main * {
 .pl-title {
     font-family: BilouFont;
     letter-spacing: 1px;
+    color: white;
+}
+.pl-title:visited {
+    color: white;
+}
+.pl-overlay a {
+    transition-property: transform, color;
+    transition-duration: 0.3s;
+    transition-timing-function: var(--biloustic);
+}
+html:not(.can-touch) .pl-overlay a:hover {
+    transform: scale(1.02);
+    color: var(--biloulightgreen);
+    display: inline-block;
 }
 .pl-bar {
     display: flex;
@@ -66,7 +98,6 @@ main, main * {
     align-items: center;
 }
 .pl-bar div {
-    /* font-family: BilouFontLight; */
     font-size: 0.8em;
     padding: 0 0.5em;
     width: 5ch;
@@ -88,7 +119,6 @@ main, main * {
     z-index: 1000;
     box-sizing: border-box;
     background-color: var(--biloubgc50);
-    min-width: 33.333%;
     justify-content: center;
 }
 #player .pl-icons div {
@@ -254,9 +284,11 @@ html:not(.can-touch) .album h2:hover {
     grid-row: 2;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-auto-rows: max-content;
     column-gap: 1px;
     word-break: break-word;
+}
+.tracklist:has(> :last-child:nth-child(-n + 6)) {
+    grid-template-columns: 1fr;
 }
 .track {
     display: grid;
@@ -264,17 +296,18 @@ html:not(.can-touch) .album h2:hover {
     padding: 0.75em;
     margin-bottom: 1px;
     background-color: var(--biloubgc33);
-    transition-timing-function: var(--biloustic);
+    transition-timing-function: var(--biloustic), var(--biloustic), var(--biloueazout);
     transition-duration: 0.3s;
     transition-property: transform, color, background-color;
     cursor: pointer;
     user-select: none;
     letter-spacing: 1px;
+    align-items: center;
 }
 html:not(.can-touch) .track:hover {
     color: var(--biloulightgreen);
     background-color: var(--biloubgc50);
-    transform: scale(1.02);
+    transform: scale(0.99);
 }
 html .track:active:hover {
     color: var(--biloulight);
@@ -284,6 +317,18 @@ html .track:active:hover {
 .track.playing {
     background-color: var(--biloubgc50);
     color: var(--biloulightgreen);
+    animation: playing 1s ease-in-out 0s alternate-reverse infinite;
+}
+.track.playing .track_title::before {
+    content: "▶ ";
+}
+@keyframes playing {
+    0% {
+        background-color: var(--biloubgc80);
+    }
+    100% {
+        background-color: var(--biloubgc50);
+    }
 }
 .track_num {
     grid-column: 1;
@@ -306,18 +351,18 @@ html .track:active:hover {
         grid-template-columns: 1fr 2fr;
     }
     .tracklist {
-        display: block;
+        grid-template-columns: 1fr;
     }
 }
 
 @media (max-width: 640px) {
-    #player {
+    #player:not(.big) {
         flex-direction: column-reverse;
         width: 100%;
         height: 10em;
         box-shadow: none;
     }
-    #player .pl-icons div {
+    #player:not(.big) .pl-icons div {
         height: 100%;
     }
     .pl-icons svg {
@@ -336,6 +381,9 @@ html .track:active:hover {
     .pl-icons {
         justify-content: center;
         box-sizing: border-box;
+    }
+    .big .pl-overlay p {
+        text-align: center;
     }
     .album {
         display: flex;

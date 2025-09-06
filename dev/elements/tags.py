@@ -1,3 +1,6 @@
+import config
+from pathlib import Path
+
 class Tag:
     all = dict()
     def __init__(self, name:str, title:str = '', desc:str = ''):
@@ -42,7 +45,7 @@ class Tag:
         else:
             return '<!--no tags-->'
 
-tsv = open('tags.tsv', 'r')
-for line in tsv:
-    Tag(*line.replace('\n', '').replace('"','&quot;').split('\t'))
-tsv.close()
+if Path(f'{config.input}/tags.tsv').exists():
+    with open(f'{config.input}/tags.tsv', 'r') as tsv:
+        for line in tsv:
+            Tag(*line.replace('\n', '').replace('"','&quot;').split('\t'))
