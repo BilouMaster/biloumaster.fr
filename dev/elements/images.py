@@ -23,24 +23,22 @@ class Image(Element):
             Image.all.append(self)
     
     def get_img_prev(self) -> list:
-        if Path(config.output + f'/img/gallery/responsive/{self.name}_640.webp').exists():
-            return [f'/img/gallery/responsive/{self.name}_640.webp']
-        return [f'/img/gallery/{self.name}.webp']
+        return [f'/img/gallery/thumbnail/{self.name}_thumbnail.webp']
     
     def get_name(self) -> str:
         return str_tofilename(self.source.stem)
     
     def get_title(self, lang='fr') -> tuple:
         if self.name in MetaData.all and 'title' in MetaData.all[self.name].data:
-            return (lang, MetaData.all[self.name].data['title'])
-        return (lang, '')
+            return MetaData.all[self.name].data['title']
+        return ''
 
     def merge_data(self, lang='fr'):
         self.width  = Image.data[self.name]['width']
         self.height = Image.data[self.name]['height']
         self.median = Image.data[self.name]['median']
-        self.title[lang] = self.get_title(lang)[1] or Image.data[self.name]['title']
-        self.desc[lang]  = self.get_desc(lang)[1] or Image.data[self.name]['desc']
+        self.title[lang] = self.get_title(lang) or Image.data[self.name]['title']
+        self.desc[lang]  = self.get_desc(lang) or Image.data[self.name]['desc']
         self.tags = Image.data[self.name]['tags'].lower()
 
     def srcset(self) -> str:
@@ -146,18 +144,12 @@ class Gallery(Page):
         if self.name == 'pixelart':
             args['extralink'] += '\n' + str_indent(get_templates()['pixelart_style'], 1)
     
-    def get_year(self, name) -> str:
-        if name[:2] in ('20', '19'):
-            return name[:4]
-        return ''
-    
     def html_year(self, year):
         if year:
             return f'<h2 class="bubble-style">{year}</h2>'
         return ''
 
     def html_content(self, lang='fr') -> str:
-        # imgs = [{'year': self.get_year(e.name), 'html': e.html(lang), 'tags': set(e.tags.split(';'))} for e in self.children]
         imgs = [{'year': e.date[:4], 'html': e.html(lang), 'tags': set(e.tags.split(';'))} for e in self.children]
         note = '<small id="note"><span class="bubble-style">...</span> <em>Cliquez sur l\'année pour voyager dans le temps !</em></small>'
         if len(self.children) < 100:
@@ -184,17 +176,15 @@ class Gallery(Page):
 
 def str_exif(key: str, exif: str, default='') -> str:
     if key in exif and not isinstance(exif[key], tuple):
-        return exif[key].decode('utf-16').rstrip('\x00').replace('<', '&lt;').replace('\n', '<br>').replace('\r', '')
+        return exif[key].decode('utf-16').rstrip('\x00').replace('<', '&lt;').replace('\n', '<br>').replace('\r', '').replace('/n', '<br>')
     else:
         return default
 
 import store
 def process(inst: Image) -> tuple:
-    if inst.source in store.DATA:
+    if inst.source in store.DATA and Path(f'{config.output}/img/gallery/{inst.name}.webp').exists():
         old = store.DATA[inst.source]
         if old.mtime == inst.mtime:
-            img = Pilimage.open(str(inst.source))
-            generate_images(img, inst.name)
             return (inst.name, {
                 'width':  old.width,
                 'height': old.height,
@@ -203,6 +193,7 @@ def process(inst: Image) -> tuple:
                 'desc':   old.desc['fr'],
                 'tags':   old.tags
             })
+    print(inst.name) + '...'
     img = Pilimage.open(str(inst.source))
     generate_images(img, inst.name)
     w, h = img.size
@@ -223,12 +214,11 @@ def process(inst: Image) -> tuple:
     })
 
 def generate_images(img, name):
-    if Path(f'{config.output}/img/gallery/{name}.webp').exists():
-        return
-    print(name)
     w, h = img.size
     th = 250
     args = dict()
+    if max(w, h) <= 816:
+        args['lossless'] = True
     animated = getattr(img, "is_animated", False)
     if animated:
         frame_duration = []
@@ -237,8 +227,9 @@ def generate_images(img, name):
                 frame_duration.append(f.info["duration"] or 100)
             else:
                 frame_duration.append(200)
-        args = {'save_all':True, 'duration':frame_duration}
+        args = {**args, **{'save_all':True, 'duration':frame_duration}}
     img.save(f'{config.output}/img/gallery/{name}.webp', **args)
+    args['lossless'] = False
     if int(w*th/h > w):
         img.save(f'{config.output}/img/gallery/thumbnail/{name}_thumbnail.webp', **args)
     else:

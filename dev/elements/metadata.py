@@ -14,7 +14,7 @@ class MetaData:
                     for i in f.read().split('\n'):
                         data = list(i.replace('/n', '<br>').split('\t'))
                         MetaData(src_path, str_tofilename(data[0]))
-                        MetaData.all[str_tofilename(data[0])].data = {'title': data[1], 'desc': data[2]}
+                        MetaData.all[str_tofilename(data[0])].data = {'title': data[1], 'desc': data[2], 'infos': data[3:]}
                 else:
                     self.data = dict([tuple(i.replace('/n', '<br>').split('$: ')) for i in f.read().split('\n')])
                     MetaData.all[str_tofilename(src_path.stem)] = self

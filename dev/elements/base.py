@@ -18,11 +18,14 @@ class Element:
             self.parents = self.parent.parents + [self.parent]
         self.name  = self.get_name()
         self.date = self.get_date()
+        self.infos = self.get_infos()
         self.min_date = self.max_date = self.date
-        self.title = dict([self.get_title(l) for l in ['fr', 'en']])
-        self.desc  = dict([self.get_desc(l) for l in ['fr', 'en']])
+        if len(self.date) == 9 and self.date[4] == '-':
+            self.min_date, self.max_date = str.split(self.date, '-')
+        self.title = {'fr': self.get_title()}
+        self.desc  = {'fr': self.get_desc()}
         self.url = self.get_url()
-        self.canon_url = dict([self.get_canon_url(l) for l in ['fr', 'en']])
+        self.canon_url = {'fr': self.get_canon_url()}
         if isinstance(self.parent, Element):
             self.parent.children.append(self)
         Element.all.append(self)
@@ -43,18 +46,23 @@ class Element:
 
     def get_canon_url(self, lang='fr') -> str:
         if lang == 'en':
-            return (lang, 'https://biloumaster.com' + self.url)
-        return (lang, 'https://biloumaster.fr' + self.url)
+            return 'https://biloumaster.com' + self.url
+        return 'https://biloumaster.fr' + self.url
 
-    def get_title(self, lang='fr') -> tuple:
+    def get_title(self, lang='fr') -> str:
         if self.name in MetaData.all and 'title' in MetaData.all[self.name].data:
-            return (lang, MetaData.all[self.name].data['title'])
-        return (lang, self.name)
+            return MetaData.all[self.name].data['title']
+        return str.split(self.source.stem, '_')[-1]
 
-    def get_desc(self, lang='fr') -> tuple:
+    def get_desc(self, lang='fr') -> str:
         if self.name in MetaData.all and 'desc' in MetaData.all[self.name].data:
-            return (lang, MetaData.all[self.name].data['desc'])
-        return (lang, '')
+            return MetaData.all[self.name].data['desc']
+        return ''
+    
+    def get_infos(self) -> list:
+        if self.name in MetaData.all and 'infos' in MetaData.all[self.name].data:
+            return MetaData.all[self.name].data['infos']
+        return ''
 
     def get_icon(self) -> str:
         icon = self.name
@@ -88,23 +96,27 @@ class Element:
         img_prev = self.get_img_prev()
         if len(img_prev) == 0 or self.parent and self.parent.name == 'index':
             return self.html_simple_nav(lang)
+        infos = ''
+        if self.infos:
+            infos = '<div class="infos"><span>' + '</span><span>'.join(self.infos) + '</span></div>'
         args = {
-            'date':        self.html_nav_time(lang),
-            'href':        self.url,
-            'title':       self.title[lang],
-            'description': self.desc[lang],
-            'icon':        self.get_icon(),
-            'imgs':        '\n'.join([f'<div style="background-image: url(\'{img}\');"></div>' for img in img_prev])
+            'date':         self.html_nav_time(lang),
+            'href':         self.url,
+            'title':        self.title[lang],
+            'description':  self.desc[lang],
+            'icon':         self.get_icon(),
+            'imgs':         '\n'.join([f'<div style="background-image: url(\'{img}\');"></div>' for img in img_prev]),
+            'infos':        infos
         }
         return get_templates()['navig_element'].format(**args)
     
     def html_simple_nav(self, lang='fr') -> str:
         args = {
-            'date':        self.html_nav_time(lang),
-            'href':        self.url,
-            'title':       self.title[lang],
-            'desc':        self.desc[lang],
-            'icon':        self.get_icon()
+            'date':         self.html_nav_time(lang),
+            'href':         self.url,
+            'title':        self.title[lang],
+            'desc':         self.desc[lang],
+            'icon':         self.get_icon()
         }
         return get_templates()['navig_simple'].format(**args)
     

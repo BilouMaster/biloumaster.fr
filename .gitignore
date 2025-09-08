@@ -7,3 +7,4 @@ exemple_output
 arc_output
 __pycache__
 .bilou
+*.woff2

@@ -3,26 +3,26 @@ from pathlib import Path
 
 class Tag:
     all = dict()
+    
     def __init__(self, name:str, title:str = '', desc:str = ''):
         self.name = name
-        self.title = dict([self.get_title(title, l) for l in ['fr', 'en']])
-        self.desc = dict([self.get_desc(desc, l) for l in ['fr', 'en']])
+        self.title = dict([(l, self.get_title(title, l)) for l in ['fr', 'en']])
+        self.desc = dict([(l, self.get_desc(desc, l)) for l in ['fr', 'en']])
         Tag.all[self.name] = self
 
-    def get_title(self, title:str='', lang:str='fr'):
+    def get_title(self, title:str='', lang:str='fr') -> str:
         if lang == 'fr':
-            return (lang, title if title else self.name.capitalize())
-        else:
-            return (lang, self.name.capitalize())
+            return title if title else self.name.capitalize()
+        return self.name.capitalize()
     
-    def get_desc(self, desc:str='', lang:str='fr'):
+    def get_desc(self, desc:str='', lang:str='fr') -> str:
         if lang == 'fr':
-            return (lang, desc if desc else 'Éléments correspondants au mot-clé «' + self.title[lang] + '»')
-        else:
-            return (lang, 'Elements matching the keyword «' + self.title[lang] + '»')
+            return desc if desc else 'Éléments correspondants au mot-clé «' + self.title[lang] + '»'
+        return 'Elements matching the keyword «' + self.title[lang] + '»'
     
     def html(self, path:str, lang='fr') -> str:
-        return f'<a href="{path}/tag/{self.name}" rel="tag nofollow" class="{self.name}" title="{self.desc[lang]}">{self.title[lang]}</a>'
+        d = self.desc[lang].replace('<br>', '\n')
+        return f'<a href="{path}/tag/{self.name}" rel="tag nofollow" class="{self.name}" title="{d}">{self.title[lang]}</a>'
     
     @classmethod
     def str_tags(cls, tags:str, path:str, lang:str='fr') -> str:
@@ -48,4 +48,4 @@ class Tag:
 if Path(f'{config.input}/tags.tsv').exists():
     with open(f'{config.input}/tags.tsv', 'r') as tsv:
         for line in tsv:
-            Tag(*line.replace('\n', '').replace('"','&quot;').split('\t'))
+            Tag(*line.replace('\n', '').replace('/n', '<br>').replace('"','&quot;').split('\t'))
