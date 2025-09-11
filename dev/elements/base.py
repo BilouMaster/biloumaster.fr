@@ -14,6 +14,8 @@ class Element:
         self.parent = parent
         self.parents = []
         self.children = []
+        self.included = src_path.stem[0] == '_'
+        self.order = self.get_order()
         if parent:
             self.parents = self.parent.parents + [self.parent]
         self.name  = self.get_name()
@@ -30,6 +32,17 @@ class Element:
             self.parent.children.append(self)
         Element.all.append(self)
     
+
+    def get_order(self) -> int:
+        o = str.split(self.source.stem, '_')
+        if self.included:
+            o = o[1]
+        else:
+            o = o[0]
+        if o.isdigit() and len(o) < 3:
+            return 99 - int(o)
+        return 50
+
     def get_date(self) -> str:
         if self.name in MetaData.all and 'date' in MetaData.all[self.name].data:
             return MetaData.all[self.name].data['date']
@@ -42,8 +55,10 @@ class Element:
         return str_tofilename(str.split(self.source.stem, '_')[-1])
 
     def get_url(self) -> str:
-        if self.source.stem[0] == '_':
+        if self.included:
             return self.parent.url
+        if self.parent.url == '/':
+            return '/' + self.name
         return self.parent.url + '/' + self.name
 
     def get_canon_url(self, lang='fr') -> str:
@@ -54,7 +69,7 @@ class Element:
     def get_title(self, lang='fr') -> str:
         if self.name in MetaData.all and 'title' in MetaData.all[self.name].data:
             return MetaData.all[self.name].data['title']
-        return str.split(str.split(self.source.stem, '_')[-1], '~')[-1].title()
+        return str.split(self.source.stem, '_')[-1].title()
 
     def get_desc(self, lang='fr') -> str:
         if self.name in MetaData.all and 'desc' in MetaData.all[self.name].data:
@@ -78,8 +93,8 @@ class Element:
             for i in range(0, min(len(self.children), 5)):
                 cip = self.children[i].get_img_prev()
                 if len(cip) > 0:
-                    if self.children[i].source.stem[0] == '_':
-                        img_prev += cip[:4]
+                    if self.children[i].included:
+                        img_prev += cip[:3]
                     else:
                         img_prev.append(cip[0])
         return img_prev
@@ -87,16 +102,22 @@ class Element:
     def html_content(self, lang='fr') -> str:
         content = ''
         nav = list()
-        included = list()
+        before = list()
+        after = list()
         for e in self.children:
-            if e.source.stem[0] == '_':
-                included.append(e)
+            if e.included:
+                if e.order < 50:
+                    after.append(e)
+                else:
+                    before.append(e)
             else:
                 nav.append(e)
-        if included:
-            content += '<div id="main_content">\n' + '\n'.join([e.html(lang) for e in included]) + '\n</div>'
+        if before:
+            content += '<div id="main_content">\n' + '\n'.join([e.html(lang) for e in before]) + '\n</div>'
         if nav:
             content += '<nav id="main_nav">\n' + '\n'.join([e.html(lang) for e in nav]) + '\n</nav>'
+        if after:
+            content += '<div id="main_content">\n' + '\n'.join([e.html(lang) for e in after]) + '\n</div>'
         return content
     
     def html_return(self, lang='fr') -> str:
@@ -154,15 +175,13 @@ class Element:
         p = self.parents[1:]
         p.append(self)
         p.reverse()
-        f = lambda e: e.source.stem[0] == '_'
-        p = [e for e in p if not f(e)]
+        p = [e for e in p if not e.included]
         nav_args = dict(('img'+str(index), value.get_icon()) for index, value in enumerate(p))
         return get_templates()['header_nav_' + str(min(3, len(p)))].format(**nav_args)
 
     def html(self, lang='fr') -> str:
-        if self.source.stem[0] == '_':
-            n = str.split(self.name, '-')[-1]
-            return f'<section id="{n}"><h2>{self.title[lang]}</h2>\n{str_indent(self.html_content(lang), 2)}\n</section>\n'
+        if self.included:
+            return f'<section id="{self.name}"><h2>{self.title[lang]}</h2>\n{str_indent(self.html_content(lang), 2)}\n</section>\n'
         args = {
             'nav':              str_indent(self.html_header_nav(), 2),
             'title':            self.title[lang],

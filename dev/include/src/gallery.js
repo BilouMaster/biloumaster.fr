@@ -28,7 +28,7 @@ window.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.gallery a').forEach(thumb => {
     lazyThumbs.observe(thumb);
   });
-  document.querySelectorAll('section').forEach(section => {
+  document.querySelectorAll('#gallery section').forEach(section => {
     section.addEventListener('click', toggleSelf);
   });
 });

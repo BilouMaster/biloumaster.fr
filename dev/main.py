@@ -25,7 +25,7 @@ def identify(path: Path, parent) -> Element:
     if s == '':
         if len(list(path.glob('*.mp3'))):
             return Album(path, parent)
-        if len(list(path.glob('*.jpg'))) or len(list(path.glob('*.webp'))) or len(list(path.glob('*.png'))):
+        if len(list(path.glob('*.jpg'))) or len(list(path.glob('*.webp'))) or len(list(path.glob('*.png'))) or len(list(path.glob('*.gif'))):
             return Gallery(path, parent)
         return Page(path, parent)
     print('unidentified: ', path)
@@ -69,7 +69,7 @@ if __name__ == "__main__":
 
     for e in Element.all:
         if e and e.children:
-            e.children.sort(key=lambda i:i.max_date + i.name, reverse=True)
+            e.children.sort(key=lambda i:str(i.order) + i.max_date + i.name, reverse=True)
 
     print_time('html ')
     if Path(config.output + '/html').exists():

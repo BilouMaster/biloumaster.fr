@@ -170,8 +170,8 @@ html:not(.can-touch) #gallery.folded section:hover a {
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
     image-rendering: pixelated;
-    width: calc(min(120px, 33vw)*var(--r));
-    max-height: 196;
+    width: calc(min(160px, 20vw)*var(--r));
+    max-height: 220px;
 }
 @media (max-width: 1024px) {
     #gallery > small {

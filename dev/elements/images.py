@@ -28,17 +28,17 @@ class Image(Element):
     def get_name(self) -> str:
         return str_tofilename(self.source.stem)
     
-    def get_title(self, lang='fr') -> tuple:
-        if self.name in MetaData.all and 'title' in MetaData.all[self.name].data:
-            return MetaData.all[self.name].data['title']
-        return ''
+    # def get_title(self, lang='fr') -> tuple:
+    #     if self.name in MetaData.all and 'title' in MetaData.all[self.name].data:
+    #         return MetaData.all[self.name].data['title']
+    #     return ''
 
     def merge_data(self, lang='fr'):
         self.width  = Image.data[self.name]['width']
         self.height = Image.data[self.name]['height']
         self.median = Image.data[self.name]['median']
-        self.title[lang] = self.get_title(lang) or Image.data[self.name]['title']
-        self.desc[lang]  = self.get_desc(lang) or Image.data[self.name]['desc']
+        self.title[lang] = Image.data[self.name]['title'] or self.get_title(lang)
+        self.desc[lang]  = Image.data[self.name]['desc'] or self.get_desc(lang)
         self.tags = Image.data[self.name]['tags'].lower()
 
     def srcset(self) -> str:
@@ -156,7 +156,7 @@ class Gallery(Page):
         if len(all_tags - {''}):
             tag_list = get_templates()['tag_list'].format(tags=Tag.str_tags(all_tags, self.url, lang))
         pixelated = ''
-        if str.split(self.name, '-')[-1] in ('pixelart', 'screenshots'):
+        if self.name in ('pixelart', 'screenshots', 'artworks'):
             pixelated = ' class="pixelated"'
         return f'<div id="gallery"{pixelated}>' + '\n'.join([note]
             + [get_templates()['gallery_section'].format(
@@ -201,7 +201,7 @@ def process(inst: Image) -> tuple:
         'width':  w,
         'height': h,
         'median': m,
-        'title':  str_exif(0x9C9B, img_exif, 'Sans titre'),
+        'title':  str_exif(0x9C9B, img_exif),
         'desc':   str_exif(0x9C9C, img_exif),
         'tags':   str_exif(0x9C9E, img_exif)
     })
