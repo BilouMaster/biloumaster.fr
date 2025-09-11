@@ -13,7 +13,5 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)/$ /$1 [R]
 RewriteRule ^(.*)/tag/.*$ $1 [L]
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{DOCUMENT_ROOT}/html/$2/$3.html -f
-RewriteRule ^(.*/|)(.*)/(.*)$ /html/$2/$3.html [L]
-RewriteCond %{DOCUMENT_ROOT}/html/$2.html -f
-RewriteRule ^(.*/|)(.*)$ /html/$2.html [L]
+RewriteCond %{DOCUMENT_ROOT}/html/$1.html -f
+RewriteRule ^(.*)$ /html/$1.html [L]

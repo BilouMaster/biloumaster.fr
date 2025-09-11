@@ -1,4 +1,4 @@
-* {
+#gallery, #gallery * {
     box-sizing: border-box;
 }
 #gallery {

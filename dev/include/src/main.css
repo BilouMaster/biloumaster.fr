@@ -171,21 +171,24 @@ header > hgroup > p:empty {
     display: block;
 }
 main {
+    flex: 0;
+}
+#main_content {
     display: flex;
     flex-wrap: wrap;
     gap: .25em;
     padding: .25em;
 }
-main > * {
+#main_content > * {
     flex-grow: 1;
 }
-main > section {
+#main_content > section {
     padding: 1em;
     text-align: justify;
     background: linear-gradient(145deg, var(--biloubgc50), var(--biloubgc33) 50%);
     border-radius: .25em;
 }
-main > section#screenshots, main > section#navigateur {
+#main_content > section#screenshots, #main-content > section#navigateur {
     width: 100%;
 }
 main h1, main h2 {

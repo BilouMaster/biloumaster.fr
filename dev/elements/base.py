@@ -94,9 +94,9 @@ class Element:
             else:
                 nav.append(e)
         if included:
-            content += '\n'.join([e.html(lang) for e in included])
+            content += '<div id="main_content">\n' + '\n'.join([e.html(lang) for e in included]) + '\n</div>'
         if nav:
-            content += '<nav id="main_nav">' + '\n'.join([e.html(lang) for e in nav]) + '</nav>'
+            content += '<nav id="main_nav">\n' + '\n'.join([e.html(lang) for e in nav]) + '\n</nav>'
         return content
     
     def html_return(self, lang='fr') -> str:
@@ -141,7 +141,7 @@ class Element:
         path = f'{config.output}/html/'
         if lang != 'fr':
             path += lang + '/'
-        path += '/'.join(str.split(self.url)[:-2]) + '/'
+        path += '/'.join(str.split(self.url, '/')[:-1]) + '/'
         makedirs(path, exist_ok=True)
         return path
 
