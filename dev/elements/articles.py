@@ -1,4 +1,5 @@
 from elements.base import Element
+from markdown import markdown
 
 class Article(Element):
     detached = list()
@@ -7,7 +8,10 @@ class Article(Element):
         super().__init__(*args)
         self.metadata = ''
         with open(self.source) as content:
-            self.content = content.read()
+            if self.source.suffix.lower() == '.md':
+                self.content = markdown(content.read())
+            else:
+                self.content = content.read()
         if '$detached$' in self.content:
             self.parent.children.remove(self)
             self.parent = None
@@ -25,4 +29,4 @@ class Article(Element):
             args.update(self.metadata)
 
     def html_content(self, lang='fr') -> str:
-        return self.content
+        return '<section class="article">' + self.content + '</section>'

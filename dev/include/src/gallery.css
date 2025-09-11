@@ -29,7 +29,7 @@
 #gallery.folded > small {
     visibility: hidden;
 }
-section {
+#gallery section {
     flex-grow: 1;
     max-width: 100%;
 }
@@ -65,7 +65,7 @@ section {
     transform: rotate(65deg) scale(-.8,.8);
     background-image: url("data:image/svg+xml,%3Csvg width='36' height='28' version='1.1' viewBox='0 0 36 28' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m36.42 22.65s-11.61-3.686-14.64-9.744c7.17 0.6679 14.64-1.355 14.64-1.355' fill='%23f0e9f2' stroke='%231f1e24' stroke-width='2'/%3E%3C/svg%3E%0A");
 }
-section h2 {
+#gallery section h2 {
     cursor: pointer;
     position: sticky;
     margin: -1.5em;
@@ -78,7 +78,7 @@ section h2 {
     transition-timing-function: var(--biloustic);
     transition-duration: 0.3s;
 }
-html:not(.can-touch) section h2:hover, html:not(.can-touch) .folded section:hover h2 {
+html:not(.can-touch) #gallery section h2:hover, html:not(.can-touch) .folded #gallery section:hover h2 {
     transform: translate(1em,1em) scale(1.05) rotate(-15deg);
 }
 .gallery {
@@ -117,11 +117,11 @@ html:not(.can-touch) .gallery > a:hover {
     box-shadow: 0px 0px 8px var(--biloubgc50);
     transition: transform .3s var(--biloustic), filter .3s var(--biloueazout);
 }
-.folded .gallery {
+#gallery.folded .gallery {
     overflow: hidden;
     height: 100%;
 }
-.folded section {
+#gallery.folded section {
     height: 6em;
     margin: 0;
     position: relative;
@@ -129,25 +129,25 @@ html:not(.can-touch) .gallery > a:hover {
     transition-timing-function: var(--biloueazout);
     transition-duration: .3s;
 }
-.folded section h2 {
+#gallery.folded section h2 {
     position: absolute;
     top: 0;
 }
-html:not(.can-touch) .folded section {
+html:not(.can-touch) #gallery.folded section {
     z-index: 100;
 }
-html:not(.can-touch) .folded section:hover {
+html:not(.can-touch) #gallery.folded section:hover {
     margin-top: -1em;
     height: 7em;
     cursor: pointer;
 }
-html:not(.can-touch) .folded section:hover a {
+html:not(.can-touch) #gallery.folded section:hover a {
     filter: brightness(1.1);
 }
-.folded .gallery > a:nth-child(n+8) {
+#gallery.folded .gallery > a:nth-child(n+8) {
     display: none;
 }
-.folded .gallery::before {
+#gallery.folded .gallery::before {
     content: '';
     position: relative;
     width: 100%;
@@ -166,25 +166,32 @@ html:not(.can-touch) .folded section:hover a {
 #current_tag a {
     font-family: BilouFont;
 }
+#gallery.pixelated .gallery > a {
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+    width: calc(min(120px, 33vw)*var(--r));
+    max-height: 196;
+}
 @media (max-width: 1024px) {
     #gallery > small {
         margin: 0;
         text-align: left;
     }
-    section h2.bubble-style {
+    #gallery section h2.bubble-style {
         font-size: 1em;
         float: right;
         transform: translate(-2em,1em) rotate(15deg);
     }
-    .folded section h2 {
+    #gallery.folded section h2 {
         right: 0;
     }
-    section h2.bubble-style::before {
+    #gallery section h2.bubble-style::before {
         transform: rotate(-70deg) scale(.7,.7);
         left: -0.5em;
         top: 2.5em;
     }
-    html:not(.can-touch) section h2:hover, html:not(.can-touch) .folded section:hover h2 { 
+    html:not(.can-touch) #gallery section h2:hover, html:not(.can-touch) #gallery.folded section:hover h2 { 
         transform: translate(-2em,1em) scale(1.05) rotate(15deg);
     }
 }
@@ -192,7 +199,7 @@ html:not(.can-touch) .folded section:hover a {
     #gallery {
         padding: 0;
     }
-    .folded .gallery > a:nth-child(n+5) {
+    #gallery.folded .gallery > a:nth-child(n+5) {
         display: none;
     }
 }

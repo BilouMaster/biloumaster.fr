@@ -14,6 +14,11 @@ html:not(.can-touch) .viewable:hover {
     --pswp-bg: var(--biloubgc) var(--overbiloulay) !important;
     --pswp-placeholder-bg: var(--biloubgct) no-repeat center/75px url(/img/placeholder.svg) !important;
 }
+.pixelated .pswp__img {
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+}
 .pswp__title {
     height: 100px;
     width: max-content;

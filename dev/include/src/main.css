@@ -87,7 +87,7 @@ body {
 body::before {
     background-color: var(--biloubgc);
     content: '';
-    flex: .25;
+    flex: 0.25;
 }
 header {
     display: flex;
@@ -95,7 +95,7 @@ header {
     justify-content: center;
     animation: 2s steps(20, end) infinite biloupsyche;
     box-shadow: 0 1px 3px var(--biloubgc50);
-    flex: .5;
+    flex: 0;
 }
 header > * {
     z-index: 100;
@@ -171,18 +171,36 @@ header > hgroup > p:empty {
     display: block;
 }
 main {
-    flex: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25em;
+    padding: .25em;
 }
-main h1, main h2, .navig h2 {
-    font-size: 1.5em;
+main > * {
+    flex-grow: 1;
+}
+main > section {
+    padding: 1em;
+    text-align: justify;
+    background: linear-gradient(145deg, var(--biloubgc50), var(--biloubgc33) 50%);
+    border-radius: .25em;
+}
+main > section#screenshots, main > section#navigateur {
+    width: 100%;
+}
+main h1, main h2 {
+    /* font-size: 1.5em; */
     /* letter-spacing: 0.25ex; */
     color: var(--biloulight);
     text-shadow: var(--biloutextborder);
     line-height: 1.75em;
-    margin: 0.5em 0;
+    margin: 0.5em;
     font-weight: lighter;
-    text-align: center;
+    /* text-align: center; */
     filter: drop-shadow(0 0 0.2rem var(--biloubgc33));
+}
+main p {
+    margin: 1em;
 }
 .tags {
     text-align: center;

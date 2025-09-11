@@ -134,16 +134,6 @@ class Gallery(Page):
         super().__init__(*args)
         Gallery.all.append(self)
     
-    def spec_args(self, args, lang='fr') -> dict:
-        args['extralink'] = str_indent("""\
-            <link rel="stylesheet" href="/pswp/photoswipe.css">
-            <link rel="stylesheet" href="/src/gallery.css">
-            <link rel="stylesheet" href="/src/pswp.css">
-            <script type="module" src="/src/pswp.js"></script>
-            <script src="/src/gallery.js"></script>""", 1)
-        if self.name == 'pixelart':
-            args['extralink'] += '\n' + str_indent(get_templates()['pixelart_style'], 1)
-    
     def html_year(self, year):
         if year:
             return f'<h2 class="bubble-style">{year}</h2>'
@@ -165,7 +155,10 @@ class Gallery(Page):
         tag_list = ''
         if len(all_tags - {''}):
             tag_list = get_templates()['tag_list'].format(tags=Tag.str_tags(all_tags, self.url, lang))
-        return '<div id="gallery">' + '\n'.join([note]
+        pixelated = ''
+        if str.split(self.name, '-')[-1] in ('pixelart', 'screenshots'):
+            pixelated = ' class="pixelated"'
+        return f'<div id="gallery"{pixelated}>' + '\n'.join([note]
             + [get_templates()['gallery_section'].format(
                 title=      year,
                 year=       self.html_year(year),
@@ -193,7 +186,7 @@ def process(inst: Image) -> tuple:
                 'desc':   old.desc['fr'],
                 'tags':   old.tags
             })
-    print(inst.name) + '...'
+    print(inst.name + '...')
     img = Pilimage.open(str(inst.source))
     generate_images(img, inst.name)
     w, h = img.size
@@ -214,6 +207,8 @@ def process(inst: Image) -> tuple:
     })
 
 def generate_images(img, name):
+    if Path(f'{config.output}/img/gallery/{name}.webp').exists():
+        return
     w, h = img.size
     th = 250
     args = dict()

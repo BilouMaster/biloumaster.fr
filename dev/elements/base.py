@@ -42,7 +42,9 @@ class Element:
         return str_tofilename(str.split(self.source.stem, '_')[-1])
 
     def get_url(self) -> str:
-        return ''.join(['/' + p.name for p in self.parents[1:]]) + '/' + self.name
+        if self.source.stem[0] == '_':
+            return self.parent.url
+        return self.parent.url + '/' + self.name
 
     def get_canon_url(self, lang='fr') -> str:
         if lang == 'en':
@@ -52,7 +54,7 @@ class Element:
     def get_title(self, lang='fr') -> str:
         if self.name in MetaData.all and 'title' in MetaData.all[self.name].data:
             return MetaData.all[self.name].data['title']
-        return str.split(self.source.stem, '_')[-1]
+        return str.split(str.split(self.source.stem, '_')[-1], '~')[-1].title()
 
     def get_desc(self, lang='fr') -> str:
         if self.name in MetaData.all and 'desc' in MetaData.all[self.name].data:
@@ -76,11 +78,26 @@ class Element:
             for i in range(0, min(len(self.children), 5)):
                 cip = self.children[i].get_img_prev()
                 if len(cip) > 0:
-                    img_prev.append(self.children[i].get_img_prev()[0])
+                    if self.children[i].source.stem[0] == '_':
+                        img_prev += cip[:4]
+                    else:
+                        img_prev.append(cip[0])
         return img_prev
 
     def html_content(self, lang='fr') -> str:
-        return '<nav id="main_nav">' + '\n'.join([e.html(lang) for e in self.children]) + '</nav>'
+        content = ''
+        nav = list()
+        included = list()
+        for e in self.children:
+            if e.source.stem[0] == '_':
+                included.append(e)
+            else:
+                nav.append(e)
+        if included:
+            content += '\n'.join([e.html(lang) for e in included])
+        if nav:
+            content += '<nav id="main_nav">' + '\n'.join([e.html(lang) for e in nav]) + '</nav>'
+        return content
     
     def html_return(self, lang='fr') -> str:
         return self.html_nav(lang)
@@ -124,8 +141,7 @@ class Element:
         path = f'{config.output}/html/'
         if lang != 'fr':
             path += lang + '/'
-        if self.parent and not self.parent.name == 'index':
-            path += self.parent.name + '/'
+        path += '/'.join(str.split(self.url)[:-2]) + '/'
         makedirs(path, exist_ok=True)
         return path
 
@@ -138,10 +154,15 @@ class Element:
         p = self.parents[1:]
         p.append(self)
         p.reverse()
+        f = lambda e: e.source.stem[0] == '_'
+        p = [e for e in p if not f(e)]
         nav_args = dict(('img'+str(index), value.get_icon()) for index, value in enumerate(p))
         return get_templates()['header_nav_' + str(min(3, len(p)))].format(**nav_args)
 
     def html(self, lang='fr') -> str:
+        if self.source.stem[0] == '_':
+            n = str.split(self.name, '-')[-1]
+            return f'<section id="{n}"><h2>{self.title[lang]}</h2>\n{str_indent(self.html_content(lang), 2)}\n</section>\n'
         args = {
             'nav':              str_indent(self.html_header_nav(), 2),
             'title':            self.title[lang],

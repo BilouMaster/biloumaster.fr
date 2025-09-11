@@ -37,10 +37,10 @@ let options = {
     }
   },
   initialZoomLevel: (zoomLevelObject) => {
-    return Math.min(4, zoomLevelObject.panAreaSize.x / zoomLevelObject.elementSize.x, zoomLevelObject.panAreaSize.y / zoomLevelObject.elementSize.y);
+    return Math.floor(Math.min(4, zoomLevelObject.panAreaSize.x / zoomLevelObject.elementSize.x, zoomLevelObject.panAreaSize.y / zoomLevelObject.elementSize.y));
   },
   maxZoomLevel: (zoomLevelObject) => {
-    return Math.max(1, 4 * Math.min(4, zoomLevelObject.panAreaSize.x / zoomLevelObject.elementSize.x, zoomLevelObject.panAreaSize.y / zoomLevelObject.elementSize.y));
+    return Math.round(Math.max(1, 4 * Math.min(4, zoomLevelObject.panAreaSize.x / zoomLevelObject.elementSize.x, zoomLevelObject.panAreaSize.y / zoomLevelObject.elementSize.y)));
   }
 };
 
@@ -276,6 +276,9 @@ lightbox.on('afterInit', () => {
   };
   noHistoryPush = false;
   document.body.classList.add('blur');
+  if (document.body.querySelector('#gallery').classList.contains('pixelated')) {
+    document.body.querySelector('.pswp').classList.add('pixelated');
+  }
 });
 
 const shareSVG = '<svg class="pswp__no-toggle" viewBox="0 0 32 32" width="32" height="32" fill="var(--biloubgc)"><path d="m25.333 2a4.6667 4.6667 0 0 0-4.6667 4.6667 4.6667 4.6667 0 0 0 0.10938 0.97526l-10.596 5.2979a4.6667 4.6667 0 0 0-3.5137-1.6064 4.6667 4.6667 0 0 0-4.6667 4.6667 4.6667 4.6667 0 0 0 4.6667 4.6667 4.6667 4.6667 0 0 0 3.5159-1.6042l10.589 5.2956a4.6667 4.6667 0 0 0-0.10482 0.97526 4.6667 4.6667 0 0 0 4.6667 4.6667 4.6667 4.6667 0 0 0 4.6667-4.6667 4.6667 4.6667 0 0 0-4.6667-4.6667 4.6667 4.6667 0 0 0-3.516 1.6042l-10.589-5.2956a4.6667 4.6667 0 0 0 0.10482-0.97526 4.6667 4.6667 0 0 0-0.10938-0.97298l10.596-5.2979a4.6667 4.6667 0 0 0 3.5137 1.6042 4.6667 4.6667 0 0 0 4.6667-4.6667 4.6667 4.6667 0 0 0-4.6667-4.6667z"/></svg>'

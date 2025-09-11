@@ -54,6 +54,8 @@
 	transition-duration: 0.3s;
 }
 .navig > h2 {
+	color: var(--biloulight);
+    text-shadow: var(--biloutextborder);
     width: 100%;
 	transition-property: color, transform;
 	transition-timing-function: var(--biloueazout), var(--biloustic);

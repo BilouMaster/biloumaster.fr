@@ -8,7 +8,7 @@ class Index(Page):
         return 'index'
 
     def get_url(self) -> str:
-        return '/'
+        return ''
 
     def html_header_nav(self):
         return '<img id="logo" src="/img/biloumaster.svg" alt="logo BilouMaster">'
