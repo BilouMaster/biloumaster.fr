@@ -173,6 +173,13 @@ html:not(.can-touch) #gallery.folded section:hover a {
     width: calc(min(160px, 20vw)*var(--r));
     max-height: 220px;
 }
+#screenshots #gallery.pixelated .gallery {
+    background: black;
+}
+/* #screenshots #gallery.pixelated .gallery > a {
+    width: 320px;
+    max-height: 240px;
+} */
 @media (max-width: 1024px) {
     #gallery > small {
         margin: 0;

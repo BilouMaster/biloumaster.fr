@@ -61,6 +61,7 @@
 	transition-timing-function: var(--biloueazout), var(--biloustic);
 	transition-duration: 0.3s;
 	line-height: 1.5em;
+	margin: .5em 0;
 }
 .navig_icon {
     width: 4em;
@@ -152,7 +153,7 @@ html:not(.can-touch) .navig.simple:nth-child(odd):hover > .navig_icon {
 	grid-template:'a b' / 2fr 1fr;
 }
 .preview_images:has(> :last-child:nth-child(3)) {
-	grid-template:'a c''b c';
+	grid-template: 'a b''a c';
 }
 .preview_images:has(> :last-child:nth-child(4)) {
 	grid-template:'a b b''a c d' / 2fr 1fr 1fr;
@@ -196,9 +197,9 @@ html:not(.can-touch) .navig.simple:nth-child(odd):hover > .navig_icon {
 	border-top-left-radius: .5em;
 	border-top-right-radius: .5em;
 }
-#main_nav:has(> :last-child:nth-child(-n + 3)) :last-child {
+/* #main_nav:has(> :last-child:nth-child(-n + 3)) :last-child {
 	grid-column: 1 / 3;
-}
+} */
 #main_nav:has(> :last-child:nth-child(-n + 4)) {
 	grid-template-columns: 1fr 1fr;
 }

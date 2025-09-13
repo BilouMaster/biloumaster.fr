@@ -188,7 +188,7 @@ def process(inst: Image) -> tuple:
             })
     print(inst.name + '...')
     img = Pilimage.open(str(inst.source))
-    generate_images(img, inst.name)
+    generate_images(img, inst.name, inst.parent.name)
     w, h = img.size
     m = ImageStat.Stat(img).median
     if len(m) != 3:
@@ -206,13 +206,13 @@ def process(inst: Image) -> tuple:
         'tags':   str_exif(0x9C9E, img_exif)
     })
 
-def generate_images(img, name):
+def generate_images(img, name, parent):
     if Path(f'{config.output}/img/gallery/{name}.webp').exists():
         return
     w, h = img.size
     th = 250
     args = dict()
-    if max(w, h) <= 816:
+    if max(w, h) <= 816 or parent == "pixelart":
         args['lossless'] = True
     animated = getattr(img, "is_animated", False)
     if animated:

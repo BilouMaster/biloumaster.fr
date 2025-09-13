@@ -16,6 +16,7 @@ class Element:
         self.children = []
         self.included = src_path.stem[0] == '_'
         self.order = self.get_order()
+        self.is_nav = False
         if parent:
             self.parents = self.parent.parents + [self.parent]
         self.name  = self.get_name()
@@ -115,6 +116,7 @@ class Element:
         if before:
             content += '<div id="main_content">\n' + '\n'.join([e.html(lang) for e in before]) + '\n</div>'
         if nav:
+            self.is_nav = True
             content += '<nav id="main_nav">\n' + '\n'.join([e.html(lang) for e in nav]) + '\n</nav>'
         if after:
             content += '<div id="main_content">\n' + '\n'.join([e.html(lang) for e in after]) + '\n</div>'
@@ -132,7 +134,7 @@ class Element:
     
     def html_nav(self, lang='fr') -> str:
         img_prev = self.get_img_prev()
-        if len(img_prev) == 0 or self.parent and self.parent.name == 'index':
+        if len(img_prev) == 0: # or self.parent and self.parent.name == 'index':
             return self.html_simple_nav(lang)
         infos = ''
         if self.infos:
@@ -200,6 +202,8 @@ class Element:
         return self.html_return(lang)
     
     def html_footer(self, lang='fr') -> str:
+        # if self.is_nav:
+        #     return ''
         if not self.parent:
             return ''
         foot_nav = [self.parent.html_simple_nav(lang)]

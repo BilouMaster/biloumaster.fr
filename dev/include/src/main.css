@@ -22,11 +22,14 @@
     --biloulight: rgb(184, 194, 231);
     /* nouvelles */
     --bbgc: 42, 37, 66;
+    /* --bbgc: 0,0,0; */
     --bdark: 92, 70, 128;
+    /* --bdark: 73, 57, 100; */
     --biloulight: rgb(231, 206, 184);
     --biloulightgreen: rgb(223, 238, 167);
     --bilouhighlight: rgb(240, 233, 242);
     --biloubgc: rgb(var(--bbgc));
+    --bilouframe: var(--biloubgc);
     --biloubgc33: rgba(var(--bbgc), 0.33);
     --biloubgc50: rgba(var(--bbgc), 0.5);
     --biloubgc80: rgba(var(--bbgc), 0.8);
@@ -42,10 +45,13 @@
     --biloufade_offset: 19px;
     --biloufade: linear-gradient(179deg, var(--biloubgc) calc(1em + var(--biloufade_offset)), var(--biloubgct) calc(1em + var(--biloufade_offset) + 1px)),
                  linear-gradient(-200deg, var(--biloudarkt) 50px, var(--biloudark) 280px);
+    --biloufade: linear-gradient(179deg, var(--bilouframe) calc(1em + var(--biloufade_offset)), var(--biloubgct) calc(1em + var(--biloufade_offset) + 1px)),
+                 linear-gradient(-200deg, var(--biloudarkt) 50px, var(--biloudark) 280px);
     --biloupsyche_top: 36px;
     --biloupsyche_left: 139px;
     --overbiloulay: radial-gradient(circle at center, transparent 40%, black 140%);
     background-color: var(--biloubgc);
+    background-color: var(--bilouframe);
     font-family: BilouFont, "Comic Sans MS", "Comic Sans", cursive, sans-serif;
     box-sizing: border-box;
     scrollbar-width: thin;
@@ -86,6 +92,7 @@ body {
 }
 body::before {
     background-color: var(--biloubgc);
+    background-color: var(--bilouframe);
     content: '';
     flex: 0.25;
 }
@@ -94,7 +101,7 @@ header {
     /* align-items: center; */
     justify-content: center;
     animation: 2s steps(20, end) infinite biloupsyche;
-    box-shadow: 0 1px 3px var(--biloubgc50);
+    /* box-shadow: 0 1px 3px var(--biloubgc50); */
     flex: 0;
 }
 header > * {
@@ -176,24 +183,75 @@ main {
 #main_content {
     display: flex;
     flex-wrap: wrap;
-    gap: .25em;
-    padding: .25em;
+    /* gap: .25em; */
+    /* padding: .25em; */
 }
 #main_content > * {
     flex-grow: 1;
 }
 #main_content > section {
-    padding: 1em;
+    /* padding: 1em; */
     text-align: justify;
-    background: linear-gradient(145deg, var(--biloubgc50), var(--biloubgc33) 50%);
-    border-radius: .25em;
+    /* background: linear-gradient(145deg, var(--biloubgc50), var(--biloubgc33) 50%); */
+    /* border-radius: .25em; */
 }
-#main_content > section > h2 {
-    display: contents;
+#main_content > section * {
+    max-width: 100%;
 }
-/* #main_content > section#screenshots, #main-content > section#navigateur {
-    width: 100%;
-} */
+.article p, .article li {
+    font-family: BilouFontLight;
+}
+#main_content > section .article img {
+    max-height: 70vh;
+    max-width: calc(100% + 2em);
+    margin: 0 -1em;
+}
+.article p:has(> img) {
+    text-align: center;
+}
+.article h3 {
+    color: var(--biloulight);
+    text-shadow: var(--biloutextborder);
+    line-height: 1.50em;
+    font-weight: lighter;
+    margin: 1em;
+}
+.article strong, .article strong em {
+    font-weight: normal;
+    font-family: BilouFont;
+}
+.article a {
+    font-family: BilouFont;
+    transition-property: color;
+    transition-duration: .2s;
+}
+.article a.download {
+    background: linear-gradient(-45deg, var(--biloulightgreen), transparent);
+    background-color: var(--biloulight);
+    padding: .5em;
+    display: inline-block;
+    color: var(--biloubgc);
+    border-radius: 1em;
+    box-shadow: var(--biloutextborder), 0px 2px 5px var(--biloubgc);
+    border: solid var(--bilouhighlight);
+    transition-property: transform, background-color;
+    transition-timing-function: var(--biloustic), var(--biloueazout);
+    transition-duration: .3s, 1s;
+}
+html:not(.can-touch) .article a.download:hover {
+    color: var(--biloubgc);
+    background-color: var(--biloulightgreen);
+    transform: scale(1.02);
+}
+#main_content > section .article a.download img {
+    height: 2em;
+    margin: 0;
+    margin-bottom: -0.5em;
+    filter: drop-shadow(0 0 0.2rem var(--biloubgc80));
+}
+html:not(.can-touch) .article a:hover {
+    color: var(--biloulightgreen);
+}
 main h1, main h2 {
     /* font-size: 1.5em; */
     /* letter-spacing: 0.25ex; */
@@ -244,6 +302,7 @@ footer > small {
     min-height: 2.5em;
     color: gray;
     background-color: var(--biloubgc);
+    background-color: var(--bilouframe);
     font-family: BilouFontLight;
     flex: 1;
 }
