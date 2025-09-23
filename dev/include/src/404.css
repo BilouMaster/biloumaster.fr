@@ -58,11 +58,11 @@ html:not(.can-touch) header > nav > a:hover {
 header > hgroup > h1 {
     transform: translateY(-20px) rotate(-10deg)
 }
-main {
+main .article {
     display: flex;
     align-items: center;
 }
-main p {
+main .article p {
     color: red;
     text-shadow: var(--biloutextborder);
     text-align: center;
@@ -72,6 +72,7 @@ main p {
     opacity: 0.404;
     transform: rotate(175deg);
     animation: shake .5s var(--biloustic);
+    font-family: BilouFont;
 }
 @keyframes shake {
     0% {

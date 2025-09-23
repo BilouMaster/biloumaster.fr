@@ -41,7 +41,10 @@ class Element:
         else:
             o = o[0]
         if o.isdigit() and len(o) < 3:
-            return 99 - int(o)
+            if self.parent and self.parent.included:
+                return int(o)
+            else:
+                return 99 - int(o)
         return 50
 
     def get_date(self) -> str:
@@ -95,10 +98,10 @@ class Element:
                 cip = self.children[i].get_img_prev()
                 if len(cip) > 0:
                     if self.children[i].included:
-                        img_prev += cip[:3]
+                        img_prev += cip[:max(1, int(5/len([e for e in self.children if e.get_img_prev()])))]
                     else:
                         img_prev.append(cip[0])
-        return img_prev
+        return img_prev[:5]
 
     def html_content(self, lang='fr') -> str:
         content = ''
@@ -178,7 +181,10 @@ class Element:
         p.append(self)
         p.reverse()
         p = [e for e in p if not e.included]
-        nav_args = dict(('img'+str(index), value.get_icon()) for index, value in enumerate(p))
+        nav_args = dict()
+        for index, value in enumerate(p):
+            nav_args['img'+str(index)] = value.get_icon()
+            nav_args['prev'+str(index)] = value.get_url()
         return get_templates()['header_nav_' + str(min(3, len(p)))].format(**nav_args)
 
     def html(self, lang='fr') -> str:

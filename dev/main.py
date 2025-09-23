@@ -29,7 +29,7 @@ def identify(path: Path, parent) -> Element:
             return Gallery(path, parent)
         return Page(path, parent)
     print('unidentified: ', path)
-    return Element(path, parent)
+    # return Element(path, parent)
 
 def crawl(path, parent):
     global website
@@ -69,7 +69,7 @@ if __name__ == "__main__":
 
     for e in Element.all:
         if e and e.children:
-            e.children.sort(key=lambda i:str(i.order) + i.max_date + i.name, reverse=True)
+            e.children.sort(key=lambda i:str(i.order) + i.max_date + i.name, reverse=not e.included)
 
     print_time('html ')
     if Path(config.output + '/html').exists():

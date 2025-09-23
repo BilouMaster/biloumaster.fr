@@ -90,6 +90,7 @@ class Image(Element):
     def html_content(self, lang='fr') -> str:
         srcset, sizes = self.str_srcset()
         go_prev, go_next = self.str_nav()
+        tags = Tag.str_tags(self.tags, self.parent.url, lang) if not self.parent.included else ''
         return get_templates()['view'].format(
             go_prev=    go_prev,
             go_next=    go_next,
@@ -100,14 +101,14 @@ class Image(Element):
             sizes=      sizes,
             filename=   self.name,
             alt=        '',
-            tags=       Tag.str_tags(self.tags, self.parent.url, lang)
+            tags=       tags
         )
 
     def html_return(self, lang='fr') -> str:
         desc = ''
         if self.desc[lang]:
             desc = f'<p>{self.desc[lang]}</p>'
-        tags = Tag.str_tags(self.tags, self.parent.url, lang)
+        tags = Tag.str_tags(self.tags, self.parent.url, lang) if not self.parent.included else '<!--no tags-->'
         return get_templates()['gallery_element'].format(
             url=        self.url,
             width=      self.width,
@@ -124,7 +125,10 @@ class Image(Element):
         )
     
     def html_footer(self, lang='fr') -> str:
-        foot_nav = self.parent.html_simple_nav(lang)
+        if self.parent.included:
+            foot_nav = self.parent.parent.html_simple_nav(lang)
+        else:
+            foot_nav = self.parent.html_simple_nav(lang)
         return '<nav id="navig_footer">\n\t\t\t' + str_indent(foot_nav, 3) + '\n\t\t</nav>'
 
 class Gallery(Page):
@@ -153,7 +157,7 @@ class Gallery(Page):
             sections[img['year']]['tags'] |= img['tags']
             all_tags |= img['tags']
         tag_list = ''
-        if len(all_tags - {''}):
+        if len(all_tags - {''}) and not self.included:
             tag_list = get_templates()['tag_list'].format(tags=Tag.str_tags(all_tags, self.url, lang))
         pixelated = ''
         if self.name in ('pixelart', 'screenshots', 'artworks'):

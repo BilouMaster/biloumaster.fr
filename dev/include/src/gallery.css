@@ -26,7 +26,7 @@
 #gallery > small b {
     color: var(--biloulight);
 }
-#gallery.folded > small {
+.folded #gallery > small {
     visibility: hidden;
 }
 #gallery section {
@@ -117,11 +117,11 @@ html:not(.can-touch) .gallery > a:hover {
     box-shadow: 0px 0px 8px var(--biloubgc50);
     transition: transform .3s var(--biloustic), filter .3s var(--biloueazout);
 }
-#gallery.folded .gallery {
+.folded #gallery .gallery {
     overflow: hidden;
     height: 100%;
 }
-#gallery.folded section {
+.folded #gallery section {
     height: 6em;
     margin: 0;
     position: relative;
@@ -129,25 +129,25 @@ html:not(.can-touch) .gallery > a:hover {
     transition-timing-function: var(--biloueazout);
     transition-duration: .3s;
 }
-#gallery.folded section h2 {
+.folded #gallery section h2 {
     position: absolute;
     top: 0;
 }
-html:not(.can-touch) #gallery.folded section {
+html:not(.can-touch) .folded #gallery section {
     z-index: 100;
 }
-html:not(.can-touch) #gallery.folded section:hover {
+html:not(.can-touch) .folded #gallery section:hover {
     margin-top: -1em;
     height: 7em;
     cursor: pointer;
 }
-html:not(.can-touch) #gallery.folded section:hover a {
+html:not(.can-touch) .folded #gallery section:hover a {
     filter: brightness(1.1);
 }
-#gallery.folded .gallery > a:nth-child(n+8) {
+.folded #gallery .gallery > a:nth-child(n+8) {
     display: none;
 }
-#gallery.folded .gallery::before {
+.folded #gallery .gallery::before {
     content: '';
     position: relative;
     width: 100%;
@@ -190,7 +190,7 @@ html:not(.can-touch) #gallery.folded section:hover a {
         float: right;
         transform: translate(-2em,1em) rotate(15deg);
     }
-    #gallery.folded section h2 {
+    .folded #gallery section h2 {
         right: 0;
     }
     #gallery section h2.bubble-style::before {
@@ -198,7 +198,7 @@ html:not(.can-touch) #gallery.folded section:hover a {
         left: -0.5em;
         top: 2.5em;
     }
-    html:not(.can-touch) #gallery section h2:hover, html:not(.can-touch) #gallery.folded section:hover h2 { 
+    html:not(.can-touch) #gallery section h2:hover, html:not(.can-touch) .folded #gallery section:hover h2 { 
         transform: translate(-2em,1em) scale(1.05) rotate(15deg);
     }
 }
@@ -206,7 +206,7 @@ html:not(.can-touch) #gallery.folded section:hover a {
     #gallery {
         padding: 0;
     }
-    #gallery.folded .gallery > a:nth-child(n+5) {
+    .folded #gallery .gallery > a:nth-child(n+5) {
         display: none;
     }
 }
