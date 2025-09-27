@@ -12,12 +12,9 @@ import config
 class Album(Page):
     def spec_args(self, args, lang='fr') -> dict:
         args['extralink'] = str_indent("""\
-            <link rel="stylesheet" href="/pswp/photoswipe.css">
-            <link rel="stylesheet" href="/src/pswp.css">
             <link rel="stylesheet" href="/src/audio.css">
-            <script src="/src/audio.js"></script>
-            <script type="module" src="/src/pswp.js"></script>""", 1)
-        args['content'] += get_templates()['player']
+            <script src="/src/audio.js"></script>""", 1)
+        args['content'] += str_indent(get_templates()['player'], 2)
 
     def get_img_prev(self) -> list:
         return [f'/img/album_art/{self.name}.jpg']
@@ -39,7 +36,7 @@ class Album(Page):
         tracks = '\n'.join([e.html(lang) for e in sorted(self.children, key=lambda t:t.track_num)])
         return get_templates()['album_section'].format(
             title     = self.title[lang],
-            tracks    = tracks,
+            tracks    = str_indent(tracks, 2),
             album_art = self.name
         )
 
@@ -59,7 +56,7 @@ class Track(Element):
         self.filename    = Track.data[self.source]['filename']
         self.name        = str_tofilename(self.track_title)
         self.url         = self.get_url()
-        self.title['fr'] = f'{self.track_title} ({self.year})'
+        self.title['fr'] = self.track_title
         self.desc['fr']  = f'Titre {self.track_num} de l\'album "{self.album}"'
         self.date = str(self.year)
         self.parent.title['fr'] = self.album
@@ -69,11 +66,8 @@ class Track(Element):
 
     def spec_args(self, args, lang='fr') -> dict:
         args['extralink'] = str_indent("""\
-            <link rel="stylesheet" href="/pswp/photoswipe.css">
-            <link rel="stylesheet" href="/src/pswp.css">
             <link rel="stylesheet" href="/src/audio.css">
-            <script src="/src/audio.js"></script>
-            <script type="module" src="/src/pswp.js"></script>""", 1)
+            <script src="/src/audio.js"></script>""", 1)
         args['content'] += get_templates()['player']
 
     def html_return(self, lang='fr') -> str:

@@ -1,5 +1,6 @@
 from elements.base import Element
 from markdown import markdown
+from utils.str import str_indent
 
 class Article(Element):
     detached = list()
@@ -29,4 +30,4 @@ class Article(Element):
             args.update(self.metadata)
 
     def html_content(self, lang='fr') -> str:
-        return '<section class="article">' + self.content + '</section>'
+        return '<section class="article">\n\t' + str_indent(self.content, 1) + '\n</section>'

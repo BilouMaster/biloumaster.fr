@@ -147,12 +147,20 @@ header > hgroup > h1 {
     text-shadow: var(--biloutextborder);
     line-height: 1em;
     transform: rotate(-1deg);
-    margin: 0.5em 0;
+    margin: 0.25em 0;
     text-align: center;
     filter: drop-shadow(0 0 0.2rem var(--biloubgc33));
 }
 header > hgroup > p:empty {
     display: none;
+}
+header > hgroup > time {
+    width: 100%;
+    display: block;
+    font-size: .8em;
+    margin: -.5em;
+    position: relative;
+    text-shadow: 0 0 1px black, 0 0 2px black, 0 0 3px black, 0 0 4px black;
 }
 #totop {
     cursor: pointer;
@@ -204,7 +212,6 @@ main {
     font-family: BilouFontLight;
 }
 #main_content > section .article img {
-    /* max-height: 70vh; */
     max-width: calc(100% + 2em);
     margin: 0 -1em;
 }

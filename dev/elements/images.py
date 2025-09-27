@@ -95,8 +95,6 @@ class Image(Element):
             go_prev=    go_prev,
             go_next=    go_next,
             max_height= self.height,
-            date=       self.str_date[lang],
-            datetime=   self.name.split('_')[0],
             srcset=     srcset,
             sizes=      sizes,
             filename=   self.name,

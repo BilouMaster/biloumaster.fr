@@ -117,12 +117,12 @@ class Element:
             else:
                 nav.append(e)
         if before:
-            content += '<div id="main_content">\n' + '\n'.join([e.html(lang) for e in before]) + '\n</div>'
+            content += '<div id="main_content">\n\t' + str_indent('\n'.join([e.html(lang) for e in before]), 1) + '\n</div>'
         if nav:
             self.is_nav = True
-            content += '<nav id="main_nav">\n' + '\n'.join([e.html(lang) for e in nav]) + '\n</nav>'
+            content += '<nav id="main_nav">\n\t' + str_indent('\n'.join([e.html(lang) for e in nav]), 1) + '\n</nav>'
         if after:
-            content += '<div id="main_content">\n' + '\n'.join([e.html(lang) for e in after]) + '\n</div>'
+            content += '<div id="main_content">\n\t' + str_indent('\n'.join([e.html(lang) for e in after]), 1) + '\n</div>'
         return content
     
     def html_return(self, lang='fr') -> str:
@@ -130,10 +130,10 @@ class Element:
 
     def html_nav_time(self, lang='fr') -> str:
         if self.date and not self.max_date:
-            return f'<time>{str_date_fr(self.date)}</time>'
+            return f'<time datetime="{self.date}">{str_date_fr(self.date)}</time>'
         if self.max_date == self.min_date:
-            return f'<time>{str_date_fr(self.max_date)}</time>'
-        return f'<time>{self.min_date[:4]}-{self.max_date[:4]}</time>'
+            return f'<time datetime="{self.max_date}">{str_date_fr(self.max_date)}</time>'
+        return f'<time datetime="{self.max_date}">{self.min_date[:4]}-{self.max_date[:4]}</time>'
     
     def html_nav(self, lang='fr') -> str:
         img_prev = self.get_img_prev()
@@ -148,7 +148,7 @@ class Element:
             'title':        self.title[lang],
             'description':  self.desc[lang],
             'icon':         self.get_icon(),
-            'imgs':         '\n'.join([f'<div style="background-image: url(\'{img}\');"></div>' for img in img_prev]),
+            'imgs':         str_indent('\n'.join([f'<div style="background-image: url(\'{img}\');"></div>' for img in img_prev]), 2),
             'infos':        infos
         }
         return get_templates()['navig_element'].format(**args)
@@ -189,10 +189,11 @@ class Element:
 
     def html(self, lang='fr') -> str:
         if self.included:
-            return f'<section id="{self.name}"><h2>{self.title[lang]}</h2>\n{str_indent(self.html_content(lang), 2)}\n</section>\n'
+            return f'<section id="{self.name}">\n\t<h2>{self.title[lang]}</h2>\n\t{str_indent(self.html_content(lang), 1)}\n</section>\n'
         args = {
             'nav':              str_indent(self.html_header_nav(), 2),
             'title':            self.title[lang],
+            'date':             self.html_nav_time(lang),
             'meta_title':       self.title[lang],
             'description':      self.desc[lang],
             'meta_description': self.desc[lang].replace('<br>',' ').replace('"',''),

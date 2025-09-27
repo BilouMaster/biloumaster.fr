@@ -20,5 +20,5 @@ class Index(Page):
     def output_path(self, lang='fr') -> str:
         return f'{config.output}/'
     
-    def html_nav_time(self, lang='fr') -> str:
-        return ''
+    # def html_nav_time(self, lang='fr') -> str:
+    #     return ''
