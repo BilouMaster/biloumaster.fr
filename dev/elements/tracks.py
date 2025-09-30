@@ -40,6 +40,9 @@ class Album(Page):
             album_art = self.name
         )
 
+    def get_og_type(self) -> str:
+        return "music.album"
+
 class Track(Element):
     all = list()
     data = dict()
@@ -94,6 +97,12 @@ class Track(Element):
     def html_footer(self, lang='fr') -> str:
         foot_nav = self.parent.html_simple_nav(lang)
         return '<nav id="navig_footer">\n\t\t\t' + str_indent(foot_nav, 3) + '\n\t\t</nav>'
+    
+    def get_og_type(self) -> str:
+        return "music.song"
+    
+    def get_og_image(self, lang) -> str:
+        return self.parent.get_og_image(lang)
 
 import store
 def process(inst: Track) -> tuple:

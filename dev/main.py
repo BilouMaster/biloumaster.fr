@@ -9,7 +9,7 @@ from elements.pages import Page
 from elements.articles import Article
 import config
 import pickle
-from shutil import rmtree, copytree, move
+from shutil import rmtree, copytree
 import subprocess
 
 def identify(path: Path, parent) -> Element:

@@ -8,6 +8,7 @@ class Article(Element):
     def __init__(self, *args):
         super().__init__(*args)
         self.metadata = ''
+        self.tags = ''
         with open(self.source) as content:
             if self.source.suffix.lower() == '.md':
                 self.content = markdown(content.read())
@@ -31,3 +32,6 @@ class Article(Element):
 
     def html_content(self, lang='fr') -> str:
         return '<section class="article">\n\t' + str_indent(self.content, 1) + '\n</section>'
+    
+    def get_og_type(self) -> str:
+        return "article"

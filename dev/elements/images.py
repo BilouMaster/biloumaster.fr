@@ -27,11 +27,13 @@ class Image(Element):
     
     def get_name(self) -> str:
         return str_tofilename(self.source.stem)
-    
-    # def get_title(self, lang='fr') -> tuple:
-    #     if self.name in MetaData.all and 'title' in MetaData.all[self.name].data:
-    #         return MetaData.all[self.name].data['title']
-    #     return ''
+
+    def get_og_image(self, lang) -> str:
+        if self.width > 2048 and self.width - 2048 > 2048 / 3:
+            return '/img/gallery/responsive/' + self.name + '_2048.webp'
+        if self.source.suffix == '.gif':
+            return '/img/og/' + self.name + '.png'
+        return '/img/gallery/' + self.name + '.webp'
 
     def merge_data(self, lang='fr'):
         self.width  = Image.data[self.name]['width']
@@ -225,6 +227,7 @@ def generate_images(img, name, parent):
             else:
                 frame_duration.append(200)
         args = {**args, **{'save_all':True, 'duration':frame_duration}}
+        img.save(f'{config.output}/img/og/{name}.png')
     img.save(f'{config.output}/img/gallery/{name}.webp', **args)
     args['lossless'] = False
     if int(w*th/h > w):

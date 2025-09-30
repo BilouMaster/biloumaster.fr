@@ -1,9 +1,11 @@
 from pathlib import Path
 from templates import get_templates
 from utils.str import str_indent, str_clean, str_tofilename, str_date_fr
-from os import makedirs, stat
+from os import makedirs, stat, path as os_path
 import config
 from elements.metadata import MetaData
+import subprocess
+from random import randint
 
 class Element:
     all = list()
@@ -33,7 +35,6 @@ class Element:
             self.parent.children.append(self)
         Element.all.append(self)
     
-
     def get_order(self) -> int:
         o = str.split(self.source.stem, '_')
         if self.included:
@@ -103,6 +104,27 @@ class Element:
                         img_prev.append(cip[0])
         return img_prev[:5]
 
+    def get_og_type(self) -> str:
+        return "website"
+
+    def get_og_image(self, lang) -> str:
+        existing = list(Path(f'{config.output}/img/og').glob(f'{str_tofilename(self.url[1:])}_*.png'))
+        if existing:
+            existing = existing[0]
+            return '/img/og/' + existing.stem + existing.suffix
+        return self.create_og_image(lang)
+
+    def create_og_image(self, lang) -> str:
+        name = f'{str_tofilename(self.url[1:])}_{str(randint(1,10000))}.png'
+        print('/img/og/' + name)
+        memo = self.desc[lang]
+        self.desc[lang] = 'biloumaster.fr'
+        open(f'{config.output}/og.html', 'w').write(get_templates()['og_image'].format(content = self.html_nav()).replace('"/','"./').replace("'/","'./"))
+        self.desc[lang] = memo
+        path = os_path.abspath(config.output)
+        subprocess.call(['firefox', '-screenshot', f'{path}/img/og/{name}', '-window-size', '1200,630', f'file://{path}/og.html'])
+        return '/img/og/' + name
+
     def html_content(self, lang='fr') -> str:
         content = ''
         nav = list()
@@ -137,7 +159,7 @@ class Element:
     
     def html_nav(self, lang='fr') -> str:
         img_prev = self.get_img_prev()
-        if len(img_prev) == 0: # or self.parent and self.parent.name == 'index':
+        if len(img_prev) == 0:
             return self.html_simple_nav(lang)
         infos = ''
         if self.infos:
@@ -200,7 +222,9 @@ class Element:
             'canon_url':        self.canon_url[lang],
             'extralink':        '',
             'content':          str_indent(self.html_content(lang), 2),
-            'footer':           self.html_footer(lang)
+            'footer':           self.html_footer(lang),
+            'og_image':         self.get_og_image(lang),
+            'og_type':          self.get_og_type()
         }
         self.spec_args(args, lang)
         html = get_templates()['main'].format(**args)
@@ -209,8 +233,6 @@ class Element:
         return self.html_return(lang)
     
     def html_footer(self, lang='fr') -> str:
-        # if self.is_nav:
-        #     return ''
         if not self.parent:
             return ''
         foot_nav = [self.parent.html_simple_nav(lang)]
