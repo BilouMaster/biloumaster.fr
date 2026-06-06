@@ -8,3 +8,5 @@ arc_output
 __pycache__
 .bilou
 *.woff2
+preload.py
+preload.txt

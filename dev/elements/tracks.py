@@ -86,7 +86,7 @@ class Track(Element):
         return get_templates()['track'].format(
             filename = self.filename,
             num      = self.track_num,
-            title    = self.track_title,
+            title    = self.track_title.replace("'","\\'"),
             year     = self.year,
             album    = self.album,
             album2    = self.album.replace("'","\\'"),

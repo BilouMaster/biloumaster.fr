@@ -211,9 +211,21 @@ html:not(.can-touch) .navig.simple:nth-child(odd):hover > .navig_icon {
 		grid-template-columns: 1fr 1fr;
 	}
 }
-@media (max-width: 640px) {
+@media (max-width: 480px) {
+	.navig time {
+		position: unset;
+		margin: 1em 0 0;
+	}
+	.navig h2 {
+		margin-top: 0;
+	}
+	.navig .infos {
+		display: none;
+	}
+}
+@media (max-width: 320px) {
 	#main_nav {
-		grid-template-columns: 1fr;
+		grid-template-columns: 1fr !important;
 	}
 	#navig_footer {
 		display: block;
