@@ -10,8 +10,9 @@ from random import randint
 class Element:
     all = list()
 
-    def __init__(self, src_path: Path, parent = None):
-        self.mtime = stat(src_path).st_mtime
+    def __init__(self, src_path: Path, parent = None, true_path = True):
+        if true_path:
+            self.mtime = stat(src_path).st_mtime
         self.source = src_path
         self.parent = parent
         self.parents = []
