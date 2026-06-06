@@ -1,1 +1,0 @@
-C'est ici que j'entrepose les images servant à la génération des galeries, pour chaque dossier présent ici est généré une galerie.

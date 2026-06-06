@@ -1,0 +1,2 @@
+input = '../input'
+output = '../output'

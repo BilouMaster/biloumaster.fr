@@ -1,0 +1,39 @@
+<!doctype html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/src/main.css">
+    <link rel="stylesheet" href="/src/navig.css">
+    <style>
+        @font-face {{
+            font-family: BilouFont;
+            src: url('./fonts/biloufont_regular.woff2') format('woff2'),
+                url('./fonts/biloufont_regular.woff') format('woff'),
+                url('./fonts/biloufont_regular.ttf') format('truetype');
+        }}
+        @font-face {{
+            font-family: BilouFontLight;
+            src: url('./fonts/biloufont_light.woff2') format('woff2'),
+                url('./fonts/biloufont_light.woff') format('woff'),
+                url('./fonts/biloufont_light.ttf') format('truetype');
+        }}
+        :root {{
+            font-size: 2em;
+        }}
+        body::before {{
+            flex: 1;
+        }}
+        body::after {{
+            background-color: var(--biloubgc);
+            background-color: var(--bilouframe);
+            content: '';
+            flex: 1;
+        }}
+    </style>
+</head>
+<body>
+    <div id="overbiloulay"></div>
+    <main>
+        {content}
+    </main>
+</body>
+</html>
