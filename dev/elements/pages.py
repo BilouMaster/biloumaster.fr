@@ -11,5 +11,8 @@ class Page(Element):
             all.desc[lang] = "Pour ceux qu'aiment pas les sous-catégories. :p"
             all.max_date = self.max_date
             all.min_date = self.min_date
+            self.children.remove(all)
+            all.html()
+            return super().html_content(lang) + f"<p class='info'><i>Z'aimez pas les sous-catégories ?</i> Vous pouvez aussi voir <a href='{self.url}/tout-en-vrac'>tout en vrac !<img src='/img/tout-en-vrac.svg'></a></p>"
         return super().html_content(lang)
     pass

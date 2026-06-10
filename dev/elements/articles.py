@@ -31,7 +31,7 @@ class Article(Element):
             args.update(self.metadata)
 
     def html_content(self, lang='fr') -> str:
-        return '<section class="article">\n\t' + str_indent(self.content, 1) + '\n</section>'
+        return '<div class="article">\n\t' + str_indent(self.content, 1) + '\n</div>'
     
     def get_og_type(self) -> str:
         return "article"

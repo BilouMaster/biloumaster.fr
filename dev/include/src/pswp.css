@@ -39,7 +39,7 @@ html:not(.can-touch) .viewable:hover {
     font-weight: lighter;
     text-align: center;
 }
-.pswp time {
+.pswp .date {
     text-shadow: 0 0 1px black, 0 0 2px black, 0 0 3px black, 0 0 4px black;
     margin: 0;
 }
@@ -154,6 +154,10 @@ html:not(.can-touch) .pswp__button--arrow--next:hover .pswp__icn {
     pointer-events: none;
     height: 4em;
     margin-bottom: -4em;
+    display: none;
+}
+.not-trippy #show_tag_list_container {
+    display: block;
 }
 html:not(.can-touch) #show_tag_list:hover {
     transform: scale(1.05);

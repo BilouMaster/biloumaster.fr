@@ -33,6 +33,45 @@
     flex-grow: 1;
     max-width: 100%;
 }
+@media (min-width: 1024px) {
+    #enlarge {
+        position: fixed;
+        font-size: 1em;
+        right: 1em;
+        top: .5em;
+        cursor: pointer;
+        transition-property: transform, right;
+        transition-duration: 1s;
+        z-index: 200;
+        padding: .5em;
+        transform: scale(2);
+    }
+    body.enlarged {
+        max-width: 100vw;
+        --biloufade: linear-gradient(-200deg, var(--biloudarkt), var(--biloudark) 280px);
+    }
+    html:not(.can-touch) #enlarge:hover {
+        transform: scale(2.5);
+    }
+    html:not(.can-touch) .enlarged #enlarge:hover {
+        transform: scale(1.5);
+    }
+    .enlarged #totop {
+        right: 4em;
+        left: auto;
+    }
+    .enlarged #gallery section h2 {
+        transform: translate(2em,1em) rotate(-15deg)
+    }
+    html:not(.can-touch) .enlarged #gallery section h2:hover, html:not(.can-touch) .enlarged .folded #gallery section:hover h2 {
+        transform: translate(2em,1em) scale(1.05) rotate(-15deg);
+    }
+}
+@media (max-width: 1024px) {
+    #enlarge {
+        display: none;
+    }
+}
 .bubble-style {
     width: 3em;
     height: 3em;
@@ -157,7 +196,15 @@ html:not(.can-touch) .folded #gallery section:hover a {
     margin-bottom: -100%;
 }
 #tag_list {
+    /* display: none; */
+    order: -1;
+    width: 100%;
+}
+#gallery > #tag_list h2 {
     display: none;
+}
+#gallery > #tag_list .tags::before {
+    content: "Filtrer par mot-clé:"
 }
 #current_tag {
     display: none;
@@ -183,7 +230,7 @@ html:not(.can-touch) .folded #gallery section:hover a {
 @media (max-width: 1024px) {
     #gallery > small {
         margin: 0;
-        text-align: left;
+        /* text-align: left; */
     }
     #gallery section h2.bubble-style {
         font-size: 1em;

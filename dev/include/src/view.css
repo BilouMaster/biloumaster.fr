@@ -44,7 +44,7 @@ figure h1 {
     margin-bottom: 0;
     color: var(--biloulight);
 }
-figure time {
+figure .date {
     margin-top: .5em;
     text-shadow: 0 0 1px black, 0 0 2px black, 0 0 3px black, 0 0 4px black;
     text-align: center;

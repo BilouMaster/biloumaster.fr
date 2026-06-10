@@ -143,7 +143,7 @@ class Element:
             content += '<div id="main_content">\n\t' + str_indent('\n'.join([e.html(lang) for e in before]), 1) + '\n</div>'
         if nav:
             self.is_nav = True
-            content += '<nav id="main_nav">\n\t' + str_indent('\n'.join([e.html(lang) for e in nav]), 1) + '\n</nav>'
+            content += '<section id="main_nav">\n\t' + str_indent('\n'.join([e.html(lang) for e in nav]), 1) + '\n</section>'
         if after:
             content += '<div id="main_content">\n\t' + str_indent('\n'.join([e.html(lang) for e in after]), 1) + '\n</div>'
         return content
@@ -153,10 +153,10 @@ class Element:
 
     def html_nav_time(self, lang='fr') -> str:
         if self.date and not self.max_date:
-            return f'<time datetime="{self.date}">{str_date_fr(self.date)}</time>'
+            return f'<time class="date" datetime="{self.date}">{str_date_fr(self.date)}</time>'
         if self.max_date == self.min_date:
-            return f'<time datetime="{self.max_date}">{str_date_fr(self.max_date)}</time>'
-        return f'<time datetime="{self.max_date}">{self.min_date[:4]}-{self.max_date[:4]}</time>'
+            return f'<time class="date"  datetime="{self.max_date}">{str_date_fr(self.max_date)}</time>'
+        return f'<span class="date">{self.min_date[:4]}-{self.max_date[:4]}</span>'
     
     def html_nav(self, lang='fr') -> str:
         img_prev = self.get_img_prev()
@@ -165,12 +165,15 @@ class Element:
         infos = ''
         if self.infos:
             infos = '<div class="infos"><span>' + '</span><span>'.join(self.infos) + '</span></div>'
+        icons = [c.get_icon() for c in self.children]
+        icons = [f'<img class="navig_icon secondary" src="/img/{i}.svg" height="128" width="128" alt="">' for i in icons if i not in ['article','gallery','image','track','album','page']][:7]
         args = {
             'date':         self.html_nav_time(lang),
             'href':         self.url,
             'title':        self.title[lang],
             'description':  self.desc[lang],
             'icon':         self.get_icon(),
+            'secondary_icons': ''.join(icons),
             'imgs':         str_indent('\n'.join([f'<div style="background-image: url(\'{img}\');"></div>' for img in img_prev]), 2),
             'infos':        infos
         }

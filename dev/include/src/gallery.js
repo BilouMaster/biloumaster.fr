@@ -5,8 +5,8 @@ window.addEventListener('DOMContentLoaded', () => {
       tagdesc = el.title;
     window.document.title += ' - ' + tagtitle;
     document.body.querySelector('#current_tag span').innerHTML = tagtitle;
-    document.body.querySelector('header > hgroup > h1').innerHTML = tagtitle;
-    document.body.querySelector('header > hgroup > p').innerHTML = tagdesc;
+    document.body.querySelector('#page_title > h1').innerHTML = tagtitle;
+    document.body.querySelector('#page_title > p').innerHTML = tagdesc;
     document.body.querySelector('header > nav > a:nth-child(2)').href = '../..';
     document.body.querySelectorAll('.gallery > a:not(.' + tag + ')').forEach(a => {
       a.nextSibling.nextSibling.outerHTML = '';
@@ -14,6 +14,9 @@ window.addEventListener('DOMContentLoaded', () => {
     });
     document.body.querySelectorAll('section:not(.' + tag + ')').forEach(s => {
       s.outerHTML = '';
+    });
+    document.body.querySelectorAll('.'+tag).forEach(t => {
+      t.classList.add('current');
     });
   };
   const lazyThumbs = new IntersectionObserver((entries, lazyThumbs) => {
@@ -32,6 +35,22 @@ window.addEventListener('DOMContentLoaded', () => {
     section.addEventListener('click', toggleSelf);
   });
 });
+
+function enlarge(el) {
+  const m = document.body;
+  m.classList.toggle('enlarged');
+  psyche_origin()
+  if (focusel) {
+    focusel.scrollIntoView({behavior: "instant", block: "center"});
+  }
+  if (m.classList.contains('enlarged')) {
+    el.innerHTML = '🐛'
+    el.title = 'calmer la page'
+  } else {
+    el.innerHTML = '🍆'
+    el.title = 'élargir la page 👄'
+  }
+}
 
 function toggleSections(el) {
   const m = document.body;
@@ -66,7 +85,7 @@ setInterval(function () {
 var tag = window.location.pathname.split('/tag/');
 if (tag.length > 1) {
   tag = tag[1];
-  var css = '.gallery > a:not(.' + tag + '), section:not(.' + tag +'), #note { display: none; } #current_tag {display: block}',
+  var css = '.gallery > a:not(.' + tag + ').gallery > a:not(.' + tag + '), section:not(.' + tag +'), #note {display: none} #current_tag {display: block}',
     head = document.head,
     style = document.createElement('style');
   head.appendChild(style);

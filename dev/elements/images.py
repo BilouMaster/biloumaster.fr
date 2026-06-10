@@ -35,13 +35,18 @@ class Image(Element):
             return '/img/og/' + self.name + '.png'
         return '/img/gallery/' + self.name + '.webp'
 
+    def get_tags(self) -> list:
+        if self.name in MetaData.all and 'tags' in MetaData.all[self.name].data:
+            return MetaData.all[self.name].data['tags']
+        return ''
+
     def merge_data(self, lang='fr'):
         self.width  = Image.data[self.name]['width']
         self.height = Image.data[self.name]['height']
         self.median = Image.data[self.name]['median']
         self.title[lang] = Image.data[self.name]['title'] or self.get_title(lang)
         self.desc[lang]  = Image.data[self.name]['desc'] or self.get_desc(lang)
-        self.tags = Image.data[self.name]['tags'].lower()
+        self.tags = Image.data[self.name]['tags'].lower() or self.get_tags()
 
     def srcset(self) -> str:
         srcset = []
@@ -162,7 +167,10 @@ class Gallery(Page):
         pixelated = ''
         if self.name in ('pixelart', 'screenshots', 'artworks'):
             pixelated = ' class="pixelated"'
-        return f'<div id="gallery"{pixelated}>' + '\n'.join([note]
+        enlarge = ''
+        if not self.included:
+            enlarge = '<button id="enlarge" onclick="enlarge(this)" title="élargir la page 👄">🍆</button>'
+        return enlarge + f'<div id="gallery"{pixelated}>' + '\n'.join([note]
             + [get_templates()['gallery_section'].format(
                 title=      year,
                 year=       self.html_year(year),

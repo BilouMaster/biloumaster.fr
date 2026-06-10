@@ -13,7 +13,7 @@ class Album(Page):
     def spec_args(self, args, lang='fr') -> dict:
         args['extralink'] = str_indent("""\
             <link rel="stylesheet" href="/src/audio.css">
-            <script src="/src/audio.js"></script>""", 1)
+            <script defer src="/src/audio.js"></script>""", 1)
         args['content'] += str_indent(get_templates()['player'], 2)
 
     def get_img_prev(self) -> list:
@@ -70,8 +70,8 @@ class Track(Element):
     def spec_args(self, args, lang='fr') -> dict:
         args['extralink'] = str_indent("""\
             <link rel="stylesheet" href="/src/audio.css">
-            <script src="/src/audio.js"></script>""", 1)
-        args['content'] += get_templates()['player']
+            <script defer src="/src/audio.js"></script>""", 1)
+        # args['content'] += get_templates()['player']
 
     def html_return(self, lang='fr') -> str:
         return get_templates()['tracklist_item'].format(

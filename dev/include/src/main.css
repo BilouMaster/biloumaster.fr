@@ -90,6 +90,19 @@ body {
     max-width: min(max(66vw, 1024px), calc(100vw - 2em));
     min-height: 100vh;
     margin: 0 auto;
+    background-image: url('data:image/svg+xml,<svg width="117.28mm" height="122.49mm" version="1.1" viewBox="0 0 117.28 122.49" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-12.858 -160.64)"><path d="m53.727 160.64c24.342 7.0555 43.504 21.422 52.564 46.214 9.0205 24.685-3.4113 43.356-17.022 50.712-13.642 7.3728-36.153 6.9604-48.86-4.5863-10.489-9.5318-7.5845-25.4 2.7342-32.191 10.319-6.791 29.14-1.9437 28.31 12.788-0.67006 11.903-13.566 14.359-17.815 10.407-4.5703-4.2504-2.7354-9.792 0-11.289 1.9389-1.0609 4.2335-0.0882 5.1154 4.4979 1.5875-5.909-2.7511-9.2302-6.7913-8.0259-5.1328 1.53-9.8763 9.3474-3.7042 17.198 3.8821 4.9377 15.686 7.3036 24.606 0.52917 16.744-12.717 7.8478-39.934-16.492-42.422-11.908-1.2169-22.827 2.2209-32.368 11.73-17.006 16.949-10.545 40.73-6.5262 50.535 1.8063 4.4065 6.1285 10.748 12.296 16.388h100.36v-89.769c-0.80337-1.1845-1.4228-2.0041-1.7968-2.3782-3.3514-3.3514-25.554-30.339-74.613-30.339z" fill="rgba(231,206,184,.03)"/></g></svg>');
+    background-repeat: no-repeat;
+    background-position: bottom right;
+    background-size: 47vmin;
+}
+#main_content > section:first-of-type {
+    /* background-image: url('data:image/svg+xml,<svg width="117.28mm" height="122.49mm" version="1.1" viewBox="0 0 117.28 122.49" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-12.858 -160.64)"><path d="m53.727 160.64c24.342 7.0555 43.504 21.422 52.564 46.214 9.0205 24.685-3.4113 43.356-17.022 50.712-13.642 7.3728-36.153 6.9604-48.86-4.5863-10.489-9.5318-7.5845-25.4 2.7342-32.191 10.319-6.791 29.14-1.9437 28.31 12.788-0.67006 11.903-13.566 14.359-17.815 10.407-4.5703-4.2504-2.7354-9.792 0-11.289 1.9389-1.0609 4.2335-0.0882 5.1154 4.4979 1.5875-5.909-2.7511-9.2302-6.7913-8.0259-5.1328 1.53-9.8763 9.3474-3.7042 17.198 3.8821 4.9377 15.686 7.3036 24.606 0.52917 16.744-12.717 7.8478-39.934-16.492-42.422-11.908-1.2169-22.827 2.2209-32.368 11.73-17.006 16.949-10.545 40.73-6.5262 50.535 1.8063 4.4065 6.1285 10.748 12.296 16.388h100.36v-89.769c-0.80337-1.1845-1.4228-2.0041-1.7968-2.3782-3.3514-3.3514-25.554-30.339-74.613-30.339z" fill="rgba(231,206,184,.03)"/></g></svg>'); */
+    background-repeat: no-repeat;
+    /* background-position: bottom right; */
+    background-size: 47vmin;
+    background-image: url('data:image/svg+xml,<svg width="117.28mm" height="109.1mm" version="1.1" viewBox="0 0 117.28 109.1" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-12.858 -174.02)"><path d="m12.858 174.02v76.379c0.80337 1.1845 1.4228 2.0041 1.7968 2.3782 3.3514 3.3514 25.554 30.339 74.612 30.339-24.342-7.0555-43.504-21.422-52.564-46.214-9.0205-24.685 3.4113-43.356 17.022-50.712 13.642-7.3728 36.153-6.9604 48.86 4.5863 10.489 9.5318 7.5845 25.4-2.7342 32.191-10.319 6.791-29.14 1.9436-28.31-12.788 0.67006-11.903 13.566-14.359 17.815-10.407 4.5703 4.2504 2.7354 9.792 0 11.289-1.9389 1.0609-4.2335 0.0882-5.1154-4.4979-1.5875 5.909 2.7512 9.2301 6.7913 8.0259 5.1328-1.53 9.8763-9.3474 3.7042-17.198-3.8821-4.9377-15.686-7.3036-24.606-0.52917-16.744 12.717-7.8478 39.934 16.492 42.422 11.908 1.2169 22.827-2.2209 32.368-11.73 17.006-16.949 10.545-40.73 6.5262-50.535-0.37777-0.92157-0.87177-1.9315-1.4635-2.9983z" fill="rgba(231,206,184,.03)"/></g></svg>');
+	background-repeat: no-repeat;
+	/* background-size: 9em; */
 }
 body::before {
     background-color: var(--biloubgc);
@@ -137,12 +150,13 @@ html:not(.can-touch) header > nav > a:hover {
 }
 header > nav > a > img {
     height: 100%;
+    width: 100%;
 }
-header > hgroup {
+header > #page_title {
     max-width: 70%;
     margin: 0.25em;
 }
-header > hgroup > h1 {
+header > #page_title > h1 {
     color: var(--biloulight);
     text-shadow: var(--biloutextborder);
     line-height: 1em;
@@ -151,16 +165,24 @@ header > hgroup > h1 {
     text-align: center;
     filter: drop-shadow(0 0 0.2rem var(--biloubgc33));
 }
-header > hgroup > p:empty {
+header > #page_title > p:empty {
     display: none;
 }
-header > hgroup > time {
+header > #page_title > .date {
     width: 100%;
     display: block;
     font-size: .8em;
     margin: -.5em;
     position: relative;
     text-shadow: 0 0 1px black, 0 0 2px black, 0 0 3px black, 0 0 4px black;
+}
+button {
+    all: unset;
+    cursor: pointer;
+}
+button:focus-visible {
+    outline: 2px solid var(--bilouhighlight);
+    outline-offset: 2px;
 }
 #totop {
     cursor: pointer;
@@ -207,6 +229,26 @@ main {
 }
 #main_content > section * {
     max-width: 100%;
+}
+.info {
+    font-family: BilouFontLight;
+    margin: .5em;
+    padding: .5em;
+    text-align: center;
+    background: var(--biloubgc33);
+    background-image: url('data:image/svg+xml,<svg width="117.28mm" height="109.1mm" version="1.1" viewBox="0 0 117.28 109.1" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-12.858 -174.02)"><path d="m12.858 174.02v76.379c0.80337 1.1845 1.4228 2.0041 1.7968 2.3782 3.3514 3.3514 25.554 30.339 74.612 30.339-24.342-7.0555-43.504-21.422-52.564-46.214-9.0205-24.685 3.4113-43.356 17.022-50.712 13.642-7.3728 36.153-6.9604 48.86 4.5863 10.489 9.5318 7.5845 25.4-2.7342 32.191-10.319 6.791-29.14 1.9436-28.31-12.788 0.67006-11.903 13.566-14.359 17.815-10.407 4.5703 4.2504 2.7354 9.792 0 11.289-1.9389 1.0609-4.2335 0.0882-5.1154-4.4979-1.5875 5.909 2.7512 9.2301 6.7913 8.0259 5.1328-1.53 9.8763-9.3474 3.7042-17.198-3.8821-4.9377-15.686-7.3036-24.606-0.52917-16.744 12.717-7.8478 39.934 16.492 42.422 11.908 1.2169 22.827-2.2209 32.368-11.73 17.006-16.949 10.545-40.73 6.5262-50.535-0.37777-0.92157-0.87177-1.9315-1.4635-2.9983z" fill="rgba(231,206,184,.03)"/></g></svg>'),
+        url('data:image/svg+xml,<svg width="117.28mm" height="122.49mm" version="1.1" viewBox="0 0 117.28 122.49" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-12.858 -160.64)"><path d="m53.727 160.64c24.342 7.0555 43.504 21.422 52.564 46.214 9.0205 24.685-3.4113 43.356-17.022 50.712-13.642 7.3728-36.153 6.9604-48.86-4.5863-10.489-9.5318-7.5845-25.4 2.7342-32.191 10.319-6.791 29.14-1.9437 28.31 12.788-0.67006 11.903-13.566 14.359-17.815 10.407-4.5703-4.2504-2.7354-9.792 0-11.289 1.9389-1.0609 4.2335-0.0882 5.1154 4.4979 1.5875-5.909-2.7511-9.2302-6.7913-8.0259-5.1328 1.53-9.8763 9.3474-3.7042 17.198 3.8821 4.9377 15.686 7.3036 24.606 0.52917 16.744-12.717 7.8478-39.934-16.492-42.422-11.908-1.2169-22.827 2.2209-32.368 11.73-17.006 16.949-10.545 40.73-6.5262 50.535 1.8063 4.4065 6.1285 10.748 12.296 16.388h100.36v-89.769c-0.80337-1.1845-1.4228-2.0041-1.7968-2.3782-3.3514-3.3514-25.554-30.339-74.613-30.339z" fill="rgba(231,206,184,.03)"/></g></svg>');
+    background-repeat: no-repeat;
+    background-position: top left, bottom right;
+    background-size: 3em;
+    border: solid 1px var(--biloubgc33);
+}
+.info img {
+    height: 2em;
+    margin: -.65em .3em;
+}
+.info a {
+    font-family: BilouFont;
 }
 .article p, .article li {
     font-family: BilouFontLight;
@@ -272,6 +314,15 @@ main h1, main h2 {
     /* text-align: center; */
     filter: drop-shadow(0 0 0.2rem var(--biloubgc33));
 }
+#main_content h2:not(.bubble-style), #main_content h3 {
+    background-image: url('data:image/svg+xml,<svg width="117.28mm" height="109.1mm" version="1.1" viewBox="0 0 117.28 109.1" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-12.858 -174.02)"><path d="m12.858 174.02v76.379c0.80337 1.1845 1.4228 2.0041 1.7968 2.3782 3.3514 3.3514 25.554 30.339 74.612 30.339-24.342-7.0555-43.504-21.422-52.564-46.214-9.0205-24.685 3.4113-43.356 17.022-50.712 13.642-7.3728 36.153-6.9604 48.86 4.5863 10.489 9.5318 7.5845 25.4-2.7342 32.191-10.319 6.791-29.14 1.9436-28.31-12.788 0.67006-11.903 13.566-14.359 17.815-10.407 4.5703 4.2504 2.7354 9.792 0 11.289-1.9389 1.0609-4.2335 0.0882-5.1154-4.4979-1.5875 5.909 2.7512 9.2301 6.7913 8.0259 5.1328-1.53 9.8763-9.3474 3.7042-17.198-3.8821-4.9377-15.686-7.3036-24.606-0.52917-16.744 12.717-7.8478 39.934 16.492 42.422 11.908 1.2169 22.827-2.2209 32.368-11.73 17.006-16.949 10.545-40.73 6.5262-50.535-0.37777-0.92157-0.87177-1.9315-1.4635-2.9983z" fill="rgb(86,66,122)"/></g></svg>');
+    background-repeat: no-repeat;
+    background-size: 3em;
+    padding: .5em;
+    margin: 0;
+    filter: none;
+    border-top: solid 2px rgb(86,66,122);
+}
 main p {
     margin: 1em;
 }
@@ -297,7 +348,14 @@ main p {
     font-size: 0.8em;
     margin: 0.2em;
 }
-html:not(.can-touch) .tags a:hover {
+.pswp .tags a.current, .tags a.current {
+    background-color: var(--biloubgc50);
+    color: var(--bilouhighlight);
+    rotate: 0deg !important;
+    pointer-events: none;
+    touch-action: none;
+}
+html:not(.can-touch) .tags a:not(.current):hover {
     transform: scale(1.05);
 }
 footer {
@@ -409,7 +467,7 @@ a.biloulink:hover {
     top: -1.5em;
     left: -5.5em;
 }
-time {
+.date {
     color: var(--bilouhighlight);
     text-align: center;
     margin: 0.1em;
@@ -453,7 +511,7 @@ time {
     header {
         margin-top: 0;
     }
-    header > hgroup >  h1 {
+    header > #page_title >  h1 {
         transform: rotate(0deg);
     }
 }
@@ -462,7 +520,7 @@ time {
     header > a {
         margin-right: 0;
     }
-    header > hgroup >  h1 {
+    header > #page_title >  h1 {
         font-size: 1.7em;
     }
     .caption {
@@ -472,7 +530,7 @@ time {
 }
 
 @media (max-width: 520px) {
-    header > hgroup >  h1 {
+    header > #page_title >  h1 {
         font-size: 1.6em;
     }
     .navig, .navig_element {
@@ -485,7 +543,7 @@ time {
 }
 
 @media (max-width: 420px) {
-    header > hgroup > h1 {
+    header > #page_title > h1 {
         font-size: 1.5em;
     }
     .navig, .navig_element {

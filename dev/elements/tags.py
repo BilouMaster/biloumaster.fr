@@ -1,5 +1,6 @@
 import config
 from pathlib import Path
+from random import randrange
 
 class Tag:
     all = dict()
@@ -22,7 +23,7 @@ class Tag:
     
     def html(self, path:str, lang='fr') -> str:
         d = self.desc[lang].replace('<br>', '\n')
-        return f'<a href="{path}/tag/{self.name}" rel="tag nofollow" class="{self.name}" title="{d}">{self.title[lang]}</a>'
+        return f'<a href="{path}/tag/{self.name}" rel="tag" class="{self.name}" title="{d}" style="rotate:{randrange(-4, 4, 1)}deg">{self.title[lang]}</a>'
     
     @classmethod
     def str_tags(cls, tags:str, path:str, lang:str='fr') -> str:

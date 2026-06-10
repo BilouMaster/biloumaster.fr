@@ -168,12 +168,12 @@ lightbox.on('uiRegister', function() {
         const currSlideElement = pswp.currSlide.data.element;
         let html = '';
         let title = currSlideElement.querySelector('h3');
-        let date = currSlideElement.querySelector('time');
+        let date = currSlideElement.querySelector('.date');
         if (title) {
           html = '<h1>« ' + title.innerHTML + ' »</h1>';
         };
         if (date) {
-          html += '<time>' + date.textContent + '</time>';
+          html += '<span class="date">' + date.textContent + '</span>';
         }
         el.innerHTML = html;
       });
@@ -293,7 +293,7 @@ lightbox.on('contentAppend', ({ content }) => {
     const currSlideElement = lightbox.pswp.currSlide.data.element;
     try {
       navigator.share({
-        title: '« ' + currSlideElement.querySelector('h3').textContent + ' » (' + currSlideElement.querySelector('time').textContent + ') par BilouMaster Joke',
+        title: '« ' + currSlideElement.querySelector('h3').textContent + ' » (' + currSlideElement.querySelector('.date').textContent + ') par BilouMaster Joke',
         text: '',
         url: String(currSlideElement.href)
       });
