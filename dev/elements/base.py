@@ -2,14 +2,9 @@ from pathlib import Path
 from templates import get_templates
 from utils.str import str_indent, str_clean, str_tofilename, str_date_fr
 from os import makedirs, stat, path as os_path
-import config
-import json
-import json_ld
 from elements.metadata import MetaData
-import subprocess
 from random import randint
-
-json_ld
+import config, json, subprocess
 
 class Element:
     all = list()
@@ -119,7 +114,26 @@ class Element:
             return '/img/og/' + existing.stem + existing.suffix
         return self.create_og_image(lang)
 
-    def create_og_image(self, lang) -> str:
+    def get_json_ld(self, lang='fr') -> dict:
+        return {
+            "@context": "https://schema.org",
+            "@graph": [{
+                "@type": "WebSite",
+                "@id": f"{config.url}/#website",
+                "name": config.sitename,
+                "url": config.url
+            }, {
+                "@type": "Person",
+                "@id": f"{config.url}/#person",
+                "name": config.author,
+                "url": f"{config.url}",
+                "image": f"{config.url}/img/logo.png",
+                "address": config.address,
+                "sameAs": config.sameAs
+            }]
+        }
+
+    def create_og_image(self, lang='fr') -> str:
         name = f'{str_tofilename(self.url[1:])}_{str(randint(1,10000))}.png'
         print('/img/og/' + name)
         memo = self.desc[lang]
@@ -224,26 +238,26 @@ class Element:
         t = [t.title[lang] for t in self.parents[1:]]
         t.reverse()
         if self.parent and len(self.parents) > 2:
-            meta_title = f'{self.title[lang]} - {" | ".join(t[:-1])} - {t[-1]} de {config.author}'
+            self.meta_title = f'{self.title[lang]} - {" | ".join(t[:-1])} - {t[-1]} de {config.author}'
         elif self.parent and len(self.parents) == 2:
-            meta_title = f'{self.title[lang]} - {t[-1]} de {config.author}'
+            self.meta_title = f'{self.title[lang]} - {t[-1]} de {config.author}'
         else:
-            meta_title = f'{self.title[lang]} de {config.author}'
-        meta_description = [i.replace('<br>',' ').replace('"','') for i in [i.desc[lang] for i in self.parents] + [self.desc[lang]] if i != ''][-1]
+            self.meta_title = f'{self.title[lang]} de {config.author}'
+        self.meta_description = [i.replace('<br>',' ').replace('"','') for i in [i.desc[lang] for i in self.parents] + [self.desc[lang]] if i != ''][-1]
         args = {
             'nav':              str_indent(self.html_header_nav(), 2),
             'title':            self.title[lang],
             'date':             self.html_nav_time(lang),
-            'meta_title':       meta_title,
+            'meta_title':       self.meta_title,
             'description':      self.desc[lang],
-            'meta_description': meta_description,
+            'meta_description': self.meta_description,
             'canon_url':        self.canon_url[lang],
             'extralink':        '',
             'content':          str_indent(self.html_content(lang), 2),
             'footer':           self.html_footer(lang),
             'og_image':         self.get_og_image(lang),
             'og_type':          self.get_og_type(),
-            'json_ld':          str_indent(json.dumps(json_ld.base, ensure_ascii=False, indent=2), 2)
+            'json_ld':          str_indent(json.dumps(self.get_json_ld(lang), ensure_ascii=False, indent=2), 2)
         }
         self.spec_args(args, lang)
         html = get_templates()['main'].format(**args)

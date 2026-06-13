@@ -1,6 +1,7 @@
 from elements.base import Element
 from markdown import markdown
 from utils.str import str_indent
+import config
 
 class Article(Element):
     detached = list()
@@ -25,6 +26,35 @@ class Article(Element):
             self.title['fr'] = self.metadata['title']
             self.desc['fr'] = self.metadata['desc']
             self.content = m[1]
+
+    def get_json_ld(self, lang='fr') -> dict:
+        j = super().get_json_ld(lang)
+        j['@graph'] += [{
+            "@type": "WebPage",
+            "@id": f"{self.canon_url[lang]}#page",
+            "url": self.canon_url[lang],
+            "name": self.meta_title,
+            "isPartOf": {
+                "@id": f"{config.url}/#website"
+            },
+            "mainEntity": {
+                "@id": f"{self.canon_url[lang]}#article"
+            }
+        },{
+            "@type": "BlogPosting",
+            "@id": f"{self.canon_url[lang]}#article",
+            "headline": self.title[lang],
+            "description": self.desc[lang].replace('<br>',' ').replace('"',''),
+            # "image": self.get_img_prev()[0],
+            "datePublished": self.date,
+            "author": {
+                "@id": f"{config.url}/#person"
+            },
+            "mainEntityOfPage": {
+                "@id": f"{self.canon_url[lang]}#page"
+            }
+        }]
+        return j
 
     def spec_args(self, args, lang='fr') -> dict:
         if self.metadata:

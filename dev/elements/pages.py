@@ -1,6 +1,20 @@
 from elements.base import Element
+import config
 
 class Page(Element):
+    def get_json_ld(self, lang='fr') -> dict:
+        j = super().get_json_ld(lang)
+        j['@graph'] += [{
+            "@type": "WebPage",
+            "@id": f"{self.canon_url[lang]}#page",
+            "url": self.canon_url[lang],
+            "name": self.meta_title,
+            "isPartOf": {
+                "@id": f"{config.url}/#website"
+            }
+        }]
+        return j
+
     def html_content(self, lang='fr') -> str:
         from elements.images import Gallery, Image
         if self.name in ['creations', 'tradi']:

@@ -8,7 +8,7 @@ address = {
       "@type": "PostalAddress",
       "addressLocality": "Paris",
       "addressCountry": "FR"
-    },
+    }
 sameAs = [
       "https://www.facebook.com/biloumaster",
       "https://www.instagram.com/biloumaster",

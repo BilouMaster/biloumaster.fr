@@ -22,6 +22,60 @@ class Image(Element):
                 self.str_date = {'fr': '', 'en': ''}
             Image.all.append(self)
     
+    def get_json_ld(self, lang) -> dict:
+        j = super().get_json_ld(lang)
+        j['@graph'] += [{
+            "@type": "ImageGallery",
+            "@id": f"{self.parent.canon_url[lang]}#gallery",
+            "name": self.parent.title[lang],
+            "url": self.parent.canon_url[lang],
+            "description": self.parent.desc[lang].replace('<br>',' ').replace('"',''),
+            "temporalCoverage": f"{self.parent.min_date[:4]}/{self.parent.max_date[:4]}",
+            "creator": {
+                "@id": f"{config.url}/#person"
+            },
+            "isPartOf": {
+                "@id": f"{config.url}/#website"
+            },          
+        },{
+            "@type": "WebPage",
+            "@id": f"{self.canon_url[lang]}#page",
+            "name": self.meta_title,
+            "url": self.canon_url[lang],
+            "isPartOf": {
+                "@id": f'{config.url}/#website'
+            },
+            "mainEntity": {
+                "@type": "VisualArtwork",
+                "@id": f"{self.canon_url[lang]}#artwork",
+                "name": self.title[lang],
+                "image": {
+                    "@type": "ImageObject",
+                    "contentUrl": f'{config.url}/img/gallery/{self.name}.webp',
+                    "license": {
+                        "@type": "CreativeWork",
+                        "name": "CC BY-NC 4.0",
+                        "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+                    },
+                    "width": self.width,
+                    "height": self.height
+                },
+                "description": self.desc[lang].replace('<br>',' ').replace('"',''),
+                "dateCreated": self.date,
+                "keywords": self.tags.split(';'),
+                "creator": {
+                    "@id": f"{config.url}/#person"
+                },
+                "mainEntityOfPage": {
+                    "@id": f"{self.canon_url[lang]}#page"
+                },
+                "isPartOf": {
+                    "@id": f"{self.parent.canon_url[lang]}#gallery"
+                },
+            }
+        }]
+        return j
+    
     def get_img_prev(self) -> list:
         return [f'/img/gallery/thumbnail/{self.name}_thumbnail.webp']
     
@@ -142,7 +196,36 @@ class Gallery(Page):
     def __init__(self, *args):
         super().__init__(*args)
         Gallery.all.append(self)
-    
+
+    def get_json_ld(self, lang='fr') -> dict:
+        j = super().get_json_ld(lang)
+        j['@graph'] += [{
+            "@type": "ImageGallery",
+            "@id": f"{self.canon_url[lang]}#gallery",
+            "name": self.title[lang],
+            "url": self.canon_url[lang],
+            "description": self.desc[lang].replace('<br>',' ').replace('"',''),
+            "temporalCoverage": f"{self.min_date[:4]}/{self.max_date[:4]}",
+            "creator": {
+                "@id": f"{config.url}/#person"
+            },
+            "isPartOf": {
+                "@id": f"{config.url}/#website"
+            },          
+        },{
+            "@type": "WebPage",
+            "@id": f"{self.canon_url[lang]}#page",
+            "url": self.canon_url[lang],
+            "name": self.meta_title,
+            "mainEntity": {
+                "@id": f"{self.canon_url[lang]}#gallery"
+            },
+            "isPartOf": {
+                "@id": f"{config.url}/#website"
+            }
+        }]
+        return j
+
     def html_year(self, year):
         if year:
             return f'<h2 class="bubble-style">{year}</h2>'
@@ -169,7 +252,7 @@ class Gallery(Page):
             pixelated = ' class="pixelated"'
         enlarge = ''
         if not self.included:
-            enlarge = '<button id="enlarge" onclick="enlarge(this) aria-label="Basculer l\'affichage de la page en pleine largeur" title="élargir la page 👄">🍆</button>'
+            enlarge = '<button id="enlarge" onclick="enlarge(this)" aria-label="Basculer l\'affichage de la page en pleine largeur" title="élargir la page 👄">🍆</button>'
         return enlarge + f'<div id="gallery"{pixelated}>' + '\n'.join([note]
             + [get_templates()['gallery_section'].format(
                 title=      year,

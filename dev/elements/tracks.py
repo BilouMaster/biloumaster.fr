@@ -9,7 +9,7 @@ import eyed3
 from os import makedirs
 import config
 
-class Album(Page):
+class Album(Element):
     def spec_args(self, args, lang='fr') -> dict:
         args['extralink'] = str_indent("""\
             <link rel="stylesheet" href="/src/audio.css">
@@ -18,6 +18,36 @@ class Album(Page):
 
     def get_img_prev(self) -> list:
         return [f'/img/album_art/{self.name}.jpg']
+
+    def get_json_ld(self, lang) -> dict:
+        j = super().get_json_ld(lang)
+        j['@graph'] += [{
+            "@type": "MusicAlbum",
+            "@id": f"{self.canon_url[lang]}#album",
+            "name": self.title[lang],
+            "url": self.canon_url[lang],
+            "description": self.desc[lang].replace('<br>',' ').replace('"',''),
+            "datePublished": self.max_date,
+            "image": f'{config.url}/img/album_art/{self.name}.jpg',
+            "byArtist": {
+                "@id": f"{config.url}/#person"
+            },
+            "mainEntityOfPage": {
+                "@id": f"{self.canon_url[lang]}#page"
+            }
+        },{
+            "@type": "WebPage",
+            "@id": f"{self.canon_url[lang]}#page",
+            "name": self.meta_title,
+            "url": self.canon_url[lang],
+            "isPartOf": {
+                "@id": f'{config.url}/#website'
+            },
+            "mainEntity": {
+                "@id": f"{self.canon_url[lang]}#album"
+            }
+        }]
+        return j
 
     def copy_cover(self):
         from elements.images import Image
@@ -66,6 +96,53 @@ class Track(Element):
     
     def get_img_prev(self) -> list:
         return [f'/img/album_art/{str_tofilename(self.album)}.jpg']
+
+    def get_json_ld(self, lang) -> dict:
+        j = super().get_json_ld(lang)
+        j['@graph'] += [{
+            "@type": "MusicAlbum",
+            "@id": f"{self.parent.canon_url[lang]}#album",
+            "name": self.parent.title[lang],
+            "url": self.parent.canon_url[lang],
+            "description": self.parent.desc[lang].replace('<br>',' ').replace('"',''),
+            "datePublished": self.parent.max_date,
+            "image": f'{config.url}/img/album_art/{self.parent.name}.jpg',
+            "byArtist": {
+                "@id": f"{config.url}/#person"
+            }
+        },{
+            "@type": "WebPage",
+            "@id": f"{self.canon_url[lang]}#page",
+            "name": self.meta_title,
+            "url": self.canon_url[lang],
+            "isPartOf": {
+                "@id": f'{config.url}/#website'
+            },
+            "mainEntity": {
+                "@id": f"{self.canon_url[lang]}#track"
+            }
+        },{
+            "@type": ["MusicComposition", "MusicRecording"],
+            "@id": f"{self.canon_url[lang]}#track",
+            "name": self.track_title,
+            "composer": {
+                "@id": f"{config.url}/#person"
+            },
+            "url": f'{config.url}/mp3/{self.filename}.mp3',
+            "position": self.track_num,
+            "license": {
+                "@type": "CreativeWork",
+                "name": "CC BY-NC 4.0",
+                "url": "https://creativecommons.org/licenses/by-nc/4.0/"
+            },
+            "inAlbum": {
+                "@id": f"{self.parent.canon_url[lang]}#album"
+            },
+            "mainEntityOfPage": {
+                "@id": f"{self.canon_url[lang]}#page"
+            }
+        }]
+        return j
 
     def spec_args(self, args, lang='fr') -> dict:
         args['extralink'] = str_indent("""\
