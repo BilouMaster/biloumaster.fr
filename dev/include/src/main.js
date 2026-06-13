@@ -52,3 +52,17 @@ function zoom_img(img) {
     document.addEventListener('touchstart', addtouchclass, false) //this event only gets called when input type is touch
     document.addEventListener('mouseover', removetouchclass, false) //this event gets called when input type is everything from touch to mouse/ trackpad
 })();
+
+document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("totop");
+
+    if (!btn) return;
+
+    btn.addEventListener("click", () => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "smooth"
+        });
+    });
+});

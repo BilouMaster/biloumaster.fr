@@ -46,9 +46,11 @@ function enlarge(el) {
   if (m.classList.contains('enlarged')) {
     el.innerHTML = '🐛'
     el.title = 'calmer la page'
+    el.ariaLabel = "Basculer l'affichage de la page en largeur normale"
   } else {
     el.innerHTML = '🍆'
     el.title = 'élargir la page 👄'
+    el.ariaLabel = "Basculer l'affichage de la page en pleine largeur"
   }
 }
 

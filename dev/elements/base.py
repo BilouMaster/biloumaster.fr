@@ -3,9 +3,13 @@ from templates import get_templates
 from utils.str import str_indent, str_clean, str_tofilename, str_date_fr
 from os import makedirs, stat, path as os_path
 import config
+import json
+import json_ld
 from elements.metadata import MetaData
 import subprocess
 from random import randint
+
+json_ld
 
 class Element:
     all = list()
@@ -68,9 +72,9 @@ class Element:
         return self.parent.url + '/' + self.name
 
     def get_canon_url(self, lang='fr') -> str:
-        if lang == 'en':
-            return 'https://biloumaster.com' + self.url
-        return 'https://biloumaster.fr' + self.url
+        # if lang == 'en':
+        #     return 'https://biloumaster.com' + self.url
+        return config.url + self.url
 
     def get_title(self, lang='fr') -> str:
         if self.name in MetaData.all and 'title' in MetaData.all[self.name].data:
@@ -214,21 +218,32 @@ class Element:
         return get_templates()['header_nav_' + str(min(3, len(p)))].format(**nav_args)
 
     def html(self, lang='fr') -> str:
+        # print(self.__class__.__name__)
         if self.included:
             return f'<section id="{self.name}">\n\t<h2>{self.title[lang]}</h2>\n\t{str_indent(self.html_content(lang), 1)}\n</section>\n'
+        t = [t.title[lang] for t in self.parents[1:]]
+        t.reverse()
+        if self.parent and len(self.parents) > 2:
+            meta_title = f'{self.title[lang]} - {" | ".join(t[:-1])} - {t[-1]} de {config.author}'
+        elif self.parent and len(self.parents) == 2:
+            meta_title = f'{self.title[lang]} - {t[-1]} de {config.author}'
+        else:
+            meta_title = f'{self.title[lang]} de {config.author}'
+        meta_description = [i.replace('<br>',' ').replace('"','') for i in [i.desc[lang] for i in self.parents] + [self.desc[lang]] if i != ''][-1]
         args = {
             'nav':              str_indent(self.html_header_nav(), 2),
             'title':            self.title[lang],
             'date':             self.html_nav_time(lang),
-            'meta_title':       self.title[lang],
+            'meta_title':       meta_title,
             'description':      self.desc[lang],
-            'meta_description': self.desc[lang].replace('<br>',' ').replace('"',''),
+            'meta_description': meta_description,
             'canon_url':        self.canon_url[lang],
             'extralink':        '',
             'content':          str_indent(self.html_content(lang), 2),
             'footer':           self.html_footer(lang),
             'og_image':         self.get_og_image(lang),
-            'og_type':          self.get_og_type()
+            'og_type':          self.get_og_type(),
+            'json_ld':          str_indent(json.dumps(json_ld.base, ensure_ascii=False, indent=2), 2)
         }
         self.spec_args(args, lang)
         html = get_templates()['main'].format(**args)

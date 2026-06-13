@@ -6,6 +6,7 @@ from elements.index import Index
 from elements.images import Image, Gallery, process_all_images
 from elements.tracks import Track, Album, process_all_tracks
 from elements.pages import Page
+from elements.jeux import Jeu
 from elements.articles import Article
 import config
 import pickle
@@ -27,6 +28,8 @@ def identify(path: Path, parent) -> Element:
             return Album(path, parent)
         if len(list(path.glob('*.jpg'))) or len(list(path.glob('*.webp'))) or len(list(path.glob('*.png'))) or len(list(path.glob('*.gif'))):
             return Gallery(path, parent)
+        if len(list(path.glob('*Screenshots'))):
+            return Jeu(path, parent)
         return Page(path, parent)
     print('unidentified: ', path)
     # return Element(path, parent)

@@ -13,6 +13,6 @@ class Page(Element):
             all.min_date = self.min_date
             self.children.remove(all)
             all.html()
-            return super().html_content(lang) + f"<p class='info'><i>Z'aimez pas les sous-catégories ?</i> Vous pouvez aussi voir <a href='{self.url}/tout-en-vrac'>tout en vrac !<img src='/img/tout-en-vrac.svg'></a></p>"
+            return super().html_content(lang) + f"<p class='info'><i>Z'aimez pas les sous-catégories ?</i> Vous pouvez aussi voir <a href='{self.url}/tout-en-vrac'>tout en vrac !<img src='/img/tout-en-vrac.svg' alt=''></a></p>"
         return super().html_content(lang)
     pass

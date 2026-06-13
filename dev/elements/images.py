@@ -169,7 +169,7 @@ class Gallery(Page):
             pixelated = ' class="pixelated"'
         enlarge = ''
         if not self.included:
-            enlarge = '<button id="enlarge" onclick="enlarge(this)" title="élargir la page 👄">🍆</button>'
+            enlarge = '<button id="enlarge" onclick="enlarge(this) aria-label="Basculer l\'affichage de la page en pleine largeur" title="élargir la page 👄">🍆</button>'
         return enlarge + f'<div id="gallery"{pixelated}>' + '\n'.join([note]
             + [get_templates()['gallery_section'].format(
                 title=      year,
