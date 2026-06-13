@@ -93,6 +93,7 @@ class Track(Element):
         self.desc['fr']  = f'{self.track_title}, titre {self.track_num} de l\'album "{self.album}", {self.parent.desc["fr"]}'
         self.date = str(self.year)
         self.parent.title['fr'] = self.album
+        self.canon_url = {'fr': self.get_canon_url()}
     
     def get_img_prev(self) -> list:
         return [f'/img/album_art/{str_tofilename(self.album)}.jpg']

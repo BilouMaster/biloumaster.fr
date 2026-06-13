@@ -244,6 +244,26 @@ class Element:
         else:
             self.meta_title = f'{self.title[lang]} de {config.author}'
         self.meta_description = [i.replace('<br>',' ').replace('"','') for i in [i.desc[lang] for i in self.parents] + [self.desc[lang]] if i != ''][-1]
+        json_ld = self.get_json_ld(lang)
+        json_ld['@graph'] += [{
+            "@type": "BreadcrumbList",
+            "@id": f"{self.canon_url[lang]}#breadcrumb",
+            "itemListElement": []
+        }]
+        # for p in self.parents:
+        for i, p in enumerate(self.parents, start=1):
+            json_ld['@graph'][-1]['itemListElement'].append({
+                "@type": "ListItem",
+                "position": i,
+                "name": p.title[lang],
+                "item": p.canon_url[lang]
+            })
+        json_ld['@graph'][-1]['itemListElement'].append({
+            "@type": "ListItem",
+            "position": len(self.parents) + 1,
+            "name": self.title[lang],
+            "item": self.canon_url[lang]
+        })
         args = {
             'nav':              str_indent(self.html_header_nav(), 2),
             'title':            self.title[lang],
@@ -257,7 +277,7 @@ class Element:
             'footer':           self.html_footer(lang),
             'og_image':         self.get_og_image(lang),
             'og_type':          self.get_og_type(),
-            'json_ld':          str_indent(json.dumps(self.get_json_ld(lang), ensure_ascii=False, indent=2), 2)
+            'json_ld':          str_indent(json.dumps(json_ld, ensure_ascii=False, indent=2), 2)
         }
         self.spec_args(args, lang)
         html = get_templates()['main'].format(**args)
