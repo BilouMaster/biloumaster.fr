@@ -1,5 +1,5 @@
 <a class="download" href="/download/Le-Ruban-Ecarlate.zip">
-    <img src="/img/le-ruban-ecarlate.svg">
+    <img src="/img/le-ruban-ecarlate.svg" alt="">
     Le-Ruban-Ecarlate.zip
 </a>
 

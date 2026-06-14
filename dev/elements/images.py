@@ -168,6 +168,8 @@ class Image(Element):
         if self.desc[lang]:
             desc = f'<p>{self.desc[lang]}</p>'
         tags = Tag.str_tags(self.tags, self.parent.url, lang) if not self.parent.included else '<!--no tags-->'
+        date = self.get_date()
+        date = f'<time class="date" datetime="{date}">{self.str_date[lang]}</time>' if date else '<!--no time-->'
         return get_templates()['gallery_element'].format(
             url=        self.url,
             width=      self.width,
@@ -176,8 +178,7 @@ class Image(Element):
             name=       self.name,
             srcset=     self.srcset(),
             tags_cls=   self.tags.replace(';', ' '),
-            datetime=   self.name.split('_')[0],
-            date=       self.str_date[lang],
+            date=       date,
             title=      self.title[lang],
             desc=       desc,
             tags=       tags

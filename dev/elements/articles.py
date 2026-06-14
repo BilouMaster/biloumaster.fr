@@ -12,7 +12,7 @@ class Article(Element):
         self.tags = ''
         with open(self.source) as content:
             if self.source.suffix.lower() == '.md':
-                self.content = markdown(content.read())
+                self.content = markdown(content.read()).replace('" />', '">')
             else:
                 self.content = content.read()
         if '$detached$' in self.content:

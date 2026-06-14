@@ -1,5 +1,5 @@
 <a class="download" href="/download/Geranium'sKwest.zip">
-    <img src="/img/geranium-s-kwest.svg">
+    <img src="/img/geranium-s-kwest.svg" alt="">
     Geranium'sKwest.zip
 </a>
 

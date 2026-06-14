@@ -170,6 +170,8 @@ class Element:
         return self.html_nav(lang)
 
     def html_nav_time(self, lang='fr') -> str:
+        if not self.date and not self.max_date:
+            return '<!--no date-->'
         if self.date and not self.max_date:
             return f'<time class="date" datetime="{self.date}">{str_date_fr(self.date)}</time>'
         if self.max_date == self.min_date:
@@ -232,7 +234,6 @@ class Element:
         return get_templates()['header_nav_' + str(min(3, len(p)))].format(**nav_args)
 
     def html(self, lang='fr') -> str:
-        # print(self.__class__.__name__)
         if self.included:
             return f'<section id="{self.name}">\n\t<h2>{self.title[lang]}</h2>\n\t{str_indent(self.html_content(lang), 1)}\n</section>\n'
         t = [t.title[lang] for t in self.parents[1:]]
@@ -250,7 +251,6 @@ class Element:
             "@id": f"{self.canon_url[lang]}#breadcrumb",
             "itemListElement": []
         }]
-        # for p in self.parents:
         for i, p in enumerate(self.parents, start=1):
             json_ld['@graph'][-1]['itemListElement'].append({
                 "@type": "ListItem",

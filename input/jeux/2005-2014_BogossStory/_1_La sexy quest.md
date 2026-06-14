@@ -6,7 +6,7 @@ Le début d’une épopée débile et stupéfiante, parsemée d'embûches !
 
 ![The best héros de tous les temps](/img/BGSpresentation.webp)
 
-### Quatre-cinq heures de <strike>torture</strike> jeu !
+### Quatre-cinq heures de <s>torture</s> jeu !
 
 Dans une démo qui représente la moitié du jeu, qui est encore inachevé, mais c'est déjà quatre/cinq heures de délire garanti.
 

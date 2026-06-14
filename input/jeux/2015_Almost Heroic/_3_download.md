@@ -1,7 +1,7 @@
 Windows :
 
 <a class="download" href="/download/AlmostHeroic.zip">
-    <img src="/img/almost-heroic.svg">
+    <img src="/img/almost-heroic.svg" alt="">
     AlmostHeroic.zip
 </a>
 
