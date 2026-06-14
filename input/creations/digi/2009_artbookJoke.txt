@@ -1,0 +1,3 @@
+title$: ArtBook Joke
+desc$: Ma contribution à un beau projet : Créer un artbook réunissant les artistes du Making, chacun ayant une double-page./nV'la c'était la mienne. L'Art book est-il sorti ? Je ne sais point.
+tags$: photoshop;bogossstory

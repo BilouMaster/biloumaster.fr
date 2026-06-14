@@ -1,0 +1,3 @@
+title$: je suis Alex :O :| :O :|
+tags$: alex
+desc$: Un test où je me disais que ça serait trop cool si le visage parlait et clignait des yeux dans la boîte de dialogue. 

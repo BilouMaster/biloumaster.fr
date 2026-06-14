@@ -1,0 +1,2 @@
+title$: Persos
+desc$: Mes premiers sprites je les faisais en deux parties : d'abord en pur pixel art, et ensuite un petit coup de densité+/densité- (outil de Photoshop) pour ajouter plus de relief (et accessoirement détruire le côté pixelart) et... je pense que ça rendait bien cool. Qui est-donc cette femme ? Un premier design de Séréna ?

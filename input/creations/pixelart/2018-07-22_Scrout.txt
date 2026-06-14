@@ -1,0 +1,2 @@
+title$: Scrout ?
+desc$: Je n'ai pas eu l'intention de créer un jeu, mais juste de voir si j'étais pas trop rouillé en pixel art après trop d'années sans en faire... Eh bien je suis plutôt rouillé !/nMais c'est pas trop dégueulasse... Si ?/nC'était aussi pour voir ce qu'on pouvait faire dans la résolution nulle de RPG Maker MV (des tiles de 48x48, c'est trop !)

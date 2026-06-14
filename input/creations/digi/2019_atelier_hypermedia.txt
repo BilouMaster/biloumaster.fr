@@ -1,0 +1,3 @@
+title$: Logo Atelier Hypermédia
+desc$: à la demande d'un pote qui m'a fait le croquis
+tags$: vector;inkscape;logo

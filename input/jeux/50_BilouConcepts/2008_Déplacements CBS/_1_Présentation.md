@@ -1,0 +1,1 @@
+Un système de combat que j’ai commencé à réaliser, mais qui fait réellement face aux limites de RPG Maker, pour cause, si plusieurs personnages sont affichés dans cette usine à gaz, ça laggue irrémédiablement... !

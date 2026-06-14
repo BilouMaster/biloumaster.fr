@@ -1,0 +1,3 @@
+title$: Alex oui-non
+tags$: alex
+desc$: Alex qui fait oui, Alex qui fait non... J'étais évidemment inspiré de Golden Sun et pour moi le jeu idéal devait être expressif, avec des petites animations qui changent tout. Ce qui est drôle c'est que j'ai fait cette animation avant celle de la marche... que je n'ai jamais faite à l'époque.

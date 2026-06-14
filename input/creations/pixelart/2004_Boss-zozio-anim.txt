@@ -1,0 +1,3 @@
+title$: Zozio, animation de boss
+tags$: decadence;monster
+desc$: Si on regarde dans la section Gribouillages et barbouillages du site, en 2004, on peut voir les bouts d'animation en dessins scannés qui m'ont permis de faire ce genre de sprite./nLe sprite du héros aussi était partit pour être dessiné à la main (boulot monstre, bonjour...)/nJ'aimerais bien retrouver les autres...

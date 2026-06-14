@@ -1,0 +1,3 @@
+title$: Village d'Alex (test de style)
+tags$: decadence
+desc$: J'ai fait cette version du village d'Alex de Décadence/Mistery of Age à l'époque pour voir si un style plus proche du pixel art (et donc des sprites des personnages) conviendrait mieux plutôt que des décors à partir de dessins scannés./nÇa aurait été plus simple à maintenir mais au final, c'était mieux de garder l'aspect dessin à la main !

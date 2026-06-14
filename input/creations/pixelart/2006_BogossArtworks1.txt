@@ -1,0 +1,3 @@
+title$: Artwork de BogossStory
+tags$: bogossstory
+desc$: C'est clairement pas du Pixel Art, mais comme c'est dessiné à main levée avec l'outil crayon de Photoshop c'est de l'Art Pixelisé.

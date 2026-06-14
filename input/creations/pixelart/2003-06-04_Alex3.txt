@@ -1,0 +1,3 @@
+title$: è_é
+tags$: alex
+desc$: Mockup de menu avec un artwork dégueu fait à la souris qui montre le premier design d'Alex. Il a les sourcils froncés et une grosse épée, il ne plaisante pas !

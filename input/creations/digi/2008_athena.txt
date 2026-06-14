@@ -1,0 +1,3 @@
+title$: Logo Athena VX
+desc$: Logo commission pour un site Internet nommé "Athena VX"... Pour RPG Maker VX. Je ne sais pas ce qu'est devenu le projet./nJ'ai fait une version bilouteuse d'un symbole d'Athéna représenté sur un drachme (une pièce de monnaie d'Athènes, merci Wikipédia).
+tags$: vector;photoshop;logo

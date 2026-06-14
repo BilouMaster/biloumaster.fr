@@ -1,0 +1,3 @@
+title$: Bilou !
+desc$: Champi bilouteuuux
+tags$: vector;illustrator;bilou

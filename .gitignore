@@ -1,6 +1,5 @@
 publish.py
 archive
-input
 output
 exemple_input
 exemple_output
@@ -10,3 +9,13 @@ __pycache__
 *.woff2
 preload.py
 preload.txt
+*.mp3
+*.ogg
+input/**/*.jpg
+input/**/*.png
+input/**/*.gif
+input/**/*.webp
+*.zip
+*.exe
+input/include/webplayer/
+*.pickle

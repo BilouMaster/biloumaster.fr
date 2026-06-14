@@ -1,0 +1,1 @@
+Juste une carte en 2D isométrique, mais une folie à programmer sous RPG Maker 2003, il est très déconseillé de faire un jeu entier comme ça !

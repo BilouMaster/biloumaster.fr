@@ -1,0 +1,49 @@
+#jouer-sur-navigateur {
+    width: 100%;
+}
+/* html {
+    scroll-snap-type: y mandatory;
+} */
+html.immersive {
+    scrollbar-color: rgb(20, 20, 20) black;
+}
+html.immersive ::-webkit-scrollbar {
+    background: black;
+}
+html.immersive ::-webkit-scrollbar-thumb {
+    background: rgb(48, 48, 48);
+}
+html.immersive #totop {
+    display: none;
+}
+html.immersive #overbiloulay {
+    background-color: black;
+}
+#overbiloulay {
+    transition-property: background-color;
+    transition-duration: .5s;
+}
+/* body {
+    scroll-snap-align: start end;
+} */
+#easyRPG {
+    width: 100%;
+    height: 320px;
+    border: none;
+    position: relative;
+    z-index: 1000;
+}
+@keyframes opening {
+    0% {
+        height: 320px;
+    }
+    100% {
+        height: 100vh;
+    }
+}
+#easyRPG.playing {
+    /* scroll-snap-align: center;
+    scroll-snap-stop: always; */
+    height: 100vh;
+    animation: opening 1s var(--biloueazout) 0s 1;
+}

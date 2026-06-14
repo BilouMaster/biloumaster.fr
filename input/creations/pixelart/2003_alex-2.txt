@@ -1,0 +1,3 @@
+title$: Alex BattleCharset 2
+tags$: decadence;alex
+desc$: Je n'avais pas encore Internet. Je découvrais RPG Maker.../nMes premiers graphismes pour mon premier projet ont été le Charset (sprite) du héros Alex et son BattleCharset (sprite de combat) que voici.../nQui s'éclate à commencer par le plus chiant à faire ? Moi... :)

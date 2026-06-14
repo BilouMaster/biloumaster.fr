@@ -1,0 +1,3 @@
+title$: Joke version Ragnarok Online
+tags$: joke
+desc$: J'ai beaucoup joué sur le serveur "World of Ragnarok", un serveur non officiel français de Ragnarok Online./nJ'ai fait ce mockup de sprite dans le style de RO pour participer à un concours sur le forum associé au serveur, où les administrateurs proposaient au gagnant d'être intégré en PNJ dans le jeu./nJe n'ai pas été choisi... Bouh !

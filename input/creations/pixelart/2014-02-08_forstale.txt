@@ -1,0 +1,2 @@
+title$: Logo Forstale
+desc$: Logo pour l'écran-titre du jeu de OddClock.

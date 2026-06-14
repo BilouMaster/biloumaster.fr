@@ -1,0 +1,1 @@
+Le jeu de la vie est un automate cellulaire imaginé par John Horton Conway en 1970 qui est probablement, au début du XXIe siècle, le plus connu de tous les automates cellulaires.

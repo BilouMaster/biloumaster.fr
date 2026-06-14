@@ -1,0 +1,2 @@
+title$: Village Test
+desc$: La première chose que j'ai voulu faire avec RPG Maker, et sans Internet je ne savais pas que j'étais l'un des premiers à le faire, c'était de voir si on pouvait avoir toute la map dessinée à la main au lieu d'utiliser un Chipset (tileset)./nJ'ai vu qu'on pouvait utiliser les panoramas... J'ai fait ce village à partir d'un dessin scanné pour tester !/n

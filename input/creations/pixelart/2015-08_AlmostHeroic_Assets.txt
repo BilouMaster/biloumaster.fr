@@ -1,0 +1,2 @@
+title$: Le rush d'un Ludum Dare
+desc$: En participant au Ludum Dare 33 avec mes amis Nuki (xvw), Zangther et Neha (Grim), une game dev jam où on a seulement 48 heures pour créer un jeu-vidéo, je me suis retrouvé à devoir rusher ces graphismes en seulement 5 heures./nJouez à Almost Heroic, la participation dont il est question !/nJe les ai plus tard distribuées en pack de ressources libres sous le nom "Free RPG Asset Pack", au plaisir de retrouver d'autres projets réalisés avec. :)

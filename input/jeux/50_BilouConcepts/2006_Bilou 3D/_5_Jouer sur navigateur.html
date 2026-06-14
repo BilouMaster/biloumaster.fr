@@ -1,0 +1,62 @@
+<iframe
+  id="easyRPG"
+  title="Jouer à Bilou3D"
+  src="/webplayer/?game=[BConcept]-Bilou3D">
+</iframe>
+<link rel="stylesheet" href="/src/easyRPG.css">
+<script defer src="/src/easyRPG.js"></script>
+<script>
+  const images = ['/webplayer/games/[BConcept]-Bilou3D/Picture/biloudroite.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/ombre.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/iso3.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/caisse1.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/Test12.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/biloutombegauche.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/11.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/biloutombedroite2.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/Test1.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/PlateformeMouvante1.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/dallemobile1ombre.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/BILOU_LOGO.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/bilousauthaut.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/!!!dialg6.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/!!!dialg2.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/bilou.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/!!!dialg4.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/bilousautdroite.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/!!!dialg5.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/biloutombehaut.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/iso2.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/iso4.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/biloutombedroite.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/iso1.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/biloutombegauche2.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/!!!dialg0.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/Ombre2x2.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/biloutombeface2.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/bilousautgauche.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/dallemobile1.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/!!!dialg3.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/bilousautface.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/biloutombeface.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/Test13.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/biloutombehaut2.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/bilougauche.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/bilouhaut.png',
+    '/webplayer/games/[BConcept]-Bilou3D/Picture/!!!dialg1.png']
+  function preloadImage(url)
+  {
+    var img=new Image();
+    img.src=url;
+  }
+  function preloadAllPictures()
+  {
+    images.forEach(preloadImage);
+  }
+  window.document.addEventListener('isPlaying', preloadAllPictures, false);
+  // document.addEventListener('readystatechange', event => { 
+  //   if (event.target.readyState === "complete") {
+  //     images.forEach(preloadImage);
+  //   }
+  // });
+</script>

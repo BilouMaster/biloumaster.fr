@@ -1,0 +1,3 @@
+title$: Mandragore Tantachronis
+tags$: decadence;monster
+desc$: Concept de Boss pour Mistery of Age/Décadence où on aurait progressivement abîmé le masque jusqu'à le briser et découvrir que le boss est encore plus dégueu.

@@ -1,0 +1,1 @@
+Petit jeu proposant une gravité multidirectionnelle pour des puzzles assez simple dans lesquels il faut anticiper les sauts dans toutes les directions pour passer des obstacles rouges qui font du die and retry.
