@@ -1,0 +1,10 @@
+[project]
+name = "bilou-builder"
+version = "0.2.1"
+
+dependencies = [
+    "eyed3>=0.9.9",
+    "Markdown>=3.7",
+    "Pillow>=12.2.0",
+    "Unidecode>=1.3.6",
+]
