@@ -3,6 +3,8 @@
 C'est ici que je partage avec vous mes débuts avec python, où j'entreprends de générer mon site Internet sans utiliser de framework.
 [Visitez-le ! :D](https://biloumaster.fr)
 
+---
+
 # Principe
 
 La principale feature de mon programme python est de récupérer directement les méta-données EXIF de mes images pour générer des galeries qui comprennent pour chaque image un titre, une description, ainsi que des mots-clés.
@@ -11,7 +13,11 @@ De ce fait, les images elles-même font office de "base de données", puisqu'ell
 
 Une logique similaire est employée à l'échelle de tout le site (audios, articles...), afin d'avoir une structure de fichier très simple directement reconvertie en structure de site web.
 
+---
+
 # Structure
+
+## Trois dossiers principaux, `dev`, `input` et `output`
 
 Dorénavant, tout est dans `dev` (que je pourrais renommer src)
 on y trouve les modules principaux :
@@ -26,16 +32,16 @@ Je mettrais un petit exemple d'`input` et `output` plus tard mais en gros :
 * dans `input/` on met ce qu'on veut, des fichiers mp3, jpg, gif, md, html, dans différents dossiers qui seront les différentes sections du site.
 * dans `output/` on récupère le site web généré.
 
-# Le dossier `input` ici n'est pas tout à fait complet
+## Le dossier `input` ici n'est pas tout à fait complet ici
 
 Je partage ici seulement une partie de l'input, vous n'avez pas toutes les images et mp3 dedans sinon ça serait bien trop lourd. Mais ça vous permet d'avoir une idée de comment c'est mal foutu de faire un site avec mon programme et vous dissuader de faire pareil, ou bien essayer de me forcer à mieux designer le truc, yey !
 
-# Le dossier `output` n'est pas là
+## Le dossier `output` n'est pas là
 
 C'est pas grave, une exécution de `dev/main.py` et tout le site est généré dans `output`,
 Le mien ? Bah c'est [mon site](https://biloumaster.fr), vous pouvez inspecter le code source comment il est foutu, c'est la sortie brut.
 
-# Le dossier particulier : `**/include`
+## Le dossier particulier : `**/include`
 
 Existe à deux endroits :
 * `dev/include/`
@@ -46,6 +52,8 @@ Son rôle est à la fois très simple et très important : tout ce qui se situe 
 Les éléments de `input/include/` peuvent écraser ceux de `dev/include/`, de cette façon il est possible de générer plusieurs sites Internet avec des css et js différents.
 
 C'est aussi dans `input/include/` qu'on peut ajouter des images simples pour les articles, structurer comme on veut des téléchargements, etc. Il suffit de considérer que `dev/include/` et `input/include/` se retrouvent fusionnés directement dans `output/`
+
+---
 
 # Structuration des noms de dossiers et fichiers
 
@@ -67,6 +75,8 @@ Beaucoup d'informations peuvent être issu du nom de fichier même (en plus des 
     * le parseur reconnaîtra si c'est un numéro ou une date... je ne sais plus si on peut combiner les deux en revanche. PEUT-ETRE.
 * `_NOM` -> included (peut se combiner, par exemple `_DATE_NOM` ou `_ORDRE_NOM`)
   * l'underscore en début de nom signifie que l'élément est inclu directement dans le parent, il n'est plus une page sous-jacente mais une partie de la page parente à lui-même. C'est utile à construire des pages complexes qui joignent plusieurs types d'éléments tels que Article et Galerie.
+
+---
 
 # Comment greffer des métadonnées
 
@@ -143,10 +153,11 @@ bogossstory	BogossStory	L'aventure rocambolesque de John Bogoss.../nl'homme le p
 
 On ajoute des informations supplémentaires sur le jeu.
 
-# Dépendances
-Pour le moment j'utilise PILLOW (PIL), eyeD3 et pathlib.
+---
 
-Par ailleurs, j'utilise l'excellent PhotoSwipe comme LightBox (pour les galleries) et l'excellent EasyRPG pour rendre mes jeux RPG Maker 2003 jouables directement depuis mon site ! <3
+# Dépendances et installation
+
+Tout est décrit dans <dev/README.md>
 
 # Licence
 Le programme est encore en cours de développement et n'est pas prévu pour une utilisation générique, celà-dit, je choisis de le présenter sous licence MIT pour ceux qui voudraient étudier mes mauvaises méthodes de débutant, ou mieux, me conseiller et m'aider dans mon labeur !

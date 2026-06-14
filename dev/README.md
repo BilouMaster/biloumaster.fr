@@ -72,12 +72,14 @@ sudo apt install firefox
 Exécuter le programme :
 
 ```bash
+cd dev
 python main.py
 ```
 
 ou :
 
 ```bash
+cd dev
 python3 main.py
 ```
 
