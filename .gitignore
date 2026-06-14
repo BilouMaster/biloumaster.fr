@@ -19,3 +19,4 @@ input/**/*.webp
 *.exe
 input/include/webplayer/
 *.pickle
+*.apk
