@@ -157,7 +157,7 @@ On ajoute des informations supplémentaires sur le jeu.
 
 # Dépendances et installation
 
-Tout est décrit dans <dev/README.md>
+Tout est décrit dans [dev/README.md](dev/README.md)
 
 # Licence
 Le programme est encore en cours de développement et n'est pas prévu pour une utilisation générique, celà-dit, je choisis de le présenter sous licence MIT pour ceux qui voudraient étudier mes mauvaises méthodes de débutant, ou mieux, me conseiller et m'aider dans mon labeur !
