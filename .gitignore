@@ -1,4 +1,5 @@
 publish.py
+save.py
 archive
 output
 exemple_input
@@ -17,6 +18,7 @@ input/**/*.gif
 input/**/*.webp
 *.zip
 *.exe
-input/include/webplayer/
+input/include/webplayer/**/
+easyrpg*
 *.pickle
 *.apk

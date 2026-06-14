@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EasyRPG Player</title>
+  <style>
+    :root {
+      --color-gray: hsl(0, 0%, 55%);
+      --controls-size: min(13vmin, 4em);
+    }
+
+    /* @media (orientation: landscape) {
+      :root {
+        --controls-size: 13vh;
+      }
+    } */
+
+    html {
+      touch-action: none;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+      margin: 0;
+      color: white;
+      background: black;
+    }
+
+    .unselectable {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    #status {
+      font-size: 1.5rem;
+      color: var(--color-gray);
+      text-align: center;
+    }
+
+    #canvas {
+      position: absolute;
+      top: calc(50% - var(--controls-size));
+      left: 50%;
+      border: 0;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      transform: translate(-50%, -50%);
+    }
+
+    .apad-full #canvas {
+      top: calc(50% - 2.5 * var(--controls-size));
+    }
+
+    @media (orientation: landscape) {
+      #canvas {
+        top: 50%;
+        left: calc(50% + 0.25 * var(--controls-size));
+      }
+      .apad-full #canvas {
+        top: 50%;
+        left: calc(50% - 0.5 * var(--controls-size));
+      }
+    }
+
+    #dpad,
+    #apad {
+      position: fixed;
+      bottom: 1rem;
+    }
+
+    #dpad {
+      left: 1rem;
+    }
+
+    #apad {
+      right: 1rem;
+    }
+
+    #dpad svg {
+      width: calc(3 * var(--controls-size));
+      height: calc(3 * var(--controls-size));
+      opacity: 0.2;
+    }
+
+    #apad-full {
+      width: calc(4 * var(--controls-size));
+      height: calc(6 * var(--controls-size));
+      opacity: 0.2;
+    }
+
+    #apad-two, #apad-three {
+      width: calc(2.5 * var(--controls-size));
+      height: calc(3 * var(--controls-size));
+      opacity: 0.2;
+    }
+
+    #f12button {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      z-index: 10;
+    }
+
+    #fullscreen {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 10;
+    }
+
+    #fullscreen svg {
+      width: calc(1 * var(--controls-size));
+      height: calc(1 * var(--controls-size));
+      opacity: 0.2;
+    }
+
+    #f12button svg {
+      width: calc(1.5 * var(--controls-size));
+      height: calc(1 * var(--controls-size));
+      opacity: 0.2;
+    }
+
+    #apad svg *, #dpad svg *, #f12button svg * {
+      paint-order: stroke;
+    }
+    
+    .button {
+      fill: rgba(255, 255, 255, 0);
+      stroke: none;
+    }
+
+    .active:not(.hidden-shape), .active:not(.hidden-shape) :not(text, tspan) {
+      stroke: #fff;
+    }
+
+    .active text, .active tspan {
+      stroke: none;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&amp;display=swap');
+    text {
+      fill:white;
+      stroke:none;
+      text-anchor:middle;
+      font-size:6px;
+      font-family:'Nunito', sans-serif;
+      dominant-baseline:middle;
+    }
+    #kmain {
+      fill:white;
+      stroke:#000;
+    }
+    #kmain text {
+      fill:#808080;
+    }
+    #kmain path {
+      fill:none;
+      stroke:#808080;
+      stroke-width:0.5
+    }
+    #knum {
+      fill:#808080;
+      stroke:black;
+    }
+    #kspec {
+      stroke:#808080;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      #apad,
+      #dpad,
+      #f12button {
+        display: none;
+      }
+      #canvas {
+        top: 50% !important;
+        left: 50% !important;
+      }
+      #fullscreen svg {
+        width: 32px;
+        height: 32px;
+      }
+    }
+
+    @media (min-width: 320px) and (min-height: 240px) { #canvas { width: 320px; height: 240px; } }
+    @media (min-width: 640px) and (min-height: 480px) { #canvas { width: 640px; height: 480px; } }
+    @media (min-width: 960px) and (min-height: 720px) { #canvas { width: 960px; height: 720px; } }
+    @media (min-width: 1280px) and (min-height: 960px) { #canvas { width: 1280px; height: 960px; } }
+    @media (min-width: 1600px) and (min-height: 1200px) { #canvas { width: 1600px; height: 1200px; } }
+    @media (min-width: 1920px) and (min-height: 1440px) { #canvas { width: 1920px; height: 1440px; } }
+    @media (min-width: 2240px) and (min-height: 1680px) { #canvas { width: 2240px; height: 1680px; } }
+    @media (min-width: 2560px) and (min-height: 1920px) { #canvas { width: 2560px; height: 1920px; } }
+    @media (min-width: 2880px) and (min-height: 2160px) { #canvas { width: 2880px; height: 2160px; } }
+    @media (min-width: 3200px) and (min-height: 2400px) { #canvas { width: 3200px; height: 2400px; } }
+    @media (min-width: 3520px) and (min-height: 2640px) { #canvas { width: 3520px; height: 2640px; } }
+    @media (min-width: 3840px) and (min-height: 2880px) { #canvas { width: 3840px; height: 2880px; } }
+    @media (min-width: 4160px) and (min-height: 3120px) { #canvas { width: 4160px; height: 3120px; } }
+    @media (min-width: 4480px) and (min-height: 3360px) { #canvas { width: 4480px; height: 3360px; } }
+    @media (min-width: 4800px) and (min-height: 3600px) { #canvas { width: 4800px; height: 3600px; } }
+    @media (min-width: 5120px) and (min-height: 3840px) { #canvas { width: 5120px; height: 3840px; } }
+    @media (min-width: 5440px) and (min-height: 4080px) { #canvas { width: 5440px; height: 4080px; } }
+    @media (min-width: 5760px) and (min-height: 4320px) { #canvas { width: 5760px; height: 4320px; } }
+
+    #play {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 9999;
+      display: flex;
+      cursor: pointer;
+    }
+    #play-icon {
+      fill: rgba(255,255,255,0.8);
+      stroke: rgba(0,0,0,0.3);
+      width: 25vmin;
+      height: 25vmin;
+      margin: auto;
+      transition-duration: 0.3s;
+      transition-property: width, height;
+      transition-timing-function: cubic-bezier(0.6, 3.0, 0.5, 0.7);
+    }
+    #play:hover #play-icon {
+      width: 20vmin;
+      height: 20vmin;
+    }
+  </style>
+</head>
+<body>
+  <div id="play">
+    <svg id="play-icon" width="32px" height="32px" version="1.1" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <path transform="matrix(1.043 0 0 1.056 -.6957 -.8924)" d="m28.7 17-24.25 14a1.155 1.155 30 0 1-1.732-1l7e-7 -12-7e-7 -16a1.155 1.155 150 0 1 1.732-1l24.25 14a1.155 1.155 90 0 1 0 2z"></path>
+    </svg>
+  </div>
+
+  <div id="fullscreen" class="unselectable">
+    <svg viewBox="0 0 32 32" fill="#FFF" xmlns="http://www.w3.org/2000/svg" width="32" height="32">
+      <path d="M8 8v6.047h2.834v-3.213h3.213V8h-3.213zm9.953 0v2.834h3.213v3.213H24V8h-2.834zM8 17.953V24h6.047v-2.834h-3.213v-3.213zm13.166 0v3.213h-3.213V24H24v-6.047z" id="fullscreen-request"/>
+      <path d="M11.213 8v3.213H8v2.834h6.047V8zm6.74 0v6.047H24v-2.834h-3.213V8zM8 17.953v2.834h3.213V24h2.834v-6.047h-2.834zm9.953 0V24h2.834v-3.213H24v-2.834h-3.213z" id="fullscreen-exit" style="display:none"/>
+    </svg>
+  </div>
+
+  <div id="status"></div>
+
+  <canvas id="canvas" tabindex="-1" class="unselectable"></canvas>
+
+  <div id="f12button" class="unselectable">
+    <svg width="15" height="10" version="1.1" viewBox="0 0 15 10" xmlns="http://www.w3.org/2000/svg">
+      <g>
+        <path d="m5 .5h5a4.5 4.5 45 014.5 4.5 4.5 4.5 135 01-4.5 4.5h-5a4.5 4.5 45 01-4.5-4.5 4.5 4.5 135 014.5-4.5z" stroke="#808080"/>
+        <text x="7.4" y="5.6">F12</text>
+        <path id="button-F12" class="button" data-key="F12" data-key-code="123" d="m5 .5h5a4.5 4.5 45 014.5 4.5 4.5 4.5 135 01-4.5 4.5h-5a4.5 4.5 45 01-4.5-4.5 4.5 4.5 135 014.5-4.5z"/>
+      </g>
+    </svg>
+  </div>
+
+  <div id="dpad" class="unselectable">
+    <svg width="30" height="30" version="1.1" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+      <path id="dpad-up" data-key="ArrowUp" data-key-code="38" d="m12 .5c-.7854 0-1.5.7146-1.5 1.5v6.586c0 .7629.3141 1.521.8535 2.061l2.586 2.586c.5553.5552 1.566.5552 2.121 0l2.586-2.586c.5394-.5395.8535-1.298.8535-2.061v-6.586c0-.7854-.7146-1.5-1.5-1.5z" fill="#fff" stroke="#000"/>
+      <path id="dpad-left" data-key="ArrowLeft" data-key-code="37" d="m2 10.5c-.7854 0-1.5.7146-1.5 1.5v6c0 .7854.7146 1.5 1.5 1.5h6.586c.7629 0 1.521-.3141 2.061-.8535l2.586-2.586c.5552-.5553.5552-1.566 0-2.121l-2.586-2.586c-.5395-.5394-1.298-.8535-2.061-.8535z" fill="#fff" stroke="#000"/>
+      <path id="dpad-down" data-key="ArrowDown" data-key-code="40" d="m15 16.33c-.3927 5.9e-5-.7829.1618-1.061.4395l-2.586 2.586c-.5394.5395-.8535 1.298-.8535 2.061v6.586c0 .7854.7146 1.5 1.5 1.5h6c.7854 0 1.5-.7146 1.5-1.5v-6.586c0-.7629-.3141-1.521-.8535-2.061l-2.586-2.586c-.2776-.2777-.6679-.4394-1.061-.4395z" fill="#fff" stroke="#000"/>
+      <path id="dpad-right" data-key="ArrowRight" data-key-code="39" d="m21.41 10.5c-.7629 0-1.521.3141-2.061.8535l-2.586 2.586c-.5552.5553-.5552 1.566 0 2.121l2.586 2.586c.5395.5394 1.298.8535 2.061.8535h6.586c.7854 0 1.5-.7146 1.5-1.5v-6c0-.7854-.7146-1.5-1.5-1.5z" fill="#fff" stroke="#000"/>
+      <path id="dpad-up&left" class="hidden-shape" data-key="ArrowUp&ArrowLeft" data-key-code="38&37" d="m11 .5586a15 15 0 00-10.44 10.44h8.441l4 4h2v-2l-4-4z" opacity="0"/>
+      <path id="dpad-left&down" class="hidden-shape" data-key="ArrowLeft&ArrowDown" data-key-code="37&40" d="m13 15-4 4h-8.441a15 15 0 0010.44 10.44v-8.441l4-4v-2z" opacity="0"/>
+      <path id="dpad-down&right" class="hidden-shape" data-key="ArrowDown&ArrowRight" data-key-code="40&39" d="m15 15v2l4 4v8.441a15 15 0 0010.44-10.44h-8.441l-4-4z" opacity="0"/>
+      <path id="dpad-right&up" class="hidden-shape" data-key="ArrowRight&ArrowUp" data-key-code="39&38" d="m19 .5488v8.451l-4 4v2h2l4-4h8.451a15 15 0 00-10.45-10.45z" opacity="0"/>
+    </svg>
+  </div>
+
+  <div id="apad" class="unselectable">
+    <svg id="apad-two" width="25" height="30" version="1.1" viewBox="0 0 25 30" xmlns="http://www.w3.org/2000/svg">
+      <g id="kmain">
+        <g>
+          <circle cx="8.1443" cy="21.856" r="7.6443"/>
+          <path d="m11.558 17.732v5.355h-6.6937"/>
+          <path d="m7.5418 25.765-2.6775-2.6775 2.6775-2.6775"/>
+          <circle id="apad-enter" class="button" data-key="Enter" data-key-code="13" cx="8.1443" cy="21.856" r="7.6443"/>
+        </g>
+        <g>
+          <circle cx="16.856" cy="8.1443" r="7.6443"/>
+          <text x="16.857077" y="8.1496191">esc</text>
+          <circle id="apad-escape" class="button" data-key="Escape" data-key-code="27" cx="16.856" cy="8.1443" r="7.6443"/>
+        </g>
+      </g>
+    </svg>
+    <svg id="apad-three" width="25" height="30" version="1.1" viewBox="0 0 25 30" xmlns="http://www.w3.org/2000/svg">
+      <g id="kmain">
+        <g>
+          <circle cx="6.9237" cy="23.076" r="6.4237"/>
+          <path d="m9.7925 19.611v4.5h-5.625"/>
+          <path d="m6.4175 26.361-2.25-2.25 2.25-2.25"/>
+          <circle id="apad-enter" class="button" data-key="Enter" data-key-code="13" cx="6.9237" cy="23.076" r="6.4237"/>
+        </g>
+        <g>
+          <circle cx="18.076" cy="15" r="6.4237"/>
+          <text x="18.077375" y="15.004501">esc</text>
+          <circle id="apad-escape" class="button" data-key="Escape" data-key-code="27" cx="18.076" cy="15" r="6.4237"/>
+        </g>
+        <g>
+          <circle cx="6.9237" cy="6.9237" r="6.4237"/>
+          <path d="m3.5487 8.1387 3.375-4.5 3.375 4.5h-2.25v2.25h-2.25v-2.25z"/>
+          <circle id="apad-shift" class="button" data-key="Shift" data-key-code="16" cx="6.9237" cy="6.9237" r="6.4237"/>
+        </g>
+      </g>
+    </svg>
+    <svg id="apad-full" width="40" height="60" version="1.1" viewBox="0 0 40 60" xmlns="http://www.w3.org/2000/svg">
+      <g id="kmain">
+        <g>
+          <circle cx="25" cy="53.78" r="5.71"/>
+          <path d="m27.55 50.7v4h-5"/>
+          <path d="m24.55 56.7-2-2 2-2"/>
+          <circle id="apad-enter" class="button" data-key="Enter" data-key-code="13" cx="25" cy="53.78" r="5.71"/>
+        </g>
+        <g>
+          <circle cx="33.79" cy="45" r="5.71"/>
+          <text x="33.791" y="45.004002">esc</text>
+          <circle id="apad-escape" class="button" data-key="Escape" data-key-code="27" cx="33.79" cy="45" r="5.71"/>
+        </g>
+        <g>
+          <circle cx="6.213" cy="53.78" r="5.71"/>
+          <path d="m3.213 54.86 3-4 3 4h-2v2h-2v-2z"/>
+          <circle id="apad-shift" class="button" data-key="Shift" data-key-code="16" cx="6.213" cy="53.78" r="5.71"/>
+        </g>
+      </g>
+      <g id="knum">
+        <g>
+          <circle cx="15.61" cy="45" r="4.5"/>
+          <text x="15.6075" y="45" dy="0.5">0</text>
+          <circle id="apad-0" class="button" data-key="0" data-key-code="96" cx="15.61" cy="45" r="4.5"/>
+        </g>
+        <g>
+          <circle cx="5.608" cy="35" r="4.5"/>
+          <text x="5.6075001" y="35" dy="0.5">1</text>
+          <circle id="apad-1" class="button" data-key="1" data-key-code="97" cx="5.608" cy="35" r="4.5"/>
+        </g>
+        <g>
+          <circle cx="15.61" cy="35" r="4.5"/>
+          <text x="15.6075" y="35" dy="0.5">2</text>
+          <circle id="apad-2" class="button" data-key="2" data-key-code="98" cx="15.61" cy="35" r="4.5"/>
+        </g>
+        <g>
+          <circle cx="25.61" cy="35" r="4.5"/>
+          <text x="25.6075" y="35" dy="0.5">3</text>
+          <circle id="apad-3" class="button" data-key="3" data-key-code="99" cx="25.61" cy="35" r="4.5"/>
+        </g>
+        <g>
+          <circle cx="5.608" cy="25" r="4.5"/>
+          <text x="5.6075001" y="25" dy="0.5">4</text>
+          <circle id="apad-4" class="button" data-key="4" data-key-code="100" cx="5.608" cy="25" r="4.5"/>
+        </g>
+        <g>
+          <circle cx="15.61" cy="25" r="4.5"/>
+          <text x="15.6075" y="25" dy="0.5">5</text>
+          <circle id="apad-5" class="button" data-key="5" data-key-code="101" cx="15.61" cy="25" r="4.5"/>
+        </g>
+        <g>
+          <circle cx="25.61" cy="25" r="4.5"/>
+          <text x="25.6075" y="25" dy="0.5">6</text>
+          <circle id="apad-6" class="button" data-key="6" data-key-code="102" cx="25.61" cy="25" r="4.5"/>
+        </g>
+        <g>
+          <circle cx="5.608" cy="15" r="4.5"/>
+          <text x="5.6075001" y="15" dy="0.5">7</text>
+          <circle id="apad-7" class="button" data-key="7" data-key-code="103" cx="5.608" cy="15" r="4.5"/>
+        </g>
+        <g>
+          <circle cx="15.61" cy="15" r="4.5"/>
+          <text x="15.6075" y="15" dy="0.5">8</text>
+          <circle id="apad-8" class="button" data-key="8" data-key-code="104" cx="15.61" cy="15" r="4.5"/>
+        </g>
+        <g>
+          <circle cx="25.61" cy="15" r="4.5"/>
+          <text x="25.6075" y="15" dy="0.5">9</text>
+          <circle id="apad-9" class="button" data-key="9" data-key-code="105" cx="25.61" cy="15" r="4.5"/>
+        </g>
+      </g>
+      <g id="kspec">
+        <g>
+          <circle cx="15.61" cy="5" r="4.5"/>
+          <text x="15.61" y="5">/</text>
+          <circle id="dpad-/" class="button" data-key="/" data-key-code="111" cx="15.61" cy="5" r="4.5"/>
+        </g>
+        <g>
+          <circle cx="25.61" cy="5" r="4.5"/>
+          <text x="25.610001" y="5">*</text>
+          <circle id="apad-*" class="button" data-key="*" data-key-code="106" cx="25.61" cy="5" r="4.5"/>
+        </g>
+        <g>
+          <circle cx="35" cy="10" r="4.5"/>
+          <text x="35" y="10">-</text>
+          <circle id="apad--" class="button" data-key="-" data-key-code="109" cx="35" cy="10" r="4.5"/>
+        </g>
+        <g>
+          <circle cx="35" cy="20" r="4.5"/>
+          <text x="35" y="20">+</text>
+          <circle id="apad-+" class="button" data-key="+" data-key-code="107" cx="35" cy="20" r="4.5"/>
+        </g>
+        <g>
+          <circle cx="35" cy="30" r="4.5"/>
+          <text x="35" y="30">.</text>
+          <circle id="apad-." class="button" data-key="." data-key-code="110" cx="35" cy="30" r="4.5"/>
+        </g>
+      </g>
+    </svg>
+  </div>
+<script async type="text/javascript" src="easyrpg-player.js"></script>
+
+<script>
+const hasTouchscreen = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+const preventNativeKeys = ['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft', ' ', 'F12'];
+const keys = new Map();
+const keysDown = new Map();
+const canvas = document.getElementById('canvas');
+let lastTouchedId;
+
+// Change touch screen for BogossStory
+const params = new Proxy(new URLSearchParams(window.location.search), {
+  get: (searchParams, prop) => searchParams.get(prop),
+});
+switch (params.game) {
+  case 'BogossStory':
+    document.body.classList.add('apad-full');
+    document.querySelector('#apad-three').remove();
+    document.querySelector('#apad-two').remove();
+    break;
+  case 'Gravitactic':
+  case 'Decadence':
+    document.body.classList.add('apad-three');
+    document.querySelector('#apad-two').remove();
+    document.querySelector('#apad-full').remove();
+    break;
+  default:
+    document.body.classList.add('apad-two');
+    document.querySelector('#apad-three').remove();
+    document.querySelector('#apad-full').remove();
+}
+
+// Make EasyRPG player embeddable
+canvas.addEventListener('mouseenter', () => window.focus());
+canvas.addEventListener('click', () => window.focus());
+
+const fullscreenAPI = getFullscreenAPI();
+
+function getFullscreenAPI() {
+  let api;
+  let enterFS;
+  let exitFS;
+  let elementFS;
+  let changeEvent;
+  let errorEvent;
+  if (document.documentElement.requestFullscreen) {
+    enterFS = 'requestFullscreen';
+    exitFS = 'exitFullscreen';
+    elementFS = 'fullscreenElement';
+    changeEvent = 'fullscreenchange';
+    errorEvent = 'fullscreenerror';
+  } else if (document.documentElement.webkitRequestFullscreen) {
+    enterFS = 'webkitRequestFullscreen';
+    exitFS = 'webkitExitFullscreen';
+    elementFS = 'webkitFullscreenElement';
+    changeEvent = 'webkitfullscreenchange';
+    errorEvent = 'webkitfullscreenerror';
+  };
+  if (enterFS) {
+    api = {
+      request: function (el) {
+        if (enterFS === 'webkitRequestFullscreen') {
+          el[enterFS](Element.ALLOW_KEYBOARD_INPUT);
+        } else {
+          el[enterFS]();
+        };
+      },
+      exit: function () {
+        return document[exitFS]();
+      },
+      isFullscreen: function () {
+        return document[elementFS];
+      },
+      change: changeEvent,
+      error: errorEvent
+    };
+  };
+  return api;
+};
+
+function toggleFullscreen() {
+  if (fullscreenAPI) {
+    if (fullscreenAPI.isFullscreen()) {
+      fullscreenAPI.exit();
+      setTimeout(function() {
+        document.getElementById('fullscreen-exit').style.display = 'none';
+        document.getElementById('fullscreen-request').style.display = 'inline';
+        window.parent.document.dispatchEvent(new CustomEvent('exitFS'))
+      }, 300);
+    } else {
+      fullscreenAPI.request(document.documentElement);
+      setTimeout(function() {
+        document.getElementById('fullscreen-exit').style.display = 'inline';
+        document.getElementById('fullscreen-request').style.display = 'none';
+      }, 300);
+    };
+  };
+};
+
+// Handle clicking on the fullscreen button
+document.querySelector('#fullscreen').addEventListener('click', toggleFullscreen);
+document.querySelector('#play').addEventListener('click', () => {
+    document.querySelector('#play').outerHTML = '';
+    var event = new CustomEvent('isPlaying');
+    window.parent.document.dispatchEvent(event);
+  }
+);
+
+/**
+ * Simulate a keyboard event on the emscripten canvas
+ *
+ * @param {string} eventType Type of the keyboard event
+ * @param {string} key Key to simulate
+ * @param {number} keyCode Key code to simulate (deprecated)
+ */
+function simulateKeyboardEvent(eventType, key, keyCode) {
+  // simulate multiple key events (data-key and data-key-code containing "&"):
+  const mk = key.split('&');
+  if (mk.length > 1) {
+    const mkc = keyCode.split('&');
+    mk.forEach((x, i) => {
+      const node = document.querySelector('[data-key="' + x + '"]');
+      if (eventType == 'keydown') node.classList.add('active');
+      else node.classList.remove('active');
+      simulateKeyboardEvent(eventType, x, mkc[i]);
+    });
+    return;
+  }
+  // simulate regular key event:
+  const event = new Event(eventType, { bubbles: true });
+  event.key = key;
+  event.code = key;
+  // Deprecated, but necessary for emscripten somehow
+  event.keyCode = keyCode;
+  event.which = keyCode;
+
+  canvas.dispatchEvent(event);
+}
+
+/**
+ * Simulate a keyboard input from `keydown` to `keyup`
+ *
+ * @param {string} key Key to simulate
+ * @param {number} keyCode Key code to simulate (deprecated)
+ */
+function simulateKeyboardInput(key, keyCode) {
+  simulateKeyboardEvent('keydown', key, keyCode);
+  window.setTimeout(() => {
+    simulateKeyboardEvent('keyup', key, keyCode);
+  }, 100);
+}
+
+/**
+ * Bind a node by a specific key to simulate on touch
+ *
+ * @param {*} node The node to bind a key to
+ * @param {string} key Key to simulate
+ * @param {number} keyCode Key code to simulate (deprecated)
+ */
+function bindKey(node, key, keyCode) {
+  keys.set(node.id, { key, keyCode });
+
+  node.addEventListener('touchstart', event => {
+    event.preventDefault();
+    simulateKeyboardEvent('keydown', key, keyCode);
+    keysDown.set(event.target.id, node.id);
+    node.classList.add('active');
+  });
+
+  node.addEventListener('touchend', event => {
+    event.preventDefault();
+
+    const pressedKey = keysDown.get(event.target.id);
+    if (pressedKey && keys.has(pressedKey)) {
+      const { key, keyCode } = keys.get(pressedKey);
+      simulateKeyboardEvent('keyup', key, keyCode);
+    }
+
+    keysDown.delete(event.target.id);
+    node.classList.remove('active');
+  
+    if (lastTouchedId) {
+      document.getElementById(lastTouchedId).classList.remove('active');
+    }
+  });
+
+  // Inspired by https://github.com/pulsejet/mkxp-web/blob/262a2254b684567311c9f0e135ee29f6e8c3613e/extra/js/dpad.js
+  node.addEventListener('touchmove', event => {
+    const { target, clientX, clientY } = event.changedTouches[0];
+    const origTargetId = keysDown.get(target.id);
+    const nextTarget = document.elementFromPoint(clientX, clientY);
+    if (nextTarget === null) return;
+    const nextTargetId = nextTarget.id;
+    if (origTargetId === nextTargetId) return;
+
+    if (origTargetId) {
+      const { key, keyCode } = keys.get(origTargetId);
+      simulateKeyboardEvent('keyup', key, keyCode);
+      keysDown.delete(target.id);
+      document.getElementById(origTargetId).classList.remove('active');
+    }
+
+    if (keys.has(nextTargetId)) {
+      const { key, keyCode } = keys.get(nextTargetId);
+      simulateKeyboardEvent('keydown', key, keyCode);
+      keysDown.set(target.id, nextTargetId);
+      lastTouchedId = nextTargetId;
+      document.getElementById(nextTargetId).classList.add('active');
+    }
+  })
+}
+
+// Bind all elements providing a `data-key` attribute with the
+// given key on touch-based devices
+if (hasTouchscreen) {
+  for (const button of document.querySelectorAll('[data-key]')) {
+    bindKey(button, button.dataset.key, button.dataset.keyCode);
+  }
+} else {
+  // Prevent scrolling when pressing specific keys
+  window.addEventListener('keydown', event => {
+    if (preventNativeKeys.includes(event.key)) {
+      event.preventDefault();
+    }
+  });
+
+  canvas.addEventListener('contextmenu', event => {
+    event.preventDefault();
+    // simulateKeyboardInput('Escape', 27);
+  });
+
+  // canvas.addEventListener('click', () => {
+  //   simulateKeyboardInput('Enter', 13);
+  // });
+}
+</script>
+
+</body>
+</html>
