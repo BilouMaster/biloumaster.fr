@@ -1,7 +1,10 @@
 AddType image/svg+xml .svg .svgz
+ErrorDocument 301 /html/301.html
 ErrorDocument 403 /html/403.html
 ErrorDocument 404 /html/404.html
 ErrorDocument 410 /html/410.html
+ErrorDocument 500 /html/500.html
+ErrorDocument 503 /html/503.html
 # url rewrite
 RewriteEngine on
 RewriteRule ^games/.*$ - [G]

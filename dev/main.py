@@ -8,10 +8,9 @@ from elements.tracks import Track, Album, process_all_tracks
 from elements.pages import Page
 from elements.jeux import Jeu
 from elements.articles import Article
-import config
-import pickle
 from shutil import rmtree, copytree
-import subprocess
+from sitemap import generate_sitemap, generate_robottxt
+import config, pickle, subprocess
 
 def identify(path: Path, parent) -> Element:
     s = path.suffix.lower()
@@ -79,6 +78,10 @@ if __name__ == "__main__":
         rmtree(config.output + '/html/')
     [e.html() for e in Article.detached]
     website[0].html()
+
+    print_time('sitemap ')
+    generate_sitemap(website)
+    generate_robottxt()
 
     print_time('pickle')
     with open(f'{config.input}/data.pickle', 'wb') as f:
