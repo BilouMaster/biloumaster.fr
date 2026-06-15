@@ -105,6 +105,9 @@ header {
     animation: 2s steps(20, end) infinite biloupsyche;
     flex: 0;
 }
+.not-trippy header {
+    animation: none;
+}
 header > * {
     z-index: 100;
 }

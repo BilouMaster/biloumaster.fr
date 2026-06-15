@@ -2,24 +2,28 @@ document.addEventListener('readystatechange', psyche_origin);
 window.addEventListener('resize', psyche_origin);
 window.addEventListener('scroll', trippy, { passive: true });
 
+let tick = false;
+
 function psyche_origin() {
-    let logo = document.getElementById('logo').getBoundingClientRect();
-    let header = document.getElementsByTagName('header')[0].getBoundingClientRect();
-    const angle = 1 * Math.PI / 180;
-    const root_style = document.documentElement.style;
-    root_style.setProperty('--biloufade_offset', Math.round((header.right - header.left) * Math.sin(angle)) + 'px');
-    root_style.setProperty('--biloupsyche_left', Math.round((logo.left + logo.right) / 2 - header.left) + 'px');
-    root_style.setProperty('--biloupsyche_top', Math.round((logo.top + logo.bottom) / 2 - header.top) + 'px');
+    if (tick) return;
+    tick = true;
+
+    requestAnimationFrame(() => {
+        let logo = document.getElementById('logo').getBoundingClientRect();
+        let header = document.getElementsByTagName('header')[0].getBoundingClientRect();
+        const angle = 1 * Math.PI / 180;
+        const root_style = document.documentElement.style;
+        root_style.setProperty('--biloufade_offset', Math.round((header.right - header.left) * Math.sin(angle)) + 'px');
+        root_style.setProperty('--biloupsyche_left', Math.round((logo.left + logo.right) / 2 - header.left) + 'px');
+        root_style.setProperty('--biloupsyche_top', Math.round((logo.top + logo.bottom) / 2 - header.top) + 'px');
+        tick = false;
+    });
 }
+
 function trippy() {
-    if (document.documentElement.scrollTop > 300) {
-        document.body.classList.add('not-trippy');
-    } else {
-        if (document.body.classList.contains('not-trippy')) {
-            document.body.classList.remove('not-trippy');
-        }
-    }
+    document.body.classList.toggle('not-trippy', document.documentElement.scrollTop > 300);
 }
+
 // http://www.javascriptkit.com/dhtmltutors/sticky-hover-issue-solutions.shtml
 (function(){
     var isTouch = false //var to indicate current input type (is touch versus no touch) 
@@ -47,14 +51,8 @@ function trippy() {
 
 document.addEventListener("DOMContentLoaded", () => {
     const btn = document.getElementById("totop");
-
     if (!btn) return;
-
     btn.addEventListener("click", () => {
-        window.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: "smooth"
-        });
+        window.scrollTo({top: 0, left: 0, behavior: "smooth"});
     });
 });

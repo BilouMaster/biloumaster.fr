@@ -34,14 +34,14 @@
     color: var(--bilouhighlight);
 }
 .img_container {
-    min-height: 30vh;
+    min-height: 40vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: calc(min(var(--height), 80vh));
+    height: calc(min(var(--height), 70vh));
 }
 .img_container img {
     cursor: zoom-in;
-    max-height: 80vh;
+    max-height: 70vh;
     max-width: 100%;
 }
