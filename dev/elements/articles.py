@@ -45,7 +45,6 @@ class Article(Element):
             "@id": f"{self.canon_url[lang]}#article",
             "headline": self.title[lang],
             "description": self.desc[lang].replace('<br>',' ').replace('"',''),
-            # "image": self.get_img_prev()[0],
             "datePublished": self.date,
             "author": {
                 "@id": f"{config.url}/#person"
@@ -54,6 +53,9 @@ class Article(Element):
                 "@id": f"{self.canon_url[lang]}#page"
             }
         }]
+        img = self.get_img_prev()
+        if img:
+            j['@graph'][-1]["image"] = img[0]
         return j
 
     def spec_args(self, args, lang='fr') -> dict:

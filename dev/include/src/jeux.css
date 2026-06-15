@@ -10,15 +10,6 @@
     background: linear-gradient(135deg, var(--biloubgct) 0%, var(--biloubgc33) 600px);
     box-sizing: border-box;
 }
-/* .prez a {
-    color: #333;
-    border: solid 2px white;
-    background-color: #CCC;
-    padding: 16px;
-    border-radius: 14px;
-    display: block;
-    margin: 5px;
-} */
 .prez:last-of-type {
     margin-bottom: 1.5em;
 }

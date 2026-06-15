@@ -22,22 +22,18 @@
     --biloulight: rgb(184, 194, 231);
     /* nouvelles */
     --bbgc: 42, 37, 66;
-    /* --bbgc: 0,0,0; */
     --bdark: 92, 70, 128;
-    /* --bdark: 73, 57, 100; */
     --biloulight: rgb(231, 206, 184);
     --biloulightgreen: rgb(223, 238, 167);
     --bilouhighlight: rgb(240, 233, 242);
     --biloubgc: rgb(var(--bbgc));
     --bilouframe: var(--biloubgc);
-    /* --bilouframe: white; */
     --biloubgc33: rgba(var(--bbgc), 0.33);
     --biloubgc50: rgba(var(--bbgc), 0.5);
     --biloubgc80: rgba(var(--bbgc), 0.8);
     --biloubgct: rgba(var(--bbgc), 0);
     --biloudark: rgb(var(--bdark));
     --biloudarkt: rgba(var(--bdark), 0);
-    /* --biloumedium: rgb(143, 129, 158); */
     --biloustic: cubic-bezier(0.6, 3.0, 0.5, 0.7);
     --biloueazout: cubic-bezier(0.4, 1, 0.6, 0.9);
     --bilouborder: solid var(--biloubgc) 3px;
@@ -78,10 +74,6 @@ a {
 a:visited {
     color: var(--biloulight);
 }
-/* h1, h2, p {
-    position: relative;
-    z-index: 100;
-} */
 body {
     display: flex;
     flex-direction: column;
@@ -96,13 +88,10 @@ body {
     background-size: 47vmin;
 }
 #main_content > section:first-of-type {
-    /* background-image: url('data:image/svg+xml,<svg width="117.28mm" height="122.49mm" version="1.1" viewBox="0 0 117.28 122.49" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-12.858 -160.64)"><path d="m53.727 160.64c24.342 7.0555 43.504 21.422 52.564 46.214 9.0205 24.685-3.4113 43.356-17.022 50.712-13.642 7.3728-36.153 6.9604-48.86-4.5863-10.489-9.5318-7.5845-25.4 2.7342-32.191 10.319-6.791 29.14-1.9437 28.31 12.788-0.67006 11.903-13.566 14.359-17.815 10.407-4.5703-4.2504-2.7354-9.792 0-11.289 1.9389-1.0609 4.2335-0.0882 5.1154 4.4979 1.5875-5.909-2.7511-9.2302-6.7913-8.0259-5.1328 1.53-9.8763 9.3474-3.7042 17.198 3.8821 4.9377 15.686 7.3036 24.606 0.52917 16.744-12.717 7.8478-39.934-16.492-42.422-11.908-1.2169-22.827 2.2209-32.368 11.73-17.006 16.949-10.545 40.73-6.5262 50.535 1.8063 4.4065 6.1285 10.748 12.296 16.388h100.36v-89.769c-0.80337-1.1845-1.4228-2.0041-1.7968-2.3782-3.3514-3.3514-25.554-30.339-74.613-30.339z" fill="rgba(231,206,184,.03)"/></g></svg>'); */
     background-repeat: no-repeat;
-    /* background-position: bottom right; */
     background-size: 47vmin;
     background-image: url('data:image/svg+xml,<svg width="117.28mm" height="109.1mm" version="1.1" viewBox="0 0 117.28 109.1" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-12.858 -174.02)"><path d="m12.858 174.02v76.379c0.80337 1.1845 1.4228 2.0041 1.7968 2.3782 3.3514 3.3514 25.554 30.339 74.612 30.339-24.342-7.0555-43.504-21.422-52.564-46.214-9.0205-24.685 3.4113-43.356 17.022-50.712 13.642-7.3728 36.153-6.9604 48.86 4.5863 10.489 9.5318 7.5845 25.4-2.7342 32.191-10.319 6.791-29.14 1.9436-28.31-12.788 0.67006-11.903 13.566-14.359 17.815-10.407 4.5703 4.2504 2.7354 9.792 0 11.289-1.9389 1.0609-4.2335 0.0882-5.1154-4.4979-1.5875 5.909 2.7512 9.2301 6.7913 8.0259 5.1328-1.53 9.8763-9.3474 3.7042-17.198-3.8821-4.9377-15.686-7.3036-24.606-0.52917-16.744 12.717-7.8478 39.934 16.492 42.422 11.908 1.2169 22.827-2.2209 32.368-11.73 17.006-16.949 10.545-40.73 6.5262-50.535-0.37777-0.92157-0.87177-1.9315-1.4635-2.9983z" fill="rgba(231,206,184,.03)"/></g></svg>');
 	background-repeat: no-repeat;
-	/* background-size: 9em; */
 }
 body::before {
     background-color: var(--biloubgc);
@@ -112,10 +101,8 @@ body::before {
 }
 header {
     display: flex;
-    /* align-items: center; */
     justify-content: center;
     animation: 2s steps(20, end) infinite biloupsyche;
-    /* box-shadow: 0 1px 3px var(--biloubgc50); */
     flex: 0;
 }
 header > * {
@@ -214,18 +201,13 @@ main {
 #main_content {
     display: flex;
     flex-wrap: wrap;
-    /* gap: .25em; */
-    /* padding: .25em; */
 }
 #main_content > * {
     flex-grow: 1;
 }
 #main_content > section {
-    /* padding: 1em; */
     text-align: justify;
     max-width: 100%;
-    /* background: linear-gradient(145deg, var(--biloubgc50), var(--biloubgc33) 50%); */
-    /* border-radius: .25em; */
 }
 #main_content > section * {
     max-width: 100%;
@@ -304,14 +286,11 @@ html:not(.can-touch) .article a:hover {
     color: var(--biloulightgreen);
 }
 main h1, main h2 {
-    /* font-size: 1.5em; */
-    /* letter-spacing: 0.25ex; */
     color: var(--biloulight);
     text-shadow: var(--biloutextborder);
     line-height: 1.75em;
     margin: 0.5em;
     font-weight: lighter;
-    /* text-align: center; */
     filter: drop-shadow(0 0 0.2rem var(--biloubgc33));
 }
 #main_content h2:not(.bubble-style), #main_content h3 {

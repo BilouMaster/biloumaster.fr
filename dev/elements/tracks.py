@@ -149,7 +149,6 @@ class Track(Element):
         args['extralink'] = str_indent("""\
             <link rel="stylesheet" href="/src/audio.css">
             <script defer src="/src/audio.js"></script>""", 1)
-        # args['content'] += get_templates()['player']
 
     def html_return(self, lang='fr') -> str:
         return get_templates()['tracklist_item'].format(

@@ -67,8 +67,6 @@ class Element:
         return self.parent.url + '/' + self.name
 
     def get_canon_url(self, lang='fr') -> str:
-        # if lang == 'en':
-        #     return 'https://biloumaster.com' + self.url
         return config.url + self.url
 
     def get_title(self, lang='fr') -> str:
@@ -232,6 +230,9 @@ class Element:
             nav_args['img'+str(index)] = value.get_icon()
             nav_args['prev'+str(index)] = value.get_url()
         return get_templates()['header_nav_' + str(min(3, len(p)))].format(**nav_args)
+    
+    def get_meta_description(self, lang='fr') -> str:
+        [i.replace('<br>',' ').replace('"','') for i in [i.desc[lang] for i in self.parents] + [self.desc[lang]] if i != ''][-1]
 
     def html(self, lang='fr') -> str:
         if self.included:
@@ -244,7 +245,7 @@ class Element:
             self.meta_title = f'{self.title[lang]} - {t[-1]} de {config.author}'
         else:
             self.meta_title = f'{self.title[lang]} de {config.author}'
-        self.meta_description = [i.replace('<br>',' ').replace('"','') for i in [i.desc[lang] for i in self.parents] + [self.desc[lang]] if i != ''][-1]
+        self.meta_description = self.get_meta_description(lang)
         json_ld = self.get_json_ld(lang)
         json_ld['@graph'] += [{
             "@type": "BreadcrumbList",
@@ -295,7 +296,7 @@ class Element:
                 foot_nav.append(spc[(spc.index(self) - 1) % len(spc)].html_nav(lang))
             if len(spc) > 2:
                 foot_nav.append(spc[(spc.index(self) + 1) % len(spc)].html_nav(lang))
-        return '<nav id="navig_footer">\n\t\t\t' + str_indent('\n'.join(foot_nav), 3) + '\n\t\t</nav>'
+        return '<nav id="navig_footer">\n          ' + str_indent('\n'.join(foot_nav), 3) + '\n        </nav>'
 
     def __repr__(self) -> str:
         return f'<{self.__class__.__name__} "{self.name}">'

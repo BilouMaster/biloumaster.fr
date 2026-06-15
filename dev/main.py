@@ -31,7 +31,6 @@ def identify(path: Path, parent) -> Element:
             return Jeu(path, parent)
         return Page(path, parent)
     print('unidentified: ', path)
-    # return Element(path, parent)
 
 def crawl(path, parent):
     global website

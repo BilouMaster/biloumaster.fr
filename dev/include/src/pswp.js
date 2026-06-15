@@ -249,8 +249,6 @@ if (history.scrollRestoration) {
 }
 
 lightbox.on('close', () => {
-  // document.documentElement.style.overflow = 'visible';
-  // document.documentElement.style.paddingRight = 0;
   if (!noHistoryBack) {
     // console.log("close - back");
     noPopState = true;
@@ -266,9 +264,6 @@ lightbox.on('close', () => {
 });
 
 lightbox.on('afterInit', () => {
-  // let olw = document.documentElement.clientWidth;
-  // document.documentElement.style.overflow = 'hidden';
-  // document.documentElement.style.paddingRight = document.documentElement.clientWidth - olw + 'px';
   if (!noHistoryPush) {
     // console.log("init - push");
     document.title = (lightbox.pswp.currSlide.data.element.title || 'Sans Titre') +  ' - ' + title_origin;
@@ -284,7 +279,6 @@ lightbox.on('afterInit', () => {
 const shareSVG = '<svg class="pswp__no-toggle" viewBox="0 0 32 32" width="32" height="32" fill="var(--biloubgc)"><path d="m25.333 2a4.6667 4.6667 0 0 0-4.6667 4.6667 4.6667 4.6667 0 0 0 0.10938 0.97526l-10.596 5.2979a4.6667 4.6667 0 0 0-3.5137-1.6064 4.6667 4.6667 0 0 0-4.6667 4.6667 4.6667 4.6667 0 0 0 4.6667 4.6667 4.6667 4.6667 0 0 0 3.5159-1.6042l10.589 5.2956a4.6667 4.6667 0 0 0-0.10482 0.97526 4.6667 4.6667 0 0 0 4.6667 4.6667 4.6667 4.6667 0 0 0 4.6667-4.6667 4.6667 4.6667 0 0 0-4.6667-4.6667 4.6667 4.6667 0 0 0-3.516 1.6042l-10.589-5.2956a4.6667 4.6667 0 0 0 0.10482-0.97526 4.6667 4.6667 0 0 0-0.10938-0.97298l10.596-5.2979a4.6667 4.6667 0 0 0 3.5137 1.6042 4.6667 4.6667 0 0 0 4.6667-4.6667 4.6667 4.6667 0 0 0-4.6667-4.6667z"/></svg>'
 
 lightbox.on('contentAppend', ({ content }) => {
-  // content.slide.container.querySelector('.pswp__img--placeholder').style.backgroundColor = content.data.element.style.backgroundColor;
   let share_button = document.createElement('button');
   share_button.classList.add('bubble-style', 'pswp__hide-on-close', 'pswp__button--share-button', 'pswp__no-toggle');
   share_button.title = 'Partager';

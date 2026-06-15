@@ -20,14 +20,6 @@ function trippy() {
         }
     }
 }
-function zoom_img(img) {
-    fig = document.getElementsByTagName('figure')[0]
-    if (fig.classList.contains('zoomed')) {
-        fig.classList.remove('zoomed');
-    } else {
-        fig.classList.add('zoomed');
-    }
-}
 // http://www.javascriptkit.com/dhtmltutors/sticky-hover-issue-solutions.shtml
 (function(){
     var isTouch = false //var to indicate current input type (is touch versus no touch) 

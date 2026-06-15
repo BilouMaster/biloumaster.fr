@@ -116,8 +116,9 @@ class Image(Element):
     
     def spec_args(self, args, lang='fr') -> dict:
         args['extralink'] = '<link rel="stylesheet" href="/src/view.css">'
-        if self.parent.name == 'pixelart':
-            args['extralink'] += '\n' + str_indent(get_templates()['pixelart_style'], 1)
+        if self.parent.title['fr'] in ['Pixel-Art', 'Screenshots']:
+            args['extralink'] += '\n    ' + str_indent(get_templates()['pixelart_style'], 1)
+        args['extralink'] += '\n    <script defer src="/src/view.js"></script>'
     
     def str_nav(self) -> tuple:
         spc = self.parent.children
@@ -147,6 +148,25 @@ class Image(Element):
         srcset = ', '.join(srcset)
         sizes = ', '.join(sizes)
         return srcset, sizes
+    
+    def get_meta_description(self, lang='fr') -> str:
+        md = self.title[lang]
+        if self.tags:
+            tags = [Tag.all[tag].title[lang] for tag in self.tags.split(';')]
+            tags = [tag for tag in tags if tag not in [self.title[lang]] + self.title[lang].split(' ')]
+            if self.desc[lang]:
+                tags = [tag for tag in tags if tag not in [self.desc[lang]] + self.desc[lang].split(' ')]
+            if tags:
+                md += '. ' + ', '.join(tags)
+        if self.desc[lang]:
+            md += '. ' + self.desc[lang]
+        else:
+            if self.parent.title[lang] == 'Screenshots':
+                md += '. Screenshot de ' + self.parents[-2].title[lang]
+                self.desc[lang] = 'Screenshot de ' + self.parents[-2].title[lang]
+            else:
+                md += '. ' + self.parent.title[lang]
+        return md.replace('<br>',' ').replace('"','')
 
     def html_content(self, lang='fr') -> str:
         srcset, sizes = self.str_srcset()
@@ -155,11 +175,11 @@ class Image(Element):
         return get_templates()['view'].format(
             go_prev=    go_prev,
             go_next=    go_next,
-            max_height= self.height,
             srcset=     srcset,
             sizes=      sizes,
+            height=     self.height,
             filename=   self.name,
-            alt=        '',
+            alt=        self.get_meta_description(lang),
             tags=       tags
         )
 
@@ -256,7 +276,7 @@ class Gallery(Page):
             enlarge = '<button id="enlarge" onclick="enlarge(this)" aria-label="Basculer l\'affichage de la page en pleine largeur" title="élargir la page 👄">🍆</button>'
         return enlarge + f'<div id="gallery"{pixelated}>' + '\n'.join([note]
             + [get_templates()['gallery_section'].format(
-                title=      year,
+                title=      year or self.title[lang],
                 year=       self.html_year(year),
                 tags=       ' '.join(data['tags'] - {''}),
                 content=    str_indent('\n'.join(data['contents']), 2)

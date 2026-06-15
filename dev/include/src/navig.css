@@ -230,19 +230,7 @@ html:not(.can-touch) .navig.simple:nth-child(odd):hover > .navig_icon {
 #main_nav {
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
-	/* padding: .5em; */
-  	/* grid-gap: .5em; */
 }
-/* #main_nav .navig {
-	border-radius: .5em;
-}
-#main_nav .preview_images {
-	border-top-left-radius: .5em;
-	border-top-right-radius: .5em;
-} */
-/* #main_nav:has(> :last-child:nth-child(-n + 3)) :last-child {
-	grid-column: 1 / 3;
-} */
 #main_nav:has(> :last-child:nth-child(-n + 4)) {
 	grid-template-columns: 1fr 1fr;
 }

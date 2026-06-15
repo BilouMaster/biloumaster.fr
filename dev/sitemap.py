@@ -2,7 +2,6 @@ from xml.etree.ElementTree import Element, SubElement, tostring
 from xml.dom import minidom
 import config
 
-
 def generate_sitemap(website):
     urlset = Element(
         "urlset",

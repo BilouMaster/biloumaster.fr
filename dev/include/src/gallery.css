@@ -150,7 +150,6 @@ html:not(.can-touch) #gallery section h2:hover, html:not(.can-touch) .folded #ga
 }
 html:not(.can-touch) .gallery > a:hover {
     filter: brightness(1);
-    /* cursor: pointer; */
     z-index: 10;
     transform: scale(1.02);
     box-shadow: 0px 0px 8px var(--biloubgc50);
@@ -196,7 +195,6 @@ html:not(.can-touch) .folded #gallery section:hover a {
     margin-bottom: -100%;
 }
 #tag_list {
-    /* display: none; */
     order: -1;
     width: 100%;
 }
@@ -213,7 +211,7 @@ html:not(.can-touch) .folded #gallery section:hover a {
 #current_tag a {
     font-family: BilouFont;
 }
-#gallery.pixelated .gallery > a {
+#gallery.pixelated :not(#gallery-Screenshots) .gallery > a {
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
     image-rendering: pixelated;
@@ -223,14 +221,9 @@ html:not(.can-touch) .folded #gallery section:hover a {
 #screenshots #gallery.pixelated .gallery {
     background: black;
 }
-/* #screenshots #gallery.pixelated .gallery > a {
-    width: 320px;
-    max-height: 240px;
-} */
 @media (max-width: 1024px) {
     #gallery > small {
         margin: 0;
-        /* text-align: left; */
     }
     #gallery section h2.bubble-style {
         font-size: 1em;

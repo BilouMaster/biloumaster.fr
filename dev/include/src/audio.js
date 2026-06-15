@@ -1,6 +1,32 @@
 var lastTrack;
 var vizuexists = false;
 
+document.addEventListener("keydown", (event) => {
+    let pl = document.getElementById('player');
+    if (pl.classList.contains('active')) {
+        switch (event.code) {
+            case "ArrowLeft":
+                event.preventDefault();
+                pl_prev();
+                break;
+
+            case "ArrowRight":
+                event.preventDefault();
+                pl_next();
+                break;
+    
+            case "Space":
+                event.preventDefault();
+                if (pl.classList.contains('pause')) {
+                    el = document.body.querySelector('.pl-play').parentElement.click();
+                } else {
+                    pl_pause();
+                }
+                break;
+        }
+    }
+});
+
 function pl_note(text) {
     let n = document.getElementById('pl-note');
     n.classList.remove('show');
@@ -84,12 +110,6 @@ function pl_prev() {
         tr_play(tracks[mod(tracks.indexOf(lastTrack) - 1, tracks.length)]);
     }
 }
-
-// function toggleSections(el) {
-//     const m = document.querySelector('main');
-//     m.classList.toggle('folded');
-//     el.parentNode.scrollIntoView({behavior: "instant", block: "start"});
-// }
 
 function tr_play(el = lastTrack) {
     const audioElem = document.getElementById('pl-audio');
@@ -227,7 +247,6 @@ function pl_change_volume(el) {
 function pl_duration(el) {
     document.querySelector('#player .pl-time').innerText = mmss(el.duration);
 }
-
 
 class visualiser {
     constructor(audioElem) {
