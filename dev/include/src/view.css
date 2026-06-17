@@ -33,9 +33,15 @@
 #arrows > a:visited {
     color: var(--bilouhighlight);
 }
-.img_container {
-    min-height: 40vh;
+main {
     display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+.img_container {
+    /* min-height: 40vh; */
+    display: flex;
+    flex: 1;
     align-items: center;
     justify-content: center;
     height: calc(min(var(--height), 70vh));

@@ -9,7 +9,7 @@ window.addEventListener('DOMContentLoaded', () => {
     document.body.querySelector('#page_title > p').textContent = tagdesc;
     document.body.querySelector('header > nav > a:nth-child(2)').href = '../..';
     document.body.querySelectorAll('.gallery > a:not(.' + tag + ')').forEach(a => {
-      a.nextElementSibling.remove();
+      a.nextSibling.nextSibling.remove();
       a.remove();
     });
     document.body.querySelectorAll('section:not(.' + tag + ')').forEach(s => {
@@ -85,6 +85,7 @@ if (tag.length > 1) {
 let focusel;
 let ticking = false;
 let isResizing = false;
+let oldwidth = window.innerWidth;
 
 function updateFocusEl() {
   if (isResizing) return;
@@ -102,8 +103,9 @@ function updateFocusEl() {
 
 window.addEventListener('resize', () => {
   isResizing = true;
-  if (focusel) {
+  if (focusel && oldwidth != window.innerWidth) {
     focusel.scrollIntoView({behavior: "instant", block: "center"});
+    oldwidth = window.innerWidth;
   }
   clearTimeout(window.__resizeTimer);
   window.__resizeTimer = setTimeout(() => {
