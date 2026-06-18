@@ -1,4 +1,16 @@
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', initGallery);
+document.addEventListener('spa:load', initGallery);
+
+function initGallery() {
+  let tag = window.location.pathname.split('/tag/');
+  if (tag.length > 1) {
+    tag = tag[1];
+    let css = '.gallery > a:not(.' + tag + ').gallery > a:not(.' + tag + '), section:not(.' + tag +'), #note {display: none} #current_tag {display: block}',
+      head = document.head,
+      style = document.createElement('style');
+    head.appendChild(style);
+    style.appendChild(document.createTextNode(css));
+  } else {tag = false;};
   if (tag) {
     const el = document.body.querySelector('#tag_list a.' + tag),
       tagtitle = el.textContent,
@@ -34,7 +46,7 @@ window.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('#gallery section').forEach(section => {
     section.addEventListener('click', toggleSelf);
   });
-});
+}
 
 function enlarge(el) {
   const m = document.body;
@@ -71,16 +83,6 @@ function toggleSelf(el) {
     toggleSections(el.target);
   }
 }
-
-let tag = window.location.pathname.split('/tag/');
-if (tag.length > 1) {
-  tag = tag[1];
-  let css = '.gallery > a:not(.' + tag + ').gallery > a:not(.' + tag + '), section:not(.' + tag +'), #note {display: none} #current_tag {display: block}',
-    head = document.head,
-    style = document.createElement('style');
-  head.appendChild(style);
-  style.appendChild(document.createTextNode(css));
-} else {tag = false;};
 
 let focusel;
 let ticking = false;

@@ -3,12 +3,14 @@
     src: url('/fonts/biloufont_regular.woff2') format('woff2'),
          url('/fonts/biloufont_regular.woff') format('woff'),
          url('/fonts/biloufont_regular.ttf') format('truetype');
+    font-display: swap;
 }
 @font-face {
     font-family: BilouFontLight;
     src: url('/fonts/biloufont_light.woff2') format('woff2'),
          url('/fonts/biloufont_light.woff') format('woff'),
          url('/fonts/biloufont_light.ttf') format('truetype');
+    font-display: swap;
 }
 :root {
     /* anciennes couleurs */

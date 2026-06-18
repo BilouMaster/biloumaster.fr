@@ -252,6 +252,7 @@ lightbox.on('close', () => {
   if (!noHistoryBack) {
     // console.log("close - back");
     noPopState = true;
+    if (window.__spa) window.__spa.ignorePop = true;
     history.back();
     document.title = title_origin;
     lightbox.pswp.currSlide.data.element.scrollIntoView({behavior: "instant", block: "center"});
@@ -411,11 +412,11 @@ if (document.getElementById('tag_list')) {
   const tag_list = new PhotoSwipeLightbox(options);
   
   tag_list.on('afterInit', () => {
-    document.body.classList.add('blur')
+    document.body.classList.add('blur');
   });
   
   tag_list.on('close', () => {
-    document.body.classList.remove('blur')
+    document.body.classList.remove('blur');
   });
   
   function get_tag_list() {

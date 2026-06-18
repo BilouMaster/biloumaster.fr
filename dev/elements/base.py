@@ -192,7 +192,7 @@ class Element:
             'description':  self.desc[lang],
             'icon':         self.get_icon(),
             'secondary_icons': ''.join(icons),
-            'imgs':         str_indent('\n'.join([f'<div style="background-image: url(\'{img}\');"></div>' for img in img_prev]), 2),
+            'imgs':         str_indent('\n'.join([f'<div data-bg="{img}"></div>' for img in img_prev]), 2),
             'infos':        infos
         }
         return get_templates()['navig_element'].format(**args)

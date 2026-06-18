@@ -1,4 +1,6 @@
 document.addEventListener('readystatechange', psyche_origin);
+document.addEventListener('spa:load', psyche_origin);
+
 window.addEventListener('resize', psyche_origin);
 window.addEventListener('scroll', trippy, { passive: true });
 
@@ -17,6 +19,23 @@ function psyche_origin() {
         root_style.setProperty('--biloupsyche_left', Math.round((logo.left + logo.right) / 2 - header.left) + 'px');
         root_style.setProperty('--biloupsyche_top', Math.round((logo.top + logo.bottom) / 2 - header.top) + 'px');
         tick = false;
+    });
+    const bgObserver = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const el = entry.target;
+        const bg = el.dataset.bg;
+        if (bg) {
+        el.style.backgroundImage = `url("${bg}")`;
+        el.removeAttribute("data-bg");
+        }
+        bgObserver.unobserve(el);
+    }
+    }, {
+    rootMargin: "200px"
+    });
+    document.querySelectorAll("*[data-bg]").forEach(el => {
+    bgObserver.observe(el);
     });
 }
 
@@ -49,10 +68,12 @@ function trippy() {
     document.addEventListener('mouseover', removetouchclass, false) //this event gets called when input type is everything from touch to mouse/ trackpad
 })();
 
-document.addEventListener("DOMContentLoaded", () => {
+function totop() {
     const btn = document.getElementById("totop");
     if (!btn) return;
     btn.addEventListener("click", () => {
         window.scrollTo({top: 0, left: 0, behavior: "smooth"});
     });
-});
+}
+document.addEventListener("DOMContentLoaded", totop);
+document.addEventListener('spa:load', totop);

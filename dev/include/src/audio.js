@@ -3,7 +3,7 @@ var vizuexists = false;
 
 document.addEventListener("keydown", (event) => {
     let pl = document.getElementById('player');
-    if (pl.classList.contains('active')) {
+    if (pl && pl.classList.contains('active')) {
         switch (event.code) {
             case "ArrowLeft":
                 event.preventDefault();
@@ -208,11 +208,13 @@ function mmss(sec) {
 
 function pl_time() {
     const audioEl = document.getElementById('pl-audio');
-    document.querySelector('.pl-bar .pl-current-time').innerText = mmss(audioEl.currentTime);
-    if (isNaN(audioEl.duration)) {
-        document.querySelector('.pl-bar input').value = 0;
-    } else {
-        document.querySelector('.pl-bar input').value = audioEl.currentTime * 100 / audioEl.duration;
+    if (audioEl) {
+        document.querySelector('.pl-bar .pl-current-time').innerText = mmss(audioEl.currentTime);
+        if (isNaN(audioEl.duration)) {
+            document.querySelector('.pl-bar input').value = 0;
+        } else {
+            document.querySelector('.pl-bar input').value = audioEl.currentTime * 100 / audioEl.duration;
+        }
     }
 }
 setInterval(pl_time, 100);
