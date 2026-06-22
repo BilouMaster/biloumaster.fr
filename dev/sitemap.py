@@ -7,6 +7,8 @@ def generate_sitemap(website):
         "urlset",
         xmlns="http://www.sitemaps.org/schemas/sitemap/0.9",
     )
+    website = website.copy()
+    website.sort(key=lambda i: len(i.parents) if hasattr(i, 'parents') and isinstance(i.parents, list) else 0)
     for page in website:
         if not page:
             continue
@@ -25,7 +27,7 @@ def generate_sitemap(website):
         f.write("\n".join(pretty_xml.split("\n")[1:]))
 
 def generate_robottxt():
-    with open(f'{config.output}/robot.txt', "w", encoding="utf-8") as f:
+    with open(f'{config.output}/robots.txt', "w", encoding="utf-8") as f:
         f.write(f"""User-agent: *
 Allow: /
 

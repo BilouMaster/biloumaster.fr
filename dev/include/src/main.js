@@ -1,25 +1,9 @@
-document.addEventListener('readystatechange', psyche_origin);
-document.addEventListener('spa:load', psyche_origin);
-
-window.addEventListener('resize', psyche_origin);
+document.addEventListener('DOMContentLoaded', main_init);
+document.addEventListener('spa:load', main_init);
 window.addEventListener('scroll', trippy, { passive: true });
 
-let tick = false;
-
-function psyche_origin() {
-    if (tick) return;
-    tick = true;
-
-    requestAnimationFrame(() => {
-        let logo = document.getElementById('logo').getBoundingClientRect();
-        let header = document.getElementsByTagName('header')[0].getBoundingClientRect();
-        const angle = 1 * Math.PI / 180;
-        const root_style = document.documentElement.style;
-        root_style.setProperty('--biloufade_offset', Math.round((header.right - header.left) * Math.sin(angle)) + 'px');
-        root_style.setProperty('--biloupsyche_left', Math.round((logo.left + logo.right) / 2 - header.left) + 'px');
-        root_style.setProperty('--biloupsyche_top', Math.round((logo.top + logo.bottom) / 2 - header.top) + 'px');
-        tick = false;
-    });
+function main_init() {
+    totop;
     const bgObserver = new IntersectionObserver((entries) => {
     for (const entry of entries) {
         if (!entry.isIntersecting) continue;
@@ -32,10 +16,10 @@ function psyche_origin() {
         bgObserver.unobserve(el);
     }
     }, {
-    rootMargin: "200px"
+        rootMargin: "200px"
     });
     document.querySelectorAll("*[data-bg]").forEach(el => {
-    bgObserver.observe(el);
+        bgObserver.observe(el);
     });
 }
 
@@ -75,5 +59,3 @@ function totop() {
         window.scrollTo({top: 0, left: 0, behavior: "smooth"});
     });
 }
-document.addEventListener("DOMContentLoaded", totop);
-document.addEventListener('spa:load', totop);

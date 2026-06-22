@@ -52,13 +52,15 @@ class Image(Element):
                 "image": {
                     "@type": "ImageObject",
                     "contentUrl": f'{config.url}/img/gallery/{self.name}.webp',
-                    "license": {
-                        "@type": "CreativeWork",
-                        "name": "CC BY-NC 4.0",
-                        "url": "https://creativecommons.org/licenses/by-nc/4.0/"
-                    },
                     "width": self.width,
-                    "height": self.height
+                    "height": self.height,
+                    "creator": {
+                        "@id": f"{config.url}/#person"
+                    },
+                    "creditText": config.author,
+                    "copyrightNotice": f"CC BY-NC 4.0 © {config.author}",
+                    "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+                    "acquireLicensePage": f"{config.url}/license"
                 },
                 "description": self.desc[lang].replace('<br>',' ').replace('"',''),
                 "dateCreated": self.date,

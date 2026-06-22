@@ -131,11 +131,10 @@ class Track(Element):
             },
             "url": f'{config.url}/mp3/{self.filename}.mp3',
             "position": self.track_num,
-            "license": {
-                "@type": "CreativeWork",
-                "name": "CC BY-NC 4.0",
-                "url": "https://creativecommons.org/licenses/by-nc/4.0/"
-            },
+            "creditText": config.author,
+            "copyrightNotice": f"CC BY-NC 4.0 © {config.author}",
+            "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+            "acquireLicensePage": f"{config.url}/license",
             "inAlbum": {
                 "@id": f"{self.parent.canon_url[lang]}#album"
             },

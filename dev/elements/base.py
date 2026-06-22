@@ -232,7 +232,7 @@ class Element:
         return get_templates()['header_nav_' + str(min(3, len(p)))].format(**nav_args)
     
     def get_meta_description(self, lang='fr') -> str:
-        [i.replace('<br>',' ').replace('"','') for i in [i.desc[lang] for i in self.parents] + [self.desc[lang]] if i != ''][-1]
+        return [i.replace('<br>',' ').replace('"','') for i in [i.desc[lang] for i in self.parents] + [self.desc[lang]] if i != ''][-1]
 
     def html(self, lang='fr') -> str:
         if self.included:
@@ -262,9 +262,9 @@ class Element:
         json_ld['@graph'][-1]['itemListElement'].append({
             "@type": "ListItem",
             "position": len(self.parents) + 1,
-            "name": self.title[lang],
-            "item": self.canon_url[lang]
+            "name": self.title[lang]
         })
+        json_ld['@graph'][-1]['itemListElement'][0]['name'] = 'Accueil'
         args = {
             'nav':              str_indent(self.html_header_nav(), 2),
             'title':            self.title[lang],
