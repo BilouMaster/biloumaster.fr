@@ -11,8 +11,10 @@ import config
 
 class Album(Element):
     def spec_args(self, args, lang='fr') -> dict:
-        args['extralink'] = str_indent("""\
+        args['extralink'] = str_indent(f"""\
             <link rel="stylesheet" href="/src/audio.css">
+            <link rel="preload" as="image" href="{config.url}/img/album_art/{self.name}.jpg">
+            <link rel="image_src" href="{config.url}/img/album_art/{self.name}.jpg">
             <script defer src="/src/audio.js"></script>""", 1)
         args['content'] += str_indent(get_templates()['player'], 2)
 
@@ -22,13 +24,26 @@ class Album(Element):
     def get_json_ld(self, lang) -> dict:
         j = super().get_json_ld(lang)
         j['@graph'] += [{
+            "@type": "ImageObject",
+            "@id": f'{config.url}/img/album_art/{self.name}.jpg#image',
+            "contentUrl": f'{config.url}/img/album_art/{self.name}.jpg',
+            "creator": {
+                "@id": f"{config.url}/#person"
+            },
+            "creditText": config.author,
+            "copyrightNotice": f"CC BY-NC 4.0 © {config.author}",
+            "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+            "acquireLicensePage": f"{config.url}/license"
+        },{
             "@type": "MusicAlbum",
             "@id": f"{self.canon_url[lang]}#album",
             "name": self.title[lang],
             "url": self.canon_url[lang],
             "description": self.desc[lang].replace('<br>',' ').replace('"',''),
             "datePublished": self.max_date,
-            "image": f'{config.url}/img/album_art/{self.name}.jpg',
+            "image": {
+                "@id": f'{config.url}/img/album_art/{self.name}.jpg#image'
+            },
             "byArtist": {
                 "@id": f"{config.url}/#person"
             },
@@ -42,6 +57,9 @@ class Album(Element):
             "url": self.canon_url[lang],
             "isPartOf": {
                 "@id": f'{config.url}/#website'
+            },
+            "primaryImageOfPage": {
+                "@id": f'{config.url}/img/album_art/{self.name}.jpg#image'
             },
             "mainEntity": {
                 "@id": f"{self.canon_url[lang]}#album"
@@ -101,13 +119,26 @@ class Track(Element):
     def get_json_ld(self, lang) -> dict:
         j = super().get_json_ld(lang)
         j['@graph'] += [{
+            "@type": "ImageObject",
+            "@id": f'{config.url}/img/album_art/{self.parent.name}.jpg#image',
+            "contentUrl": f'{config.url}/img/album_art/{self.parent.name}.jpg',
+            "creator": {
+                "@id": f"{config.url}/#person"
+            },
+            "creditText": config.author,
+            "copyrightNotice": f"CC BY-NC 4.0 © {config.author}",
+            "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+            "acquireLicensePage": f"{config.url}/license"
+        },{
             "@type": "MusicAlbum",
             "@id": f"{self.parent.canon_url[lang]}#album",
             "name": self.parent.title[lang],
             "url": self.parent.canon_url[lang],
             "description": self.parent.desc[lang].replace('<br>',' ').replace('"',''),
             "datePublished": self.parent.max_date,
-            "image": f'{config.url}/img/album_art/{self.parent.name}.jpg',
+            "image": {
+                "@id": f'{config.url}/img/album_art/{self.parent.name}.jpg#image'
+            },
             "byArtist": {
                 "@id": f"{config.url}/#person"
             }
@@ -118,6 +149,9 @@ class Track(Element):
             "url": self.canon_url[lang],
             "isPartOf": {
                 "@id": f'{config.url}/#website'
+            },
+            "primaryImageOfPage": {
+                "@id": f'{config.url}/img/album_art/{self.parent.name}.jpg#image'
             },
             "mainEntity": {
                 "@id": f"{self.canon_url[lang]}#track"
@@ -145,8 +179,10 @@ class Track(Element):
         return j
 
     def spec_args(self, args, lang='fr') -> dict:
-        args['extralink'] = str_indent("""\
+        args['extralink'] = str_indent(f"""\
             <link rel="stylesheet" href="/src/audio.css">
+            <link rel="preload" as="image" href="{config.url}/img/album_art/{self.name}.jpg">
+            <link rel="image_src" href="{config.url}/img/album_art/{self.name}.jpg">
             <script defer src="/src/audio.js"></script>""", 1)
 
     def html_return(self, lang='fr') -> str:

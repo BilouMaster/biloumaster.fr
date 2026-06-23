@@ -38,6 +38,19 @@ class Image(Element):
                 "@id": f"{config.url}/#website"
             },          
         },{
+            "@type": "ImageObject",
+            "@id": f'{config.url}/img/gallery/{self.name}.webp#image',
+            "contentUrl": f'{config.url}/img/gallery/{self.name}.webp',
+            "width": self.width,
+            "height": self.height,
+            "creator": {
+                "@id": f"{config.url}/#person"
+            },
+            "creditText": config.author,
+            "copyrightNotice": f"CC BY-NC 4.0 © {config.author}",
+            "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+            "acquireLicensePage": f"{config.url}/license"
+        },{
             "@type": "WebPage",
             "@id": f"{self.canon_url[lang]}#page",
             "name": self.meta_title,
@@ -45,22 +58,15 @@ class Image(Element):
             "isPartOf": {
                 "@id": f'{config.url}/#website'
             },
+            "primaryImageOfPage": {
+                "@id": f'{config.url}/img/gallery/{self.name}.webp#image'
+            },
             "mainEntity": {
                 "@type": "VisualArtwork",
                 "@id": f"{self.canon_url[lang]}#artwork",
                 "name": self.title[lang],
                 "image": {
-                    "@type": "ImageObject",
-                    "contentUrl": f'{config.url}/img/gallery/{self.name}.webp',
-                    "width": self.width,
-                    "height": self.height,
-                    "creator": {
-                        "@id": f"{config.url}/#person"
-                    },
-                    "creditText": config.author,
-                    "copyrightNotice": f"CC BY-NC 4.0 © {config.author}",
-                    "license": "https://creativecommons.org/licenses/by-nc/4.0/",
-                    "acquireLicensePage": f"{config.url}/license"
+                    "@id": f'{config.url}/img/gallery/{self.name}.webp#image'
                 },
                 "description": self.desc[lang].replace('<br>',' ').replace('"',''),
                 "dateCreated": self.date,
@@ -118,6 +124,8 @@ class Image(Element):
     
     def spec_args(self, args, lang='fr') -> dict:
         args['extralink'] = '<link rel="stylesheet" href="/src/view.css">'
+        args['extralink'] += f'\n    <link rel="preload" as="image" href="/img/gallery/{self.name}.webp">'
+        args['extralink'] += f'\n    <link rel="image_src" href="{config.url}/img/gallery/{self.name}.webp">'
         if self.parent.title['fr'] in ['Pixel-Art', 'Screenshots']:
             args['extralink'] += '\n    ' + str_indent(get_templates()['pixelart_style'], 1)
         args['extralink'] += '\n    <script defer src="/src/view.js"></script>'
@@ -188,10 +196,10 @@ class Image(Element):
     def html_return(self, lang='fr') -> str:
         desc = ''
         if self.desc[lang]:
-            desc = f'<p>{self.desc[lang]}</p>'
+            desc = f'<p class="image-context">{self.desc[lang]}</p>'
         tags = Tag.str_tags(self.tags, self.parent.url, lang) if not self.parent.included else '<!--no tags-->'
         date = self.get_date()
-        date = f'<time class="date" datetime="{date}">{self.str_date[lang]}</time>' if date else '<!--no time-->'
+        date = f'<time class="image-context date" datetime="{date}">{self.str_date[lang]}</time>' if date else '<!--no time-->'
         return get_templates()['gallery_element'].format(
             url=        self.url,
             width=      self.width,

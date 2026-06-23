@@ -1,5 +1,17 @@
 <nav id="arrows">{go_prev}{go_next}</nav>
-<div class="img_container" style="--height: {height}px;">
-    <img class="viewable" srcset="{srcset}" sizes="{sizes}" src="/img/gallery/{filename}.webp" alt="{alt}" fetchpriority="high">
-</div>
+<figure aria-labelledby="main_title main_desc" class="img_container" style="--height: {height}px;">
+    <img
+        class="viewable"
+        src="/img/gallery/{filename}.webp"
+        srcset="{srcset}"
+        sizes="{sizes}"
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
+        alt="{alt}"
+    >
+    <figcaption class="image-context">
+        {alt}
+    </figcaption>
+</figure>
 {tags}

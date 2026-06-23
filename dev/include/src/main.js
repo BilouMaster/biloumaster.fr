@@ -3,7 +3,7 @@ document.addEventListener('spa:load', main_init);
 window.addEventListener('scroll', trippy, { passive: true });
 
 function main_init() {
-    totop;
+    totop();
     const bgObserver = new IntersectionObserver((entries) => {
     for (const entry of entries) {
         if (!entry.isIntersecting) continue;

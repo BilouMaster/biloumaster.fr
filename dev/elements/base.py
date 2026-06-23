@@ -191,7 +191,7 @@ class Element:
             'title':        self.title[lang],
             'description':  self.desc[lang],
             'icon':         self.get_icon(),
-            'secondary_icons': ''.join(icons),
+            'secondary_icons': '<div class="secondary_icons">' + ''.join(icons) + '</div>' if icons else '',
             'imgs':         str_indent('\n'.join([f'<div data-bg="{img}"></div>' for img in img_prev]), 2),
             'infos':        infos
         }

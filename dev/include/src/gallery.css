@@ -142,9 +142,6 @@ html:not(.can-touch) #gallery section h2:hover, html:not(.can-touch) .folded #ga
     transition: transform .6s var(--biloueazout), filter .6s var(--biloueazout);
     cursor: zoom-in;
 }
-.gallery > a > * {
-    display: none;
-}
 .gallery > .tags {
     display: none;
 }
