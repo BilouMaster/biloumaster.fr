@@ -1,6 +1,6 @@
-<a class="download" href="[BConcept]-Vaisseau3D.zip">
-    <img src="/img/bilouconcepts.svg" alt="">
-    [BConcept]-Vaisseau3D.zip
+<a class="download" href="[BConcept]-Gravitactic.zip">
+    <img src="/img/ui/gravitactic.svg" alt="">
+    [BConcept]-Gravitactic.zip
 </a>
 
 Décompressez l'archive `.zip` et lancez `RPG_RT.exe` pour jouer.

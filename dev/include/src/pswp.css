@@ -12,7 +12,7 @@ html:not(.can-touch) .viewable:hover {
 }
 .pswp {
     --pswp-bg: var(--biloubgc) var(--overbiloulay) !important;
-    --pswp-placeholder-bg: var(--biloubgct) no-repeat center/75px url(/img/placeholder.svg) !important;
+    --pswp-placeholder-bg: var(--biloubgct) no-repeat center/75px url(/img/ui/placeholder.svg) !important;
 }
 .pixelated .pswp__img {
     image-rendering: -moz-crisp-edges;

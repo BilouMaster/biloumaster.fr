@@ -15,7 +15,7 @@ function initGallery() {
     const el = document.body.querySelector('#tag_list a.' + tag),
       tagtitle = el.textContent,
       tagdesc = el.title;
-    window.document.title = `${tagtitle} - window.document.title`;
+    window.document.title = `${tagtitle} - ${window.document.title}`;
     document.body.querySelector('#current_tag span').textContent = tagtitle;
     document.body.querySelector('#page_title > h1').textContent = tagtitle;
     document.body.querySelector('#page_title > p').textContent = tagdesc;

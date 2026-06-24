@@ -452,7 +452,7 @@ a.biloulink:hover {
 }
 .caption.avatar::before {
     content: "";
-    background-image: url(/img/bubble_tail_left.svg), url(/img/biloumaster.svg);
+    background-image: url(/img/ui/bubble_tail_left.svg), url(/img/ui/biloumaster.svg);
     background-size: auto, contain;
     background-repeat: no-repeat;
     background-position: right, left;

@@ -86,7 +86,7 @@ class Element:
 
     def get_icon(self) -> str:
         icon = self.name
-        if not Path(f'{config.output}/img/' + icon + '.svg').exists():
+        if not Path(f'{config.output}/img/ui/' + icon + '.svg').exists():
             icon = self.__class__.__name__.lower()
         return icon
     
@@ -184,7 +184,7 @@ class Element:
         if self.infos:
             infos = '<div class="infos"><span>' + '</span><span>'.join(self.infos) + '</span></div>'
         icons = [c.get_icon() for c in self.children]
-        icons = [f'<img class="navig_icon secondary" src="/img/{i}.svg" height="128" width="128" alt="">' for i in icons if i not in ['article','gallery','image','track','album','page']][:7]
+        icons = [f'<img class="navig_icon secondary" src="/img/ui/{i}.svg" height="128" width="128" alt="">' for i in icons if i not in ['article','gallery','image','track','album','page']][:7]
         args = {
             'date':         self.html_nav_time(lang),
             'href':         self.url,
@@ -244,7 +244,7 @@ class Element:
         elif self.parent and len(self.parents) == 2:
             self.meta_title = f'{self.title[lang]} - {t[-1]} de {config.author}'
         else:
-            self.meta_title = f'{self.title[lang]} de {config.author}'
+            self.meta_title = f'{self.title[lang]} - {config.url[8:]}'
         self.meta_description = self.get_meta_description(lang)
         json_ld = self.get_json_ld(lang)
         json_ld['@graph'] += [{

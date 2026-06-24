@@ -1,5 +1,5 @@
 <a class="download" href="[BConcept]-Vaisseau3D.zip">
-    <img src="/img/bilouconcepts.svg" alt="">
+    <img src="/img/ui/vaisseau-3d.svg" alt="">
     [BConcept]-Vaisseau3D.zip
 </a>
 
