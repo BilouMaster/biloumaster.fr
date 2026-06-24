@@ -1,0 +1,27 @@
+<svg width="128" height="128" version="1.1" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <radialGradient id="biloub" cx="64" cy="128" r="92" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="rgb(223, 238, 167)" offset=".5"/>
+   <stop stop-color="rgb(223, 238, 167)" stop-opacity="0" offset="1"/>
+  </radialGradient>
+  <linearGradient id="biloue" x1="30" x2="60" y1="40" y2="60" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#fff" stop-opacity="0" offset="1"/>
+  </linearGradient>
+  <radialGradient id="biloud" cx="123.08" cy="104.66" r="58.621" gradientTransform="matrix(0 -2 2 -1.9982e-8 -122.62 367.86)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#f0e9f2" stop-opacity="0" offset="1"/>
+  </radialGradient>
+  <radialGradient id="bilouc" cx="15.023" cy="-37.564" r="58.621" gradientTransform="matrix(0 2 -2 0 16.136 -5.3795)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#e7ceb8" offset="0"/>
+   <stop stop-color="#e7ceb8" offset=".5"/>
+   <stop stop-color="#e7ceb8" stop-opacity="0" offset="1"/>
+  </radialGradient>
+ </defs>
+ <circle cx="64" cy="64" r="60.512" fill="#5c4680"/>
+ <circle cx="64" cy="64" r="60.512" fill="url(#bilouc)"/>
+ <circle cx="64" cy="64" r="60.512" fill="url(#biloub)"/>
+ <circle cx="64" cy="64" r="60.512" fill="url(#biloud)"/>
+ <path fill="url(#biloue)" d="m64 5.3789c-32.375 5.7e-5 -58.621 26.246-58.621 58.621 0.023097 17.322 7.7057 33.747 20.986 44.867-7.1774-9.9285-12.602-18.925-12.651-31.176-8.64e-4 -32.376 17.91-34.352 50.286-34.353 13.885 0.005775 37.19-22.262 47.777-13.278-10.99-15.478-28.795-24.675-47.777-24.682z"/>
+</svg>

@@ -221,7 +221,7 @@ class Image(Element):
             foot_nav = self.parent.html_simple_nav(lang)
         return '<nav id="navig_footer">\n\t\t\t' + str_indent(foot_nav, 3) + '\n\t\t</nav>'
 
-class Gallery(Page):
+class Gallery(Element):
     all = list()
 
     def __init__(self, *args):

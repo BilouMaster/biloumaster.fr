@@ -12,10 +12,12 @@ class Index(Page):
 
     def html_header_nav(self):
         return '<img id="logo" src="/img/biloumaster.svg" alt="BilouMaster Joke" width="128" height="128" fetchpriority="high">'
+    
+    def get_meta_description(self, lang='fr') -> str:
+        return 'Artiste, développeur de jeux vidéo et compositeur amateur/autodidacte. Découvrez mes créations graphiques, jeux indépendants et albums musicaux.'
 
     def get_json_ld(self, lang='fr') -> dict:
         self.meta_title = config.sitename + ' - Créations artistiques, jeux vidéo et compositions musicales'
-        self.meta_description = 'Artiste, développeur de jeux vidéo et compositeur amateur/autodidacte. Découvrez mes créations graphiques, jeux indépendants et albums musicaux.'
         return super().get_json_ld(lang)
 
     def spec_args(self, args, lang='fr') -> dict:

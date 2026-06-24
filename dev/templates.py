@@ -15,7 +15,6 @@ def get_template(infile: str) -> tuple:
     return filename, content
 
 def str_template(infile: str) -> str:
-    file = open(infile, 'r')
-    content = file.read()
-    file.close()
+    with open(infile, 'r', encoding='utf-8') as file:
+        content = file.read()
     return content

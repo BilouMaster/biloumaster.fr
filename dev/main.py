@@ -11,6 +11,7 @@ from elements.articles import Article
 from shutil import rmtree, copytree
 from sitemap import generate_sitemap, generate_robottxt
 import config, pickle, subprocess
+import sys
 
 def identify(path: Path, parent) -> Element:
     s = path.suffix.lower()
@@ -39,16 +40,23 @@ def crawl(path, parent):
         if e.is_dir() and e.stem != 'include':
             crawl(e, website[-1])
 
-if __name__ == "__main__":
+website = []
+
+def main():
     print_time('copy ','first')
     copytree('include/', f'{config.output}/', dirs_exist_ok=True)
     subprocess.call(['rsync', '-a', f'{config.input}/include/', f'{config.output}/'])
+
+    if '-u' in sys.argv:
+        print_time('bilou','last')
+        return
 
     print_time('metadatas')
     [MetaData(e) for e in Path(config.input).glob('**/*.txt')]
     [MetaData(e) for e in Path(config.input).glob('**/*.tsv')]
 
     print_time('crawl')
+    global website
     website = [Index(Path(config.input))]
     crawl(Path(config.input), website[0])
 
@@ -87,3 +95,6 @@ if __name__ == "__main__":
         pickle.dump(website, f, pickle.HIGHEST_PROTOCOL)
 
     print_time('bilou','last')
+
+if __name__ == "__main__":
+    main()

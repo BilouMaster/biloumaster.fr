@@ -283,7 +283,8 @@ class Element:
         self.spec_args(args, lang)
         html = get_templates()['main'].format(**args)
         path = self.output_path(lang)
-        open(f'{path}{self.name}.html', 'w').write(str_clean(html))
+        with open(f'{path}{self.name}.html', 'w', encoding='utf-8') as f:
+            f.write(str_clean(html))
         return self.html_return(lang)
     
     def html_footer(self, lang='fr') -> str:

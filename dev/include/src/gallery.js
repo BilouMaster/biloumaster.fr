@@ -2,35 +2,7 @@ window.addEventListener('DOMContentLoaded', initGallery);
 document.addEventListener('spa:load', initGallery);
 
 function initGallery() {
-  let tag = window.location.pathname.split('/tag/');
-  if (tag.length > 1) {
-    tag = tag[1];
-    let css = '.gallery > a:not(.' + tag + ').gallery > a:not(.' + tag + '), section:not(.' + tag +'), #note {display: none} #current_tag {display: block}',
-      head = document.head,
-      style = document.createElement('style');
-    head.appendChild(style);
-    style.appendChild(document.createTextNode(css));
-  } else {tag = false;};
-  if (tag) {
-    const el = document.body.querySelector('#tag_list a.' + tag),
-      tagtitle = el.textContent,
-      tagdesc = el.title;
-    window.document.title = `${tagtitle} - ${window.document.title}`;
-    document.body.querySelector('#current_tag span').textContent = tagtitle;
-    document.body.querySelector('#page_title > h1').textContent = tagtitle;
-    document.body.querySelector('#page_title > p').textContent = tagdesc;
-    document.body.querySelector('header > nav > a:nth-child(2)').href = '../..';
-    document.body.querySelectorAll('.gallery > a:not(.' + tag + ')').forEach(a => {
-      a.nextSibling.nextSibling.remove();
-      a.remove();
-    });
-    document.body.querySelectorAll('section:not(.' + tag + ')').forEach(s => {
-      s.remove();
-    });
-    document.body.querySelectorAll('.'+tag).forEach(t => {
-      t.classList.add('current');
-    });
-  };
+  filterTag();
   const lazyThumbs = new IntersectionObserver((entries, lazyThumbs) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -46,6 +18,66 @@ function initGallery() {
   document.querySelectorAll('#gallery section').forEach(section => {
     section.addEventListener('click', toggleSelf);
   });
+}
+
+function filterTag() {
+  let loc = window.location.toString();
+  let tag = false;
+  let splitted = loc.split('/tag/');
+  if (splitted.length > 1) {
+    let tag = splitted[1];
+    let css = '.gallery > a:not(.' + tag + ').gallery > a:not(.' + tag + '), section:not(.' + tag +'), #note {display: none} #current_tag {display: block}',
+      head = document.head,
+      style = document.createElement('style');
+    head.appendChild(style);
+    style.appendChild(document.createTextNode(css));
+    const el = document.body.querySelector('#tag_list a.' + tag),
+      tagtitle = el.textContent,
+      tagdesc = el.title;
+    window.document.title = `${tagtitle} - ${window.document.title}`;
+    head.querySelector('meta[name="description"]').setAttribute('content', tagdesc);
+    head.querySelector('meta[property="og:title"]').setAttribute('content', window.document.title);
+    head.querySelector('meta[property="og:description"]').setAttribute('content', tagdesc);
+    head.querySelector('meta[property="og:url"]').setAttribute('content', loc);
+    head.querySelector('meta[name="twitter:title"]').setAttribute('content', window.document.title);
+    head.querySelector('meta[name="twitter:description"]').setAttribute('content', tagdesc);
+    head.querySelector('link[rel="canonical"]').setAttribute('href', loc);
+    const jsonLdScript = head.querySelector('script[type="application/ld+json"]');
+    const data = JSON.parse(jsonLdScript.textContent);
+    const imageGallery = data['@graph'].find(item => item['@type'] === 'ImageGallery');
+    imageGallery['@id'] = loc + "#gallery";
+    imageGallery.url = loc;
+    imageGallery.name = `Galerie "${imageGallery.name}", filtrée avec le mot-clé "${tagtitle}"`;
+    imageGallery.description = tagdesc;
+    const webPage = data['@graph'].find(item => item['@type'] === 'WebPage');
+    webPage['@id'] = loc + "#page";
+    webPage.name = window.document.title;
+    webPage.url = loc;
+    webPage.mainEntity = {"@id": loc + "#gallery"}
+    const breadcrumb = data['@graph'].find(item => item['@type'] === 'BreadcrumbList');
+    breadcrumb['@id'] = loc + "#breadcrumb";
+    breadcrumb.itemListElement.at(-1).item = splitted[0];
+    breadcrumb.itemListElement.push({
+        "@type": "ListItem",
+        "position": breadcrumb.itemListElement.length + 1,
+        "name": 'Mot-clé : ' + tagtitle
+      });
+    jsonLdScript.textContent = JSON.stringify(data, null, 2);
+    document.body.querySelector('#current_tag span').textContent = tagtitle;
+    document.body.querySelector('#page_title > h1').textContent = tagtitle;
+    document.body.querySelector('#page_title > p').textContent = tagdesc;
+    document.body.querySelector('header > nav > a:nth-child(2)').href = '../..';
+    document.body.querySelectorAll('.gallery > a:not(.' + tag + ')').forEach(a => {
+      a.nextSibling.nextSibling.remove();
+      a.remove();
+    });
+    document.body.querySelectorAll('section:not(.' + tag + ')').forEach(s => {
+      s.remove();
+    });
+    document.body.querySelectorAll('.'+tag).forEach(t => {
+      t.classList.add('current');
+    });
+  };
 }
 
 function enlarge(el) {
