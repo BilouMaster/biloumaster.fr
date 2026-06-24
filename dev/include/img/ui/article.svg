@@ -1,6 +1,31 @@
-<svg width="2048" height="2048" version="1.1" viewBox="0 0 2048 2048" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="1024" cy="1024" r="968.2" fill="#fff"/>
-  <path d="m1024 0a1024 1024 0 00-1024 1024 1024 1024 0 001024 1024 1024 1024 0 001024-1024 1024 1024 0 00-1024-1024zm.0234 71.99a952 951.9 0 01952 951.9 952 951.9 0 01-952 951.9 952 951.9 0 01-952-951.9 952 951.9 0 01952-951.9z" fill="#010000" style="paint-order:stroke fill markers"/>
-  <path d="m692.3 412.5c109.5-43.82 564.6-182.1 916.7 234.9 352.1 417-180.7 1107-607.1 1093-426.4-13.76-697.7-233-598.7-602 98.99-369 665.3-729.5 919.2-262.7 253.9 466.9-121.8 616.3-263.3 552.2-141.6-64.06-290.5-117.2-220.6-248.1 164.5-308.2 221.2 309.7 408.1 120.7 202.1-204.4-399.6-728-577.9-397.7-196.1 363.3-88.29 672.9 204.8 742 295.7 69.76 517-120.5 614.4-235.4s232.1-454.3-167.9-804.4c-400.1-350-695.4 209.6-836.7 89.92-199.2-168.7 99.76-239 209.2-282.8z"/>
-  <circle cx="351.1" cy="828.1" r="110.7" fill="#010000" style="paint-order:stroke fill markers"/>
+<svg width="128" height="128" version="1.1" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <linearGradient id="biloue" x1="29.357" x2="64.456" y1="12.579" y2="62.118" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#fff" stop-opacity="0" offset="1"/>
+  </linearGradient>
+  <radialGradient id="biloud" cx="123.08" cy="104.66" r="58.621" gradientTransform="matrix(0 -2 2 -1.9982e-8 -122.62 367.86)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#f0e9f2" offset="0"/>
+   <stop stop-color="#f0e9f2" stop-opacity="0" offset="1"/>
+  </radialGradient>
+  <radialGradient id="bilouc" cx="15.023" cy="-37.564" r="58.621" gradientTransform="matrix(0 2 -2 0 16.136 -5.3795)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#e7ceb8" offset="0"/>
+   <stop stop-color="#e7ceb8" stop-opacity="0" offset="1"/>
+  </radialGradient>
+  <radialGradient id="biloub" cx="128" cy="128" r="64" gradientTransform="matrix(5.0621e-8 -2 2 1.9053e-7 -128 384)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#5c4680" offset="0"/>
+   <stop stop-color="#2a2542" offset="1"/>
+  </radialGradient>
+  <radialGradient id="biloua" cx="5.3789" cy="5.3789" r="62" gradientTransform="matrix(9.3661e-6 1.891 -1.891 1.1385e-5 15.55 -4.7927)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#5c4680" offset="0"/>
+   <stop stop-color="#2a2542" offset="1"/>
+  </radialGradient>
+ </defs>
+ <circle cx="64" cy="64" r="60.512" fill="#5c4680"/>
+ <circle cx="64" cy="64" r="60.512" fill="url(#bilouc)"/>
+ <circle cx="64" cy="64" r="60.512" fill="url(#biloud)"/>
+ <path fill="url(#biloue)" d="m64 5.3789c-32.375 5.7e-5 -58.621 26.246-58.621 58.621 0.023097 17.322 7.7057 33.747 20.986 44.867-7.1774-9.9285-12.602-18.925-12.651-31.176-8.64e-4 -32.376 17.91-34.352 50.286-34.353 13.885 0.005775 37.19-22.262 47.777-13.278-10.99-15.478-28.795-24.675-47.777-24.682z"/>
+ <path fill="url(#biloua)" d="m64 0a64 64 0 0 0-64 64 64 64 0 0 0 64 64 64 64 0 0 0 64-64 64 64 0 0 0-64-64zm0.0014 4.4994a59.5 59.494 0 0 1 59.5 59.494 59.5 59.494 0 0 1-59.5 59.494 59.5 59.494 0 0 1-59.5-59.494 59.5 59.494 0 0 1 59.5-59.494z"/>
+ <path fill="url(#biloua)" d="m43.269 25.781c6.8438-2.7388 35.288-11.381 57.294 14.681s-11.294 69.188-37.944 68.312c-26.65-0.86-43.606-14.562-37.419-37.625 6.1869-23.062 41.581-45.594 57.45-16.419 15.869 29.181-7.6125 38.519-16.456 34.512-8.85-4.0038-18.156-7.325-13.788-15.506 10.281-19.262 13.825 19.356 25.506 7.5438 12.631-12.775-24.975-45.5-36.119-24.856-12.256 22.706-5.5181 42.056 12.8 46.375 18.481 4.36 32.312-7.5312 38.4-14.712s14.506-28.394-10.494-50.275c-25.006-21.875-43.462 13.1-52.294 5.62-12.45-10.544 6.235-14.938 13.075-17.675z"/>
+ <circle fill="url(#biloua)" cx="21.944" cy="51.756" r="6.9187"/>
 </svg>
