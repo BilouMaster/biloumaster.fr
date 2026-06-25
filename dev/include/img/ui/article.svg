@@ -6,7 +6,7 @@
    <stop stop-color="#000" offset="0.4"/>
    <stop stop-color="#2a2542" offset="1"/>
   </radialGradient>
-  <radialGradient id="biloub" cx="64" cy="128" r="128" gradientUnits="userSpaceOnUse">
+  <radialGradient id="biloub" cx="64" cy="128" r="92" gradientUnits="userSpaceOnUse">
    <stop stop-color="#fff" offset="0"/>
    <stop stop-color="rgb(223, 238, 167)" offset=".5"/>
    <stop stop-color="rgb(223, 238, 167)" stop-opacity="0" offset="1"/>

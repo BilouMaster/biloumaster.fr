@@ -59,14 +59,10 @@
 	transition-duration: 0.3s;
 }
 .navig > h2 {
-	color: var(--biloulight);
-    text-shadow: var(--biloutextborder);
-    width: 100%;
 	transition-property: color, transform;
 	transition-timing-function: var(--biloueazout), var(--biloustic);
 	transition-duration: 0.3s;
-	line-height: 1.5em;
-	margin: .5em 0;
+	margin: 0.5em auto;
 }
 .navig_icon {
     width: 4em;

@@ -24,7 +24,7 @@ class Index(Page):
         args['footer'] = str_indent(get_templates()['index_footer'], 2)
         args['extralink'] = '<link rel="stylesheet" href="/src/index.css">'
         args['content'] += '''<div class="info">
-        <h2>Kess ke c'est k'ce site ?</h2>
+        <h2 data-text="Kess ke c'est k'ce site ?">Kess ke c'est k'ce site ?</h2>
         <p>Bonyour, je suis Joke ! ... auto-proclamé BilouMaster, boui boui.<br>
         Je fais du gribouillage, de la musique et des jeux vidéos en amateur et autodidacte ...<br>
         Depuis 2021 je réunis mes vieux trucs ici ... et prépare le terrain pour de nouveaux projets !<br>

@@ -1,7 +1,7 @@
 from elements.base import Element
 from markdown import markdown
 from utils.str import str_indent
-import config
+import config, re
 
 class Article(Element):
     detached = list()
@@ -15,6 +15,12 @@ class Article(Element):
                 self.content = markdown(content.read()).replace('" />', '">')
             else:
                 self.content = content.read()
+        self.content = re.sub(
+            r"<h2([^>]*)>(.*?)</h2>",
+            lambda m: f'<h2{m.group(1)} data-text="{m.group(2)}">{m.group(2)}</h2>',
+            self.content,
+            flags=re.DOTALL
+        )
         if '$detached$' in self.content:
             self.parent.children.remove(self)
             self.parent = None

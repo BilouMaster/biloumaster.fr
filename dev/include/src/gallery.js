@@ -65,6 +65,7 @@ function filterTag() {
     jsonLdScript.textContent = JSON.stringify(data, null, 2);
     document.body.querySelector('#current_tag span').textContent = tagtitle;
     document.body.querySelector('#page_title > h1').textContent = tagtitle;
+    document.body.querySelector('#page_title > h1').dataset.text = tagtitle;
     document.body.querySelector('#page_title > p').textContent = tagdesc;
     document.body.querySelector('header > nav > a:nth-child(2)').href = '../..';
     document.body.querySelectorAll('.gallery > a:not(.' + tag + ')').forEach(a => {

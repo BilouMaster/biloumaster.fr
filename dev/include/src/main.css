@@ -25,6 +25,7 @@
     /* nouvelles */
     --bbgc: 42, 37, 66;
     --bdark: 92, 70, 128;
+    --biloudeep: black;
     --biloulight: rgb(231, 206, 184);
     --biloulightgreen: rgb(223, 238, 167);
     --bilouhighlight: rgb(240, 233, 242);
@@ -84,8 +85,64 @@ a {
     text-decoration: none;
     color: var(--biloulight);
 }
+html:not(.can-touch) a:not(.navig):hover {
+    color: var(--biloulightgreen);
+}
+:not(footer) > :not(nav, aside) > a:not(.navig, .download) {
+    -webkit-text-stroke: 3px var(--biloubgc);
+    filter: drop-shadow(0 0 0.1rem var(--biloubgc50));
+    paint-order: stroke fill;
+    font-family: BilouFont;
+    transition-property: color;
+    transition-duration: .2s;
+}
 a:visited {
     color: var(--biloulight);
+}
+h1, h2:not(.bubble-style) {
+  position: relative;
+  color: var(--biloulight);
+  width: fit-content;
+  padding: .25em .5em;
+  z-index: 1;
+}
+h1::before, h2:not(.bubble-style)::before {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    color: transparent;
+    -webkit-text-stroke: 4px transparent;
+    background: radial-gradient(
+    circle at -10px -10px,
+        var(--biloudark) 0%,
+        var(--biloubgc) 20%,
+        var(--biloudeep) 40%,
+        var(--biloubgc) 100%
+    );;
+    -webkit-background-clip: text;
+    background-clip: text;
+    filter: drop-shadow(0 0 0.2rem var(--biloubgc80));
+    padding: .25em .5em;
+}
+h1::after, h2:not(.bubble-style)::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    color: transparent;
+    background: url(/img/ui/decoration1.png);
+    -webkit-background-clip: text;
+    background-clip: text;
+    background-size: 100% 1em;
+    pointer-events: none;
+    padding: .25em .5em;
+}
+html:not(.can-touch) .navig:hover h2::after {
+    background: url(/img/ui/decoration2.png);
+    -webkit-background-clip: text;
+    background-clip: text;
+    background-size: 100% 100%;
 }
 body {
     display: flex;
@@ -160,13 +217,10 @@ header > #page_title {
     margin: 0.25em;
 }
 header > #page_title > h1 {
-    color: var(--biloulight);
-    text-shadow: var(--biloutextborder);
     line-height: 1em;
     transform: rotate(-1deg);
-    margin: 0.25em 0;
+    margin: 0 auto;
     text-align: center;
-    filter: drop-shadow(0 0 0.2rem var(--biloubgc33));
 }
 header > #page_title > p:empty {
     display: none;
@@ -248,6 +302,9 @@ main {
 .info a {
     font-family: BilouFont;
 }
+.info h2 {
+    margin: 0 auto;
+}
 .article p, .article li {
     font-family: BilouFontLight;
 }
@@ -260,54 +317,52 @@ main {
 }
 .article h3 {
     color: var(--biloulight);
-    text-shadow: var(--biloutextborder);
     line-height: 1.50em;
     font-weight: lighter;
     margin: 1em;
+    -webkit-text-stroke: 4px var(--biloubgc80);
+    paint-order: stroke fill;
+    filter: drop-shadow(0 0 0.1rem var(--biloubgc50));
 }
 .article strong, .article strong em {
     font-weight: normal;
     font-family: BilouFont;
 }
-.article a {
-    font-family: BilouFont;
-    transition-property: color;
-    transition-duration: .2s;
-}
 .article a.download {
-    background: linear-gradient(-45deg, var(--biloulightgreen), transparent);
+    font-family: BilouFont;
+    background-image: url('/img/ui/decoration1.png');
+    background-size: 100% 100%;
     background-color: var(--biloulight);
     padding: .5em;
     display: inline-block;
     color: var(--biloubgc);
     border-radius: 1em;
-    box-shadow: var(--biloutextborder), 0px 2px 5px var(--biloubgc);
-    border: solid var(--bilouhighlight);
-    transition-property: transform, background-color;
-    transition-timing-function: var(--biloustic), var(--biloueazout);
-    transition-duration: .3s, 1s;
+    border: solid 3px var(--biloubgc);
+    transition-property: margin, padding, background-color;
+    transition-timing-function: var(--biloustic), var(--biloustic), var(--biloueazout);
+    transition-duration: .3s;
+    filter: drop-shadow(0 0 0.2rem var(--biloubgc80));
 }
 html:not(.can-touch) .article a.download:hover {
-    color: var(--biloubgc);
     background-color: var(--biloulightgreen);
-    transform: scale(1.02);
+    color: var(--biloubgc);
+    padding: .75em;
+    margin: -.25em;
 }
 #main_content > section .article a.download img {
     height: 2em;
     margin: 0;
     margin-bottom: -0.5em;
     filter: drop-shadow(0 0 0.2rem var(--biloubgc80));
+    transition-property: transform;
+    transition-timing-function: var(--biloustic);
+    transition-duration: .3s;
 }
-html:not(.can-touch) .article a:hover {
-    color: var(--biloulightgreen);
+html:not(.can-touch) .article a.download:hover img {
+    transform: scale(1.1);
 }
 main h1, main h2 {
-    color: var(--biloulight);
-    text-shadow: var(--biloutextborder);
-    line-height: 1.75em;
-    margin: 0.5em;
     font-weight: lighter;
-    filter: drop-shadow(0 0 0.2rem var(--biloubgc33));
 }
 #main_content h2:not(.bubble-style), #main_content h3 {
     background-image: url('data:image/svg+xml,<svg width="117.28mm" height="109.1mm" version="1.1" viewBox="0 0 117.28 109.1" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-12.858 -174.02)"><path d="m12.858 174.02v76.379c0.80337 1.1845 1.4228 2.0041 1.7968 2.3782 3.3514 3.3514 25.554 30.339 74.612 30.339-24.342-7.0555-43.504-21.422-52.564-46.214-9.0205-24.685 3.4113-43.356 17.022-50.712 13.642-7.3728 36.153-6.9604 48.86 4.5863 10.489 9.5318 7.5845 25.4-2.7342 32.191-10.319 6.791-29.14 1.9436-28.31-12.788 0.67006-11.903 13.566-14.359 17.815-10.407 4.5703 4.2504 2.7354 9.792 0 11.289-1.9389 1.0609-4.2335 0.0882-5.1154-4.4979-1.5875 5.909 2.7512 9.2301 6.7913 8.0259 5.1328-1.53 9.8763-9.3474 3.7042-17.198-3.8821-4.9377-15.686-7.3036-24.606-0.52917-16.744 12.717-7.8478 39.934 16.492 42.422 11.908 1.2169 22.827-2.2209 32.368-11.73 17.006-16.949 10.545-40.73 6.5262-50.535-0.37777-0.92157-0.87177-1.9315-1.4635-2.9983z" fill="rgb(86,66,122)"/></g></svg>');
@@ -317,6 +372,13 @@ main h1, main h2 {
     margin: 0;
     filter: none;
     border-top: solid 2px rgb(86,66,122);
+}
+#main_content h3 {
+    padding: .5em 1em;
+}
+#main_content h2:not(.bubble-style)::before, #main_content h2:not(.bubble-style)::after {
+    padding: .5em;
+    margin: 0;
 }
 main p {
     margin: 1em;

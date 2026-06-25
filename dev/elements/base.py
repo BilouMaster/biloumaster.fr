@@ -236,7 +236,7 @@ class Element:
 
     def html(self, lang='fr') -> str:
         if self.included:
-            return f'<section id="{self.name}">\n\t<h2>{self.title[lang]}</h2>\n\t{str_indent(self.html_content(lang), 1)}\n</section>\n'
+            return f'<section id="{self.name}">\n\t<h2 data-text="{self.title[lang]}">{self.title[lang]}</h2>\n\t{str_indent(self.html_content(lang), 1)}\n</section>\n'
         t = [t.title[lang] for t in self.parents[1:]]
         t.reverse()
         if self.parent and len(self.parents) > 2:
