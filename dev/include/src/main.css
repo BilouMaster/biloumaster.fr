@@ -100,11 +100,11 @@ a:visited {
     color: var(--biloulight);
 }
 h1, h2:not(.bubble-style) {
-  position: relative;
-  color: var(--biloulight);
-  width: fit-content;
-  padding: .25em .5em;
-  z-index: 1;
+    position: relative;
+    color: var(--biloulight);
+    width: fit-content;
+    padding: .25em .5em;
+    z-index: 100;
 }
 h1::before, h2:not(.bubble-style)::before {
     content: attr(data-text);
@@ -131,18 +131,13 @@ h1::after, h2:not(.bubble-style)::after {
     inset: 0;
     z-index: 1;
     color: transparent;
-    background: url(/img/ui/decoration1.png);
+    background-image: url(/img/ui/decoration.png);
     -webkit-background-clip: text;
     background-clip: text;
     background-size: 100% 1em;
+    background-position-y: .25em;
     pointer-events: none;
     padding: .25em .5em;
-}
-html:not(.can-touch) .navig:hover h2::after {
-    background: url(/img/ui/decoration2.png);
-    -webkit-background-clip: text;
-    background-clip: text;
-    background-size: 100% 100%;
 }
 body {
     display: flex;
@@ -330,21 +325,24 @@ main {
 }
 .article a.download {
     font-family: BilouFont;
-    background-image: url('/img/ui/decoration1.png');
-    background-size: 100% 100%;
+    background-image: url('/img/ui/decoration.png');
+    background-size: 100% 125%;
+    background-position-y: -.8em;
     background-color: var(--biloulight);
+    background-blend-mode: hard-light;
     padding: .5em;
     display: inline-block;
     color: var(--biloubgc);
     border-radius: 1em;
-    border: solid 3px var(--biloubgc);
-    transition-property: margin, padding, background-color;
-    transition-timing-function: var(--biloustic), var(--biloustic), var(--biloueazout);
+    border: solid 2px var(--biloubgc);
+    transition-property: margin, padding, background-color, background-position-y;
+    transition-timing-function: var(--biloustic), var(--biloustic), var(--biloueazout), var(--biloueazout);
     transition-duration: .3s;
     filter: drop-shadow(0 0 0.2rem var(--biloubgc80));
 }
 html:not(.can-touch) .article a.download:hover {
     background-color: var(--biloulightgreen);
+    background-position-y: -.9em;
     color: var(--biloubgc);
     padding: .75em;
     margin: -.25em;
@@ -359,7 +357,7 @@ html:not(.can-touch) .article a.download:hover {
     transition-duration: .3s;
 }
 html:not(.can-touch) .article a.download:hover img {
-    transform: scale(1.1);
+    transform: scale(1.15);
 }
 main h1, main h2 {
     font-weight: lighter;
