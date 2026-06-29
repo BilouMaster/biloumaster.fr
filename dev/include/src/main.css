@@ -113,8 +113,8 @@ h1::before, h2:not(.bubble-style)::before {
     z-index: -1;
     color: transparent;
     -webkit-text-stroke: 4px transparent;
-    background: radial-gradient(
-    circle at -10px -10px,
+    background: linear-gradient(
+    to bottom right,
         var(--biloudark) 0%,
         var(--biloubgc) 20%,
         var(--biloudeep) 40%,
@@ -131,7 +131,7 @@ h1::after, h2:not(.bubble-style)::after {
     inset: 0;
     z-index: 1;
     color: transparent;
-    background-image: url(/img/ui/decoration.png);
+    background-image: url(/img/ui/decoration.webp);
     -webkit-background-clip: text;
     background-clip: text;
     background-size: 100% 1em;
@@ -325,7 +325,7 @@ main {
 }
 .article a.download {
     font-family: BilouFont;
-    background-image: url('/img/ui/decoration.png');
+    background-image: url('/img/ui/decoration.webp');
     background-size: 100% 125%;
     background-position-y: -.8em;
     background-color: var(--biloulight);
@@ -374,7 +374,12 @@ main h1, main h2 {
 #main_content h3 {
     padding: .5em 1em;
 }
-#main_content h2:not(.bubble-style)::before, #main_content h2:not(.bubble-style)::after {
+#main_content h2:not(.bubble-style)::before {
+    padding: .5em;
+    margin: 0;
+}
+#main_content h2:not(.bubble-style)::after {
+    background-position-y: .5em;
     padding: .5em;
     margin: 0;
 }
@@ -422,7 +427,7 @@ footer > small {
     text-align: right;
     display: block;
     min-height: 2.5em;
-    color: gray;
+    color: var(--bilouhighlight);
     background-color: var(--biloubgc);
     background-color: var(--bilouframe);
     font-family: BilouFontLight;

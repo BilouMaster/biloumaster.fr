@@ -22,6 +22,7 @@ class Article(Element):
             flags=re.DOTALL
         )
         if '$detached$' in self.content:
+            self.detached = True
             self.parent.children.remove(self)
             self.parent = None
             Article.detached.append(self)

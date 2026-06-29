@@ -337,8 +337,8 @@ def generate_images(img, name, parent):
         return
     w, h = img.size
     th = 250
-    args = dict()
-    if max(w, h) <= 816 or parent == "pixelart":
+    args = {'method':4}
+    if max(w, h) <= 816 or parent == "pixelart" or parent == "Screenshots":
         args['lossless'] = True
     animated = getattr(img, "is_animated", False)
     if animated:
@@ -348,18 +348,9 @@ def generate_images(img, name, parent):
                 frame_duration.append(f.info["duration"] or 100)
             else:
                 frame_duration.append(200)
-        args = {**args, **{'save_all':True, 'duration':frame_duration}}
+        args = {**args, **{'save_all':True, 'duration':frame_duration, 'allow_mixed':True, 'minimize_size':True}}
         img.save(f'{config.output}/img/og/{name}.png')
     img.save(f'{config.output}/img/gallery/{name}.webp', **args)
-    args['lossless'] = False
-    if int(w*th/h > w):
-        img.save(f'{config.output}/img/gallery/thumbnail/{name}_thumbnail.webp', **args)
-    else:
-        if animated:
-            seq = ImageSequence.all_frames(img, lambda x : x.resize((int(w*th/h), th)))
-            seq[0].save(f'{config.output}/img/gallery/thumbnail/{name}_thumbnail.webp', save_all=True, append_images=seq[1:], duration=frame_duration)
-        else:
-            img.resize((int(w*th/h), th)).save(f'{config.output}/img/gallery/thumbnail/{name}_thumbnail.webp')
     for nw in [640, 1024, 2048]:
         if w > nw:
             next
@@ -367,9 +358,21 @@ def generate_images(img, name, parent):
             break
         if animated:
             seq = ImageSequence.all_frames(img, lambda x : x.resize((nw, int(h*nw/w))))
-            seq[0].save(f'{config.output}/img/gallery/responsive/{name}_{nw}.webp', save_all=True, append_images=seq[1:], duration=frame_duration)
+            seq[0].save(f'{config.output}/img/gallery/responsive/{name}_{nw}.webp', append_images=seq[1:], **args)
         else:
-            img.resize((nw, int(h*nw/w))).save(f'{config.output}/img/gallery/responsive/{name}_{nw}.webp')
+            img.resize((nw, int(h*nw/w))).save(f'{config.output}/img/gallery/responsive/{name}_{nw}.webp', **args)
+    if 'lossless' not in args:
+        args['quality'] = 60
+    else:
+        args['lossless'] = False
+    if int(w*th/h >= w):
+        img.save(f'{config.output}/img/gallery/thumbnail/{name}_thumbnail.webp', **args)
+    else:
+        if animated:
+            seq = ImageSequence.all_frames(img, lambda x : x.resize((int(w*th/h), th)))
+            seq[0].save(f'{config.output}/img/gallery/thumbnail/{name}_thumbnail.webp', append_images=seq[1:], **args)
+        else:
+            img.resize((int(w*th/h), th)).save(f'{config.output}/img/gallery/thumbnail/{name}_thumbnail.webp', **args)
 
 def process_all_images():
     Image.data = dict(Pool().map(process, Image.all))

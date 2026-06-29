@@ -19,6 +19,7 @@ class Element:
         self.included = src_path.stem[0] == '_'
         self.order = self.get_order()
         self.is_nav = False
+        self.detached = False
         if parent:
             self.parents = self.parent.parents + [self.parent]
         self.name  = self.get_name()
@@ -184,7 +185,7 @@ class Element:
         if self.infos:
             infos = '<div class="infos"><span>' + '</span><span>'.join(self.infos) + '</span></div>'
         icons = [c.get_icon() for c in self.children]
-        icons = [f'<img class="navig_icon secondary" src="/img/ui/{i}.svg" height="128" width="128" alt="">' for i in icons if i not in ['article','gallery','image','track','album','page']][:7]
+        icons = [f'<img class="navig_icon secondary" src="/img/ui/{i}.svg" height="128" width="128" alt="" aria-hidden="true">' for i in icons if i not in ['article','gallery','image','track','album','page']][:7]
         args = {
             'date':         self.html_nav_time(lang),
             'href':         self.url,
@@ -233,18 +234,22 @@ class Element:
     
     def get_meta_description(self, lang='fr') -> str:
         return [i.replace('<br>',' ').replace('"','') for i in [i.desc[lang] for i in self.parents] + [self.desc[lang]] if i != ''][-1]
+    
+    def get_meta_title(self, lang='fr') -> str:
+        if self.detached:
+            return f'{self.title[lang]}'
+        t = [t.title[lang] for t in self.parents[1:]]
+        t.reverse()
+        if self.parent and len(self.parents) > 2:
+            return f'{self.title[lang]} - {" | ".join(t[:-1])} - {t[-1]} de {config.author}'
+        if self.parent and len(self.parents) == 2:
+            return f'{self.title[lang]} - {t[-1]} de {config.author}'
+        return f'{self.title[lang]} de {config.author}'
 
     def html(self, lang='fr') -> str:
         if self.included:
             return f'<section id="{self.name}">\n\t<h2 data-text="{self.title[lang]}">{self.title[lang]}</h2>\n\t{str_indent(self.html_content(lang), 1)}\n</section>\n'
-        t = [t.title[lang] for t in self.parents[1:]]
-        t.reverse()
-        if self.parent and len(self.parents) > 2:
-            self.meta_title = f'{self.title[lang]} - {" | ".join(t[:-1])} - {t[-1]} de {config.author}'
-        elif self.parent and len(self.parents) == 2:
-            self.meta_title = f'{self.title[lang]} - {t[-1]} de {config.author}'
-        else:
-            self.meta_title = f'{self.title[lang]} - {config.url[8:]}'
+        self.meta_title = self.get_meta_title(lang)
         self.meta_description = self.get_meta_description(lang)
         json_ld = self.get_json_ld(lang)
         json_ld['@graph'] += [{

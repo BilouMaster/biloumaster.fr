@@ -21,6 +21,11 @@ footer > nav > a {
     transition-duration: 0.3s;
     transform-origin: 50% 90%;
 }
+footer > nav > a > span {
+    display: block;
+    text-align: center;
+    font-family: BilouFontLight;
+}
 html:not(.can-touch) footer > nav > a:hover {
     transform: scale(1.1);
 }

@@ -15,10 +15,9 @@ class Index(Page):
     
     def get_meta_description(self, lang='fr') -> str:
         return 'Artiste, développeur de jeux vidéo et compositeur amateur/autodidacte. Découvrez mes créations graphiques, jeux indépendants et albums musicaux.'
-
-    def get_json_ld(self, lang='fr') -> dict:
-        self.meta_title = config.sitename + ' - Créations artistiques, jeux vidéo et compositions musicales'
-        return super().get_json_ld(lang)
+    
+    def get_meta_title(self, lang='fr') -> str:
+        return config.sitename + ' - Créations artistiques, jeux vidéo et compositions musicales'
 
     def spec_args(self, args, lang='fr') -> dict:
         args['footer'] = str_indent(get_templates()['index_footer'], 2)
