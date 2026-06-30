@@ -1,10 +1,5 @@
-<svg width="400" height="500" version="1.1" viewBox="0 0 102.4 500" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="100" height="60" version="1.1" viewBox="0 0 25.6 60" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
  <defs>
-  <radialGradient id="e" cx="58.696" cy="125.79" r="50" gradientTransform="matrix(5.8954 -.00017427 .0016567 .42375 -295.5 -14.609)" gradientUnits="userSpaceOnUse">
-   <stop stop-color="#fff" offset="0"/>
-   <stop stop-color="#eea7cb" offset=".5"/>
-   <stop stop-color="#eea7cb" stop-opacity="0" offset="1"/>
-  </radialGradient>
   <linearGradient id="a" x1="27.656" x2="38.588" y1="24.071" y2="2.0786" gradientTransform="matrix(3.5938 0 0 .3125 -171.12 0)" gradientUnits="userSpaceOnUse">
    <stop stop-color="#fff" offset="0"/>
    <stop stop-color="#fff" stop-opacity="0" offset="1"/>
@@ -19,50 +14,67 @@
    <stop stop-color="#dfeea7" offset=".5"/>
    <stop stop-color="#dfeea7" stop-opacity="0" offset="1"/>
   </radialGradient>
-  <radialGradient id="biloug" cx="19.558" cy="-34.117" r="50" gradientTransform="matrix(-.62155 .36462 -7.6132 -.098129 -119.49 -.84987)" gradientUnits="userSpaceOnUse" xlink:href="#c"/>
-  <radialGradient id="bilouh" cx="58.696" cy="125.79" r="50" gradientTransform="matrix(5.8954 -.00020912 .0016567 .5085 -295.2 -25.531)" gradientUnits="userSpaceOnUse" xlink:href="#e"/>
-  <radialGradient id="biloui" cx="78.206" cy="125.25" r="50" gradientTransform="matrix(5.6725 -.03951 .23104 .36118 -328.5 -5.4228)" gradientUnits="userSpaceOnUse" xlink:href="#d"/>
-  <linearGradient id="biloub" x1="27.656" x2="38.588" y1="24.071" y2="2.0786" gradientTransform="matrix(3.5874 0 0 .31309 -170.82 0)" gradientUnits="userSpaceOnUse" xlink:href="#a"/>
-  <radialGradient id="bilouj" cx="19.558" cy="-34.117" r="50" gradientTransform="matrix(-.62155 -1.4585 -7.6132 .39252 -119.49 3.919)" gradientUnits="userSpaceOnUse" xlink:href="#c"/>
-  <radialGradient id="bilouk" cx="58.696" cy="125.79" r="50" gradientTransform="matrix(5.8954 .00069708 .0016567 -1.695 -295.2 58.955)" gradientUnits="userSpaceOnUse" xlink:href="#e"/>
-  <radialGradient id="biloul" cx="78.206" cy="125.25" r="50" gradientTransform="matrix(5.6725 .1317 .23104 -1.2039 -328.5 -8.0713)" gradientUnits="userSpaceOnUse" xlink:href="#d"/>
-  <linearGradient id="bilouc" x1="27.656" x2="38.588" y1="24.071" y2="2.0786" gradientTransform="matrix(3.5874 0 0 -1.2523 -170.82 .51948)" gradientUnits="userSpaceOnUse" xlink:href="#a"/>
-  <radialGradient id="biloum" cx="19.558" cy="-34.117" r="50" gradientTransform="matrix(-.62155 -1.4585 -7.6132 .39252 -119.49 203.4)" gradientUnits="userSpaceOnUse" xlink:href="#c"/>
-  <radialGradient id="biloun" cx="58.696" cy="125.79" r="50" gradientTransform="matrix(5.8954 .00069708 .0016567 -1.695 -295.2 258.44)" gradientUnits="userSpaceOnUse" xlink:href="#e"/>
-  <radialGradient id="bilouo" cx="78.206" cy="125.25" r="50" gradientTransform="matrix(5.6725 .1317 .23104 -1.2039 -328.5 191.41)" gradientUnits="userSpaceOnUse" xlink:href="#d"/>
-  <mask id="biloud">
+  <radialGradient id="bilouk" cx="19.558" cy="-34.117" r="50" gradientTransform="matrix(-.62171 .27346 -7.6151 -.073597 -119.48 -.6374)" gradientUnits="userSpaceOnUse" xlink:href="#c"/>
+  <radialGradient id="bilouj" cx="58.696" cy="125.79" r="50" gradientTransform="matrix(5.8969 -.00020912 .0016571 .5085 -295.23 -25.531)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#eea7cb" offset=".3"/>
+   <stop stop-color="#eea7cb" stop-opacity="0" offset="1"/>
+  </radialGradient>
+  <radialGradient id="biloui" cx="78.206" cy="125.25" r="50" gradientTransform="matrix(5.6739 -.03951 .2311 .36118 -328.54 -5.4228)" gradientUnits="userSpaceOnUse" xlink:href="#d"/>
+  <linearGradient id="biloup" x1="27.656" x2="38.588" y1="24.071" y2="2.0786" gradientTransform="matrix(3.5883 0 0 .31309 -170.82 0)" gradientUnits="userSpaceOnUse" xlink:href="#a"/>
+  <radialGradient id="bilouh" cx="19.558" cy="-34.117" r="50" gradientTransform="matrix(-.62155 -1.4585 -7.6132 .39252 -119.49 3.919)" gradientUnits="userSpaceOnUse" xlink:href="#c"/>
+  <radialGradient id="biloug" cx="58.696" cy="125.79" r="50" gradientTransform="matrix(5.8954 .00069708 .0016567 -1.695 -295.2 58.955)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#eea7cb" offset=".3"/>
+   <stop stop-color="#eea7cb" stop-opacity="0" offset="1"/>
+  </radialGradient>
+  <radialGradient id="bilouf" cx="78.206" cy="125.25" r="50" gradientTransform="matrix(5.6725 .1317 .23104 -1.2039 -328.5 -8.0713)" gradientUnits="userSpaceOnUse" xlink:href="#d"/>
+  <linearGradient id="bilouo" x1="27.656" x2="38.588" y1="24.071" y2="2.0786" gradientTransform="matrix(3.5874 0 0 -1.2523 -170.82 .51948)" gradientUnits="userSpaceOnUse" xlink:href="#a"/>
+  <radialGradient id="biloue" cx="19.558" cy="-34.117" r="50" gradientTransform="matrix(-.62155 -1.4585 -7.6132 .39252 -119.49 203.4)" gradientUnits="userSpaceOnUse" xlink:href="#c"/>
+  <radialGradient id="biloud" cx="58.696" cy="125.79" r="50" gradientTransform="matrix(5.8954 .00069708 .0016567 -1.695 -295.2 258.44)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#eea7cb" offset=".5"/>
+   <stop stop-color="#eea7cb" stop-opacity="0" offset="1"/>
+  </radialGradient>
+  <radialGradient id="bilouc" cx="78.206" cy="125.25" r="50" gradientTransform="matrix(5.6725 .1317 .23104 -1.2039 -328.5 191.41)" gradientUnits="userSpaceOnUse" xlink:href="#d"/>
+  <mask id="biloun">
    <rect transform="scale(1,-1)" x="-170.82" y="-40" width="460" height="40" fill="url(#biloua)"/>
   </mask>
   <linearGradient id="biloua" x1="49.311" x2="49.311" y1="106.32" y2="5.6671" gradientTransform="matrix(1.15 0 0 .4 2.4771 -42.267)" gradientUnits="userSpaceOnUse">
    <stop offset="0"/>
    <stop stop-color="#fff" offset="1"/>
   </linearGradient>
-  <mask id="biloue">
+  <mask id="biloum">
    <rect transform="scale(1,-1)" x="-170.82" y="-40" width="460" height="40" fill="url(#biloua)"/>
   </mask>
-  <mask id="bilouf">
+  <mask id="biloul">
    <rect transform="scale(1,-1)" x="-170.82" y="-40" width="460" height="40" fill="url(#biloua)"/>
   </mask>
+  <radialGradient id="biloub" cx="-90.899" cy="102.65" r="102.65" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#fff" offset=".73438"/>
+   <stop stop-color="#fff" stop-opacity="0" offset="1"/>
+  </radialGradient>
  </defs>
- <g transform="matrix(.86956 0 0 10 -.26496 100)">
-  <g>
-   <rect x="-170.82" y="-3.5527e-15" width="460" height="40" fill="url(#biloug)" stroke-width=".35936"/>
-   <rect x="-170.82" y="10" width="460" height="30" fill="url(#bilouh)" stroke-width=".31122"/>
-   <rect x="-170.82" y="10" width="460" height="30" fill="url(#biloui)" stroke-width=".31122" style="mix-blend-mode:lighten"/>
+ <g transform="scale(.25 .12)">
+  <g transform="matrix(.86934 0 0 10 -.29876 100)" stroke-width="1.0001">
+   <rect x="-170.82" y="-2.6645e-15" width="460" height="30" fill="url(#bilouk)" stroke-width=".31125"/>
+   <rect x="-170.82" y="10" width="460" height="30" fill="url(#bilouj)" stroke-width=".31126"/>
+   <rect x="-170.82" y="10" width="460" height="30" fill="url(#biloui)" stroke-width=".31126" style="mix-blend-mode:lighten"/>
+   <path d="m-170.52 0v40s-11.026-29.726 100.57-29.723c111.59 0.0035 188.34 8.9797 283.73 8.778 95.385-0.20168 73.156-19.054 73.156-19.054z" fill="url(#biloup)" stroke-width=".35874"/>
   </g>
-  <path d="m-170.52 0v40s-11.026-29.726 100.57-29.723c111.59 0.0035 188.34 8.9797 283.73 8.778 95.385-0.20168 73.156-19.054 73.156-19.054z" fill="url(#biloub)" stroke-width=".3587"/>
- </g>
- <g transform="matrix(.86956 0 0 -2.5 -.26496 100)">
-  <g stroke-width=".35936">
-   <rect x="-170.82" y="-3.5527e-15" width="460" height="40" fill="url(#bilouj)"/>
-   <rect x="-170.82" y="-3.5527e-15" width="460" height="40" fill="url(#bilouk)"/>
-   <rect x="-170.82" y="1e-6" width="460" height="40" fill="url(#biloul)" style="mix-blend-mode:lighten"/>
+  <g transform="matrix(.86956 0 0 -2.5 -.26238 100)">
+   <g transform="matrix(1 0 0 1 .00174 0)" stroke-width=".35936">
+    <rect x="-170.82" y="-3.5527e-15" width="460" height="40" fill="url(#bilouh)"/>
+    <rect x="-170.82" y="-3.5527e-15" width="460" height="40" fill="url(#biloug)"/>
+    <rect x="-170.82" y="1e-6" width="460" height="40" fill="url(#bilouf)" style="mix-blend-mode:lighten"/>
+   </g>
+   <path d="m-170.82 0v40s0.54224-24.085 84.015-24.082c83.473 0.0023 198.39 5.1462 294.14 4.9446 95.747-0.20168 81.037-20.861 81.037-20.861z" fill="url(#bilouo)" stroke-width=".35938"/>
   </g>
-  <path d="m-170.82 0v40s0.54224-24.085 84.015-24.082c83.473 0.0023 198.39 5.1462 294.14 4.9446 95.747-0.20168 81.037-20.861 81.037-20.861z" fill="url(#bilouc)" stroke-width=".35938"/>
- </g>
- <g transform="matrix(.86956 0 0 -2.5 -.26496 100)" stroke-width=".35936">
-  <rect transform="matrix(1 0 0 1 .0047114 0)" x="-170.82" y="-3.5527e-15" width="460" height="40" fill="url(#biloum)" mask="url(#bilouf)"/>
-  <rect transform="matrix(1 0 0 1 .0047114 0)" x="-170.82" y="-3.5527e-15" width="460" height="40" fill="url(#biloun)" mask="url(#biloue)"/>
-  <rect transform="matrix(1 0 0 1 .0047114 0)" x="-170.82" y="1e-6" width="460" height="40" fill="url(#bilouo)" mask="url(#biloud)" style="mix-blend-mode:lighten"/>
+  <g transform="matrix(.86957 0 0 -2.5 -.26496 100)" stroke-width=".35936">
+   <rect transform="translate(.0047114)" x="-170.82" y="-3.5527e-15" width="460" height="40" fill="url(#biloue)" mask="url(#biloul)"/>
+   <rect transform="translate(.0047114)" x="-170.82" y="-3.5527e-15" width="460" height="40" fill="url(#biloud)" mask="url(#biloum)"/>
+   <rect transform="translate(.0047114)" x="-170.82" y="1e-6" width="460" height="40" fill="url(#bilouc)" mask="url(#biloun)" style="mix-blend-mode:lighten"/>
+  </g>
+  <rect x="-148.8" width="160.56" height="205.31" fill="url(#biloub)"/>
  </g>
 </svg>

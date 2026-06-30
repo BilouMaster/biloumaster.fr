@@ -1,5 +1,4 @@
 from elements.base import Element
-from elements.pages import Page
 from elements.tags import Tag
 from templates import get_templates
 from utils.str import str_indent, str_date_fr, str_tofilename
@@ -196,22 +195,18 @@ class Image(Element):
     def html_return(self, lang='fr') -> str:
         desc = ''
         if self.desc[lang]:
-            desc = f'<p class="image-context">{self.desc[lang]}</p>'
-        tags = Tag.str_tags(self.tags, self.parent.url, lang) if not self.parent.included else '<!--no tags-->'
-        date = self.get_date()
-        date = f'<time class="image-context date" datetime="{date}">{self.str_date[lang]}</time>' if date else '<!--no time-->'
+            desc = self.desc[lang]
         return get_templates()['gallery_element'].format(
             url=        self.url,
             width=      self.width,
             height=     self.height,
             median=     self.median,
+            title=      self.title[lang],
+            desc=       desc.replace('<br>', '\n').replace('"','&quot;'),
+            date=       self.str_date[lang],
             name=       self.name,
             srcset=     self.srcset(),
-            tags_cls=   self.tags.replace(';', ' '),
-            date=       date,
-            title=      self.title[lang],
-            desc=       desc,
-            tags=       tags
+            tags=       self.tags.replace(';', ' ')
         )
     
     def html_footer(self, lang='fr') -> str:
@@ -284,14 +279,16 @@ class Gallery(Element):
         enlarge = ''
         if not self.included:
             enlarge = '<button id="enlarge" onclick="enlarge(this)" aria-label="Basculer l\'affichage de la page en pleine largeur" title="élargir la page 👄">🍆</button>'
-        return enlarge + f'<div id="gallery"{pixelated}>' + '\n'.join([note]
-            + [get_templates()['gallery_section'].format(
+        return enlarge + f'<div id="gallery"{pixelated}>' + '\n'.join(
+            [tag_list] +
+            [note] +
+            [get_templates()['gallery_section'].format(
                 title=      year or self.title[lang],
                 year=       self.html_year(year),
                 tags=       ' '.join(data['tags'] - {''}),
                 content=    str_indent('\n'.join(data['contents']), 2)
             ) for year, data in sections.items()]
-            + [tag_list]) + '</div>'
+        )
 
 def str_exif(key: str, exif: str, default='') -> str:
     if key in exif and not isinstance(exif[key], tuple):

@@ -167,13 +167,13 @@ lightbox.on('uiRegister', function() {
       lightbox.pswp.on('change', () => {
         const currSlideElement = pswp.currSlide.data.element;
         let html = '';
-        let title = currSlideElement.querySelector('h3');
+        let title = currSlideElement.title;
         let date = currSlideElement.querySelector('.date');
         if (title) {
-          html = '<h1>« ' + title.innerHTML + ' »</h1>';
+          html = `<h1>« ${title} »</h1>`;
         };
         if (date) {
-          html += '<span class="date">' + date.textContent + '</span>';
+          html += `<span class="date">${date.textContent}</span>`;
         }
         el.innerHTML = html;
       });
@@ -186,21 +186,23 @@ lightbox.on('uiRegister', function() {
     appendTo: 'root',
     html: '',
     onInit: (el, pswp) => {
+      el.addEventListener('wheel', mouseScroll);
+      el.addEventListener('touchstart', startTouchScroll);
+      el.addEventListener('touchmove', touchScroll);
+      const taglist = document.querySelector(".tags");
       lightbox.pswp.on('change', () => {
         const currSlideElement = lightbox.pswp.currSlide.data.element;
         let html = '';
-        let desc = currSlideElement.querySelector('p');
+        let desc = currSlideElement.dataset.desc.replace('\n', '<br>');
         if (desc) {
-          html = '<div class="caption_container"><div class="caption avatar"><p>' + desc.innerHTML + '</p></div></div>';
+          html = `<div class="caption_container"><div class="caption avatar"><p>${desc}</p></div></div>`;
         };
-        let tags = currSlideElement.nextSibling.nextSibling.outerHTML;
-        if (tags) {
-          html += tags;
+        let tags = Array.from(currSlideElement.classList).filter(tag => tag !== 'tag');
+        if (tags.length) {
+          tags = Array.from(taglist.querySelectorAll('.' + tags.join(', .'))).map((a) => a.outerHTML).join('')
+          html += `<aside class="tags">${tags}</aside>`;
         };
         el.innerHTML = html;
-        el.addEventListener('wheel', mouseScroll);
-        el.addEventListener('touchstart', startTouchScroll);
-        el.addEventListener('touchmove', touchScroll);
       });
     }
   });

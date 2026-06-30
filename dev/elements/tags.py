@@ -1,6 +1,7 @@
 import config
 from pathlib import Path
 from random import randrange
+from utils.str import str_indent
 
 class Tag:
     all = dict()
@@ -42,11 +43,13 @@ class Tag:
                     str_tags.append(Tag(tag))
             str_tags.sort(key=lambda k: k.title[lang])
             str_tags = ''.join([t.html(path, lang) for t in str_tags])
-            return f'<aside class="tags">{str_tags}</aside>'
+            return f'''<aside class="tags">
+        {str_indent(str_tags, 2)}
+    </aside>'''
         else:
             return '<!--no tags-->'
 
 if Path(f'{config.input}/tags.tsv').exists():
     with open(f'{config.input}/tags.tsv', 'r') as tsv:
         for line in tsv:
-            Tag(*line.replace('\n', '').replace('/n', '<br>').replace('"','&quot;').split('\t'))
+            Tag(*line.replace('\n', '').replace('/n', '\n').replace('"','&quot;').split('\t'))
