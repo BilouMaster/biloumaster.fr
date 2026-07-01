@@ -16,34 +16,14 @@ const lazyBackgrounds = new IntersectionObserver((entries, observer) => {
   for (const entry of entries) {
     if (!entry.isIntersecting) continue;
     const el = entry.target;
-    const url = el.dataset.bg;
-    loadBackground(el, url);
+    el.style.backgroundImage = `url("${el.dataset.bg}")`;
+    delete el.dataset.bg;
     observer.unobserve(el);
   }
 }, {rootMargin: "500px 0px"});
 document.querySelectorAll("[data-bg]").forEach(el => {
   lazyBackgrounds.observe(el);
 });
-
-const bgCache = new Map();
-
-function loadBackground(el, url) {
-  if (bgCache.has(url)) {
-    el.style.backgroundImage = url("${url}");
-    return;
-  }
-  const img = new Image();
-  img.decoding = "async";
-  img.onload = () => {
-    bgCache.set(url, true);
-    el.style.backgroundImage = `url("${url}")`;
-    img.onload = null;
-  };
-  img.onerror = () => {
-    console.warn("Image failed to load:", url);
-  };
-  img.src = url;
-}
 
 
 // http://www.javascriptkit.com/dhtmltutors/sticky-hover-issue-solutions.shtml
@@ -78,35 +58,14 @@ document.querySelectorAll('#gallery section').forEach(section => {
 const lazyThumbs = new IntersectionObserver((entries, observer) => {
   for (const entry of entries) {
     if (!entry.isIntersecting) continue;
-    const thumb = entry.target;
-    const url = `/img/gallery/thumbnail/${thumb.dataset.name}_thumbnail.webp`;
-    loadThumb(thumb, url);
-    observer.unobserve(thumb);
+    const el = entry.target;
+    el.style.backgroundImage = `url("/img/gallery/thumbnail/${el.dataset.name}_thumbnail.webp")`;
+    observer.unobserve(el);
   }
 }, {rootMargin: "1000px 0px"});
 document.querySelectorAll('.gallery a').forEach(el => {
   lazyThumbs.observe(el);
 });
-
-const thumbCache = new Map();
-
-function loadThumb(el, url) {
-  if (thumbCache.has(url)) {
-    el.style.backgroundImage = url("${url}");
-    return;
-  }
-  const img = new Image();
-  img.decoding = "async";
-  img.onload = () => {
-    thumbCache.set(url, true);
-    el.style.backgroundImage = `url("${url}")`;
-    img.onload = null;
-  };
-  img.onerror = () => {
-    console.warn("Failed to load thumbnail:", url);
-  };
-  img.src = url;
-}
 
 filterTag();
 
@@ -205,7 +164,7 @@ function toggleSelf(el) {
 let focusel;
 let ticking = false;
 let isResizing = false;
-let oldwidth = window.innerWidth;
+let oldwidth = null;
 
 function updateFocusEl() {
   if (isResizing) return;

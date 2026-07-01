@@ -131,7 +131,7 @@ h1::after, h2:not(.bubble-style)::after {
     inset: 0;
     z-index: 1;
     color: transparent;
-    background-image: url(/img/ui/decoration.webp);
+    background-image: url('/img/ui/decoration.webp');
     -webkit-background-clip: text;
     background-clip: text;
     background-size: 100% 1em;

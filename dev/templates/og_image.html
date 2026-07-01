@@ -2,7 +2,6 @@
 <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="/src/main.css">
-    <link rel="stylesheet" href="/src/navig.css">
     <script defer src="/src/main.js"></script>
     <style>
         @font-face {{
@@ -28,6 +27,9 @@
             background-color: var(--bilouframe);
             content: '';
             flex: 1;
+        }}
+        h1::after, h2:not(.bubble-style)::after {{
+            background-image: url(./img/ui/decoration.webp);
         }}
     </style>
 </head>

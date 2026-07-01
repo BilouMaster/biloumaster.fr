@@ -288,7 +288,7 @@ class Gallery(Element):
                 tags=       ' '.join(data['tags'] - {''}),
                 content=    str_indent('\n'.join(data['contents']), 2)
             ) for year, data in sections.items()]
-        )
+        ) + '</div>'
 
 def str_exif(key: str, exif: str, default='') -> str:
     if key in exif and not isinstance(exif[key], tuple):
